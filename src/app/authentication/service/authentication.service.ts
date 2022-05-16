@@ -1,0 +1,28 @@
+import { HttpClient, HttpErrorResponse } from '@angular/common/http';
+import { Injectable } from '@angular/core';
+import { catchError, take, tap } from 'rxjs';
+import { AuthService } from 'src/app/core/services/auth.service';
+import { environment } from 'src/environments/environment';
+
+@Injectable({
+  providedIn: 'root'
+})
+export class AuthenticationService {
+
+  constructor(private http: HttpClient, private auth: AuthService) {}
+
+  recoveryUser(user: { login: string }) {
+    return this.http.get(`${environment.API}recovery/user`, {params: user})
+    .pipe(
+      take(1),
+    )
+  }
+
+  login(user: { login: string; password: string }) {
+    return this.http.post(`${environment.API}login`, user)
+    .pipe(
+        tap((res: any) => this.auth.setToken(res)
+      )
+    )
+  }
+}

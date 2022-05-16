@@ -1,0 +1,47 @@
+
+<section class="main">
+  <div class="container-main">
+    <mat-card class="login-container-card">
+
+      <mat-card-header class="header-container-card">
+        <mat-card-title><img class="logoRJ-login" mat-card-image [src]="logoRJ" alt="Secretaria de Saúde do Estado do Rio de Janeiro"></mat-card-title>
+      </mat-card-header>
+
+      <mat-card-content class="body-container-card">
+        <mat-form-field
+        [formGroup]="formRecovery"
+        appearance="outline">
+
+          <mat-label>CPF</mat-label>
+          <input matInput
+          formControlName="cpf"
+          mask="000.000.000-00"
+          (focusout)="getErrorMessageCPF()" required>
+          <mat-error class="error-access" *ngIf="invalidCPF">{{ errorCPFMsg }}</mat-error>
+        </mat-form-field>
+
+        <mat-form-field
+        [formGroup]="formRecovery"
+        appearance="outline"
+        *ngIf="!isAdm">
+          <ngx-mat-file-input
+          formControlName="oficio"
+          placeholder="Ofício"
+          valuePlaceholder="Insira o ofício"
+          (change)="getErrorMessageOficio()" [required]="false"></ngx-mat-file-input>
+          <mat-icon matSuffix>folder</mat-icon>
+          <mat-error class="error-access" *ngIf="invalidOficio">{{ errorMsgOficio }}</mat-error>
+        </mat-form-field>
+
+        <mat-card-actions class="container-btn-access">
+          <button mat-button
+          [class]="(formRecovery.valid) ? 'btn-login-active':''"
+          class="btn-login"
+          [disabled]="blockBtnSubmit"
+          >Entrar</button>
+        </mat-card-actions>
+      </mat-card-content>
+      <!-- <mat-card-actions></mat-card-actions> -->
+    </mat-card>
+  </div>
+</section>

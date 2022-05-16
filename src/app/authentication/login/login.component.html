@@ -1,0 +1,55 @@
+
+<section class="main">
+  <div class="container-main">
+    <mat-card class="login-container-card">
+
+      <mat-card-header class="header-container-card">
+        <mat-card-title><img class="logoRJ-login" mat-card-image [src]="logoRJ" alt="Secretaria de Saúde do Estado do Rio de Janeiro"></mat-card-title>
+      </mat-card-header>
+
+      <mat-card-content class="body-container-card">
+        <mat-form-field
+        [formGroup]="formLogin"
+        appearance="outline">
+
+          <mat-label>CPF</mat-label>
+          <input matInput
+          formControlName="cpf"
+          mask="000.000.000-00"
+          (focusout)="getErrorMessageCPF()" required>
+          <mat-error class="error-access" *ngIf="invalidCPF">{{ ErrorCPFMsg }}</mat-error>
+        </mat-form-field>
+
+        <mat-form-field
+        class="container-password"
+        [formGroup]="formLogin"
+        appearance="outline">
+            <mat-label>Senha</mat-label>
+            <input matInput
+            (focusout)="getErrorMessagePassword()"
+            formControlName="password"
+            [type]="hide ? 'password' : 'text'"
+            required>
+
+            <button mat-icon-button
+            matSuffix (click)="hide = !hide"
+            [attr.aria-label]="'Exibir Password'"
+            [attr.aria-pressed]="hide"><mat-icon>{{hide ? 'visibility_off' : 'visibility'}}</mat-icon>
+          </button>
+        </mat-form-field>
+        <mat-error class="error-access" *ngIf="!access">{{ errorAccessMsg }}</mat-error>
+        <div class="container-reset-password">
+          <a class="reset-password" routerLink="/authentication/recovery">Recuperar Senha</a>
+        </div>
+        <mat-card-actions class="container-btn-access">
+          <button mat-button
+          [class]="(formLogin.valid) ? 'btn-login-active':''"
+          class="btn-login"
+          [disabled]="!formLogin.valid"
+          (click)="onSubmit()">Entrar</button>
+        </mat-card-actions>
+      </mat-card-content>
+      <!-- <mat-card-actions></mat-card-actions> -->
+    </mat-card>
+  </div>
+</section>
