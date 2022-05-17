@@ -2,7 +2,7 @@ import { Tools } from './../../shared/tools/tools';
 import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
-import { AuthenticationService } from '../service/authentication.service';
+import { AuthenticationService } from '../services/authentication/authentication.service';
 
 import { CustomValidators } from '../../shared/validators/custom-validators'
 

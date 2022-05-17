@@ -38,6 +38,7 @@
           [class]="(formRecovery.valid) ? 'btn-login-active':''"
           class="btn-login"
           [disabled]="blockBtnSubmit"
+          (click)="onSubmit()"
           >Entrar</button>
         </mat-card-actions>
       </mat-card-content>

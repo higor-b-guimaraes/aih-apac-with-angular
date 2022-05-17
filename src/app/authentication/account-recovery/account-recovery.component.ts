@@ -5,7 +5,7 @@ import { FileValidator } from 'ngx-material-file-input';
 import { Tools } from 'src/app/shared/tools/tools';
 import { CustomValidators } from 'src/app/shared/validators/custom-validators';
 
-import { AuthenticationService } from '../service/authentication.service';
+import { AccountRecoveryService } from '../services/account-recovery/account-recovery.service';
 import { ModalAlert } from './modal/modal-alert';
 
 
@@ -42,7 +42,7 @@ export class AccountRecoveryComponent implements OnInit {
 
   constructor(
     private formBuilder: FormBuilder,
-    private auth: AuthenticationService,
+    private account: AccountRecoveryService,
     private validator: CustomValidators,
     private tools: Tools,
     private cdRef: ChangeDetectorRef,
@@ -77,7 +77,7 @@ export class AccountRecoveryComponent implements OnInit {
       return;
     }
 
-    this.auth.recoveryUser({
+    this.account.recoveryUser({
       login: this.tools.removeMaskCPF(<FormControl>this.formRecovery.controls['cpf'])
     })
     .subscribe({
@@ -124,32 +124,22 @@ export class AccountRecoveryComponent implements OnInit {
   }
 
 
-  /* onSubmit() {
+  onSubmit() {
+
+    console.log(this.formRecovery?.value?.oficio.files);
+
     if(this.formRecovery.valid) {
-        this.auth.login({
-          login: this.tools.removeMaskCPF(<FormControl>this.formRecovery.controls['cpf']),
-          password: this.formRecovery.value?.password
+        this.account.recoveryAccount({
+          cpf: this.tools.removeMaskCPF(<FormControl>this.formRecovery.controls['cpf']),
+          oficio: this.formRecovery?.value?.oficio.files[0]
         })
         .subscribe({
-          next: (dados) => this.router.navigate(['/authentication/']),
-          error: (e) => {
-            if( e.status === 500) {
-              this.access = false;
-              this.errorAccessMsg = "Por favor, verifique o login e senha informados e tente novamente!";
-            }else if( e.status === 502) {
-              this.access = false;
-              this.errorAccessMsg = "O usuário não existe na base de dados";
-            }
-            else if( e.status === 403) {
-              this.access = false;
-              this.errorAccessMsg = "Esta conta está bloqueada! Entre em contato via e-mail: saecases@gmail.com, para solicitar a reativação da conta.";
-          }else {
-            this.access = true;
-          }
+          next: (res: any) => {console.log(res)},
+          error: (e: { status: any; }) => console.log(e.status)
         }
-      });
+      );
     }
-  } */
+  }
 
   ngAfterContentChecked() {
     this.cdRef.detectChanges();
