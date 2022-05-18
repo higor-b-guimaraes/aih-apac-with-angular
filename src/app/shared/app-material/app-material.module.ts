@@ -8,7 +8,8 @@ import { FileInputConfig, MaterialFileInputModule, NGX_MAT_FILE_INPUT_CONFIG } f
 import { NgxMaskModule } from 'ngx-mask';
 import {MatDialogModule} from '@angular/material/dialog';
 import {MatSidenavModule} from '@angular/material/sidenav';
-
+import {MatListModule} from '@angular/material/list';
+import {MatToolbarModule} from '@angular/material/toolbar';
 
 const config: FileInputConfig = {
   sizeUnit: 'Octet'
@@ -28,6 +29,8 @@ const config: FileInputConfig = {
     MaterialFileInputModule,
     MatDialogModule,
     MatSidenavModule,
+    MatListModule,
+    MatToolbarModule,
     NgxMaskModule,
   ],
   providers: [{ provide: NGX_MAT_FILE_INPUT_CONFIG, useValue: config }]

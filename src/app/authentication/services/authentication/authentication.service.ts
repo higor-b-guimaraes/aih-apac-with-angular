@@ -9,7 +9,9 @@ import { environment } from 'src/environments/environment';
 })
 export class AuthenticationService {
 
-  constructor(private http: HttpClient, private auth: AuthService) {}
+  constructor(private http: HttpClient, private auth: AuthService) {
+
+  }
 
   login(user: { login: string; password: string }) {
     return this.http.post(`${environment.API}login`, user)
