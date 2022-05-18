@@ -123,16 +123,18 @@ export class AccountRecoveryComponent implements OnInit {
     this.blockBtnSubmit = false;
   }
 
-
+  /* 53080675037 */
   onSubmit() {
 
-    console.log(this.formRecovery?.value?.oficio.files);
+    console.log(this.formRecovery?.value?.oficio);
+    let formData: FormData = new FormData();
+    let oficio: any = formData.append('oficio', this.formRecovery?.value?.oficio);
+
 
     if(this.formRecovery.valid) {
         this.account.recoveryAccount({
           cpf: this.tools.removeMaskCPF(<FormControl>this.formRecovery.controls['cpf']),
-          oficio: this.formRecovery?.value?.oficio.files[0]
-        })
+          oficio})
         .subscribe({
           next: (res: any) => {console.log(res)},
           error: (e: { status: any; }) => console.log(e.status)

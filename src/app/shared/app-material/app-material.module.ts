@@ -7,6 +7,7 @@ import {MatButtonModule} from '@angular/material/button';
 import { FileInputConfig, MaterialFileInputModule, NGX_MAT_FILE_INPUT_CONFIG } from 'ngx-material-file-input';
 import { NgxMaskModule } from 'ngx-mask';
 import {MatDialogModule} from '@angular/material/dialog';
+import {MatSidenavModule} from '@angular/material/sidenav';
 
 
 const config: FileInputConfig = {
@@ -26,6 +27,7 @@ const config: FileInputConfig = {
     MatButtonModule,
     MaterialFileInputModule,
     MatDialogModule,
+    MatSidenavModule,
     NgxMaskModule,
   ],
   providers: [{ provide: NGX_MAT_FILE_INPUT_CONFIG, useValue: config }]
