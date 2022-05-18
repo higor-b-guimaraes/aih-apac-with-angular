@@ -15,6 +15,7 @@ import { AuthGuardService } from './core/guards/main/auth-guard.service';
 import { MainContainerComponent } from './core/main/main-container/main-container.component';
 import { AuthService } from './core/services/auth.service';
 import { AppMaterialModule } from './shared/app-material/app-material.module';
+import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 
 
 @NgModule({
@@ -35,6 +36,7 @@ import { AppMaterialModule } from './shared/app-material/app-material.module';
     HomeModule,
     GerarFaixasModule,
     AnalisarFaixasModule,
+    FontAwesomeModule,
 
   ],
   providers: [AuthService, AuthGuardService],

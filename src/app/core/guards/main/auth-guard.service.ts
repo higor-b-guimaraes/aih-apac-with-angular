@@ -19,22 +19,6 @@ export class AuthGuardService implements CanActivate, CanLoad {
   }
 
   checkLogin(): boolean {
-
-
-    console.log(
-      this.auth.getProfile().subscribe({
-        next: (dados: any) => {
-          if(dados?.profile === "Administrador") console.log("é adm")
-          if(dados?.profile !== "Administrador") console.log("não é adm")
-        },
-        error: (e) => {
-          if(e.status === 502) {}
-        }
-      })
-    )
-
-
-
     if(this.auth.isAuthenticated()) {
       return true;
     }
@@ -42,7 +26,4 @@ export class AuthGuardService implements CanActivate, CanLoad {
     this.router.navigateByUrl('/login');
     return false;
   }
-
-
-  checkProfile() {}
 }
