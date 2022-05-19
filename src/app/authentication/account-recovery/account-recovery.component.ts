@@ -6,7 +6,7 @@ import { Tools } from 'src/app/shared/tools/tools';
 import { CustomValidators } from 'src/app/shared/validators/custom-validators';
 
 import { AccountRecoveryService } from '../services/account-recovery/account-recovery.service';
-import { ModalAlert } from './modal/modal-alert';
+import { ModalAlert } from '../../shared/modals/error-alert/modal-error-alert';
 
 
 @Component({
@@ -60,12 +60,14 @@ export class AccountRecoveryComponent implements OnInit {
     const dialogRef = this.dialog.open(ModalAlert, {
       width: '320px',
       panelClass: 'modal-warning',
-      data: {cpf: this.formRecovery.get('cpf')?.value},
+      data: {
+        titleErrorMessage: 'Usuário não encontrado!',
+        bodyErrorMessage: `Olá, infelizmente não conseguimos encontrar o usuário de CPF ${this.formRecovery.get('cpf')?.value} em nossa base de dados.
+        Por favor, verifique se o CPF informado está correto e tente novamente.`
+      },
     });
 
-    dialogRef.afterClosed().subscribe(result => {
-
-    });
+    dialogRef.afterClosed().subscribe();
   }
 
   getErrorMessageCPF() {
@@ -123,16 +125,16 @@ export class AccountRecoveryComponent implements OnInit {
     this.blockBtnSubmit = false;
   }
 
-
+  /* 53080675037 */
   onSubmit() {
 
-    console.log(this.formRecovery?.value?.oficio.files);
+    let formData: FormData = new FormData();
+    let oficio: any = formData.append('oficio', this.formRecovery?.value?.oficio);
 
     if(this.formRecovery.valid) {
         this.account.recoveryAccount({
           cpf: this.tools.removeMaskCPF(<FormControl>this.formRecovery.controls['cpf']),
-          oficio: this.formRecovery?.value?.oficio.files[0]
-        })
+          oficio})
         .subscribe({
           next: (res: any) => {console.log(res)},
           error: (e: { status: any; }) => console.log(e.status)

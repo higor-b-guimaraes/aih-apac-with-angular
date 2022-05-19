@@ -1,0 +1,181 @@
+
+  .container{
+    width:100%;
+    height: 100%;
+    display: flex;
+    flex-flow: row;
+    perspective: 1000px;
+    perspective-origin: center;
+  }
+
+  .link-decoration {
+    text-decoration: none;
+    cursor: pointer;
+}
+
+  .col{
+    height:  100%;
+    transition: transform 600ms cubic-bezier(0.390, 0.575, 0.565, 1.000), opacity 300ms ease;
+    transform: translateZ(34px) scale(.98);
+  /*  flex: 0 0 33.3333%;  */
+    position: relative;
+    text-align: center;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+
+  #menuUm:before {
+      background-image: url('../../../../assets/resources/images/btn-home/default.jpg');
+  }
+
+  #menuDois:before {
+      background-image: url('../../../../assets/resources/images/btn-home/password.jpg');
+  }
+
+  #menuTres:before {
+      background-image: url('../../../../assets/resources/images/btn-home/default.jpg');
+  }
+
+  #menuQuatro:before {
+      background-image: url('../../../../assets/resources/images/btn-home/search.jpg');
+  }
+
+  #menuCinco:before {
+      background-image: url('../../../../assets/resources/images/btn-home/default.jpg');
+  }
+
+  #menuSeis:before {
+      background-image: url('../../../../assets/resources/images/btn-home/default.jpg');
+  }
+
+  #menuSete:before {
+      background-image: url('../../../../assets/resources/images/btn-home/default.jpg');
+  }
+
+  #menuOito:before {
+      background-image: url('../../../../assets/resources/images/btn-home/search.jpg');
+  }
+
+  .card-container{
+    position: relative;
+    width: calc(100% - 25px);
+    height:  calc(33.3% - 25px);
+    margin: 17px;
+    padding: 8px;
+    text-align: center;
+    opacity: .89;
+    max-height: 200px;
+    min-height: 300px;
+    min-width: 360px;
+
+    transition: transform 600ms cubic-bezier(0.390, 0.575, 0.565, 1.000), opacity 300ms ease;
+    transform: translateZ(34px) scale(.98);
+  }
+
+  .card-container:hover,
+  .card-container:focus{
+    opacity: 1;
+    transform: translateZ(34px);
+    transition: transform 300ms cubic-bezier(0.390, 0.575, 0.565, 1.000), opacity 300ms ease;
+  }
+
+  .card-container:hover .card:before,
+  .card-container:hover .card:after,
+  .card-container:focus .card:before,
+  .card-container:focus .card:after{
+    opacity: .34;
+    transform: scale(1);
+  }
+
+  .card-container:hover > .card > h4,
+  .card-container:focus > .card > h4{
+    transform: translateY(-13px);
+  }
+
+  .card-container:hover > .card > span,
+  .card-container:focus > .card > span{
+  opacity: 1;
+      transform: translateX(3px);
+    animation: slideRight 300ms ease;
+  }
+
+  .card{
+      border-radius: 5px;
+      height: 100%;
+      transition: all 300ms ease-out;
+      align-items: center;
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      justify-content: flex-end;
+      position: relative;
+      z-index: 0;
+      opacity: 1;
+      padding: 13px 21px;
+      color: #fff;
+      background-color: #000;
+  }
+
+  .card:before,
+  .card:after{
+    content: '';
+    position: absolute;
+    left:0;
+    top: 0;
+    display: block;
+    width: 100%;
+    height: 100%;
+    opacity: .21;
+    transition: transform 300ms ease;
+    transform: scale(.98);
+  }
+
+  .card:before{
+    background-size: cover;
+    background-position: 50% 50%;
+  }
+
+  .card:after{
+      background: linear-gradient(to bottom, rgba(0,0,0,0) 50%,rgba(0,0,0,0.89) 100%);
+  }
+
+  .card > span{
+      font-size: 34px;
+      opacity: 0;
+      transform: translateX(-3px);
+      transition: all 300ms ease;
+  }
+
+  h4{
+    text-align: left;
+    font-size: 1.4em;
+    font-weight:400;
+    transform: translateY(5px);
+    transition: transform 450ms cubic-bezier(0.390, 0.575, 0.565, 1.000);
+    max-width: 320px;
+    outline: 1px solid transparent;
+  }
+
+
+@media (max-width: 375px){
+
+  .container {
+    display: contents;
+  }
+
+  .card-container{
+    padding-top: 20px;
+    margin: 0px;
+    max-height: 200px;
+    min-height: 200px;
+    min-width: 320px;
+
+    transition: transform 600ms cubic-bezier(0.390, 0.575, 0.565, 1.000), opacity 300ms ease;
+    transform: translateZ(34px) scale(.98);
+  }
+
+  h4 {
+    margin: 0px;
+  }
+}

@@ -7,9 +7,14 @@ body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
 /* MODALS */
 
 .modal-warning {
-  background-color: #FFF3CD !important;
+  background-color: #F8D7DA !important;
+  /* background-color: #FFF3CD !important; */
 }
 
 .mat-dialog-container {
   background-color: transparent !important;
+}
+
+mat-sidenav-content.mat-drawer-content.mat-sidenav-content.ng-star-inserted {
+  display: initial;
 }

@@ -1,0 +1,8 @@
+<div class="container-adm" *ngIf="perfil === 'Administrador'" >
+  <app-menu></app-menu>
+</div>
+
+
+<div class="container-table" *ngIf="perfil !== 'Administrador'" >
+  <app-faixas class="table-a" [colunas]="titulos" [linhas]="this.filas"></app-faixas>
+</div>

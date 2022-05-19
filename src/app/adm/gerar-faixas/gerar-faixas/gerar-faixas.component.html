@@ -1,0 +1,86 @@
+<mat-card class="secao-administrativo">
+  <div class="grupo-conteudo">
+  <div class="container container-faixas box-shadow-border-dark">
+    <form class="row g-3 needs-validation" novalidate >
+
+
+        <mat-form-field appearance="fill"  class="col-md-4">
+          <mat-label>Municípios / Unidades</mat-label>
+          <mat-select [formControl]="formControl">
+            <mat-optgroup *ngFor="let municipio of municipios" [label]="municipio.nome">
+              <mat-option *ngFor="let unidade of municipio.unidades" [value]="unidade.nome">
+                {{unidade.nome}}
+              </mat-option>
+            </mat-optgroup>
+          </mat-select>
+        </mat-form-field>
+
+
+      <div class="col-md-4">
+        <label for="tipoFaixa" class="form-label">Tipo de Faixa</label>
+        <select id="tipoFaixa" class="form-select" required aria-label="select tipo-faixa">
+            <option value="1">AIH Comum</option>
+            <option value="5">AIH Eleitva</option>
+            <option value="2">APAC Comum</option>
+            <option value="6">APAC Eleitva</option>
+        </select>
+        <div class="invalid-feedback">
+            O tipo de faixa precisa ser selecionada
+        </div>
+      </div>
+
+      <div class="col-md-4">
+          <label for="faixaCompetencia" class="form-label">Competência</label>
+
+          <select *ngIf="crossedLimitYear()" id="faixaCompetencia" class="form-select" required>
+            <option *ngFor="let ano of anos" [value]="ano" selected>{{ano}}</option>
+          </select>
+          <select *ngIf="!crossedLimitYear()" id="faixaCompetencia" class="form-select" required>
+            <option *ngFor="let ano of anos" [value]="ano" selected>{{ano}}</option>
+          </select>
+
+          <div class="invalid-feedback">
+              O ano de competência precisa ser informado
+          </div>
+      </div>
+
+      <div class="col-md-4">
+          <label for="faixaMeses" class="form-label">Mês</label>
+          <select id="faixaMeses" class="form-select" required>
+            <option *ngFor="let mes of meses" [value]="mes" selected>{{mes}}</option>
+          </select>
+          <div class="invalid-feedback">
+              O mês de competência precisa ser informado
+          </div>
+      </div>
+
+      <div class="col-md-4">
+          <label for="quantidadeFaixasSolicitadas" class="form-label">Quantidade</label>
+          <input id="quantidadeFaixasSolicitadas" class="form-control" type="number" required>
+          <div class="invalid-feedback">
+              A quantidade de faixas precisa ser informada
+          </div>
+      </div>
+
+      <div class="col-md-4">
+          <label for="cotaDisponivel" class="form-label">Cota Disponível</label>
+          <input type="text" class="form-control" id="cotaDisponivel" readonly>
+      </div>
+
+      <div class="col-md-4">
+          <label for="cotaUsada" class="form-label">Cota Usada</label>
+          <input type="text" class="form-control" id="cotaUsada" readonly>
+      </div>
+
+      <div class="col-md-4">
+          <label for="cotaPadrao" class="form-label">Cota Padrão</label>
+          <input type="text" class="form-control" id="cotaPadrao" readonly>
+      </div>
+
+      <div class="col-12">
+          <button class="btn btn-primary" type="submit">Gerar Faixas</button>
+      </div>
+    </form>
+  </div>
+</div>
+</mat-card>

@@ -1,0 +1,10 @@
+
+<div class="container-modal" >
+  <h2 mat-dialog-title class="title-modal">{{message['titleErrorMessage']}}</h2>
+
+  <mat-dialog-content class="mat-typography body-modal"> {{message['bodyErrorMessage']}}</mat-dialog-content>
+
+  <mat-dialog-actions align="end" class="footer-modal">
+    <button class="btn-close-modal" mat-button [mat-dialog-close]="true" cdkFocusInitial>fechar</button>
+  </mat-dialog-actions>
+</div>

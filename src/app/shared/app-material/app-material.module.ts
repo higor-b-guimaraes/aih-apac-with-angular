@@ -4,10 +4,14 @@ import {MatFormFieldModule} from '@angular/material/form-field';
 import {MatInputModule} from '@angular/material/input';
 import {MatIconModule} from '@angular/material/icon';
 import {MatButtonModule} from '@angular/material/button';
-import { FileInputConfig, MaterialFileInputModule, NGX_MAT_FILE_INPUT_CONFIG } from 'ngx-material-file-input';
 import { NgxMaskModule } from 'ngx-mask';
 import {MatDialogModule} from '@angular/material/dialog';
-
+import {MatSidenavModule} from '@angular/material/sidenav';
+import {MatListModule} from '@angular/material/list';
+import {MatToolbarModule} from '@angular/material/toolbar';
+import {MatTableModule} from '@angular/material/table';
+import { FileInputConfig, MaterialFileInputModule, NGX_MAT_FILE_INPUT_CONFIG } from 'ngx-material-file-input';
+import {MatSelectModule} from '@angular/material/select';
 
 const config: FileInputConfig = {
   sizeUnit: 'Octet'
@@ -26,6 +30,11 @@ const config: FileInputConfig = {
     MatButtonModule,
     MaterialFileInputModule,
     MatDialogModule,
+    MatSidenavModule,
+    MatListModule,
+    MatToolbarModule,
+    MatTableModule,
+    MatSelectModule,
     NgxMaskModule,
   ],
   providers: [{ provide: NGX_MAT_FILE_INPUT_CONFIG, useValue: config }]

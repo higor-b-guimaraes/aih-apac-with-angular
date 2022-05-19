@@ -71,7 +71,7 @@ export class LoginComponent implements OnInit {
           password: this.formLogin.value?.password
         })
         .subscribe({
-          next: (dados) => this.router.navigate(['/authentication/']),
+          next: (dados) => this.router.navigate(['/']),
           error: (e) => {
             if( e.status === 500) {
               this.access = false;

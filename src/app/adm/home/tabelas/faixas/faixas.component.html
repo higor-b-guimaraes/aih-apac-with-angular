@@ -1,0 +1,40 @@
+
+<table mat-table [dataSource]="linhas" class="mat-elevation-z8 table">
+  <ng-container matColumnDef="dtSolicitacao" >
+    <th mat-header-cell class="header-table" *matHeaderCellDef>Data da Solicitação</th>
+    <td mat-cell [class]="getClass(linha.status)" *matCellDef="let linha">{{linha.dtSolicitacao}}</td>
+  </ng-container>
+
+  <ng-container matColumnDef="tipoSolicitaca">
+    <th mat-header-cell class="header-table" *matHeaderCellDef>Tipo de Solicitação</th>
+    <td mat-cell [class]="getClass(linha.status)" *matCellDef="let linha">{{linha.tipoSolicitaca}}</td>
+  </ng-container>
+
+  <ng-container matColumnDef="tipoFaixa">
+    <th mat-header-cell class="header-table" *matHeaderCellDef>Tipo de Faixa</th>
+    <td [class]="getClass(linha.status)" mat-cell *matCellDef="let linha">{{linha.tipoFaixa}}</td>
+  </ng-container>
+
+  <ng-container matColumnDef="qtdFaixasExtras">
+    <th mat-header-cell class="header-table" *matHeaderCellDef>Qnt de Faixas Extras</th>
+    <td mat-cell [class]="getClass(linha.status)" *matCellDef="let linha">{{linha.qtdFaixasExtras}}</td>
+  </ng-container>
+
+  <ng-container matColumnDef="oficioAutorizacao">
+    <th mat-header-cell class="header-table" *matHeaderCellDef>Ofício de Autorização	</th>
+    <td mat-cell [class]="getClass(linha.status)" *matCellDef="let linha">{{linha.oficioAutorizacao}}</td>
+  </ng-container>
+
+  <ng-container matColumnDef="status">
+    <th mat-header-cell class="header-table" *matHeaderCellDef>Status</th>
+    <td mat-cell [class]="getClass(linha.status)" *matCellDef="let linha">{{linha.status}}</td>
+  </ng-container>
+
+  <ng-container matColumnDef="motivoCancelamento">
+    <th mat-header-cell class="header-table" *matHeaderCellDef>Motivo</th>
+    <td mat-cell [class]="getClass(linha.status)" *matCellDef="let linha">{{linha.motivoCancelamento}}</td>
+  </ng-container>
+
+  <tr mat-header-row *matHeaderRowDef="colunas; sticky: true"></tr>
+  <tr mat-row *matRowDef="let row; columns: colunas;"></tr>
+</table>

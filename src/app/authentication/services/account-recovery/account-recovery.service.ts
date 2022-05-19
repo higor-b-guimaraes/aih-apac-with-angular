@@ -21,7 +21,7 @@ export class AccountRecoveryService {
     )
   }
 
-  recoveryAccount(data: { cpf: string; oficio: File }) {
+  recoveryAccount(data: {cpf: string, oficio: FormData}) {
     return this.http.post(`${environment.API}reset/user`, data)
     .pipe(
         tap((res: any) => console.log(res)

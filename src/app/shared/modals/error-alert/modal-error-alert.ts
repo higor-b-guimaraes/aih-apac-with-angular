@@ -1,8 +1,5 @@
 import {Component, Inject } from '@angular/core';
 import {MatDialog, MatDialogRef, MAT_DIALOG_DATA} from '@angular/material/dialog';
-import { AccountRecoveryComponent } from '../account-recovery.component';
-
-
 
 @Component({
   selector: 'modal-alert',
@@ -12,9 +9,9 @@ import { AccountRecoveryComponent } from '../account-recovery.component';
 export class ModalAlert {
   constructor(
     public dialogRef: MatDialogRef<ModalAlert>,
-    @Inject(MAT_DIALOG_DATA) public data: any,
+    @Inject(MAT_DIALOG_DATA) public message: any,
   ) {
-    console.log((data['cpf']))
+    console.log((message['bodyErrorMessage']))
   }
 
   onNoClick(): void {

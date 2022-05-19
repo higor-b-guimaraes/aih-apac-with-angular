@@ -1,0 +1,53 @@
+.table {
+  width: 100%;
+}
+
+.header-table {
+  background-color: #363636;
+  color: #fff;
+  font-size: 14px;
+  vertical-align: middle;
+  text-align: center;
+}
+
+th {
+  padding: 0px 20px;
+  white-space: nowrap;
+}
+
+th.mat-header-cell {
+  padding: 10px 20px;
+}
+
+
+
+.alert-danger {
+  color: #842029;
+  background-color: #f8d7da;
+  border-color: #f5c2c7;
+  vertical-align: middle;
+  text-align: center;
+}
+
+.alert-warning {
+  color: #664d03;
+  background-color: #fff3cd;
+  border-color: #ffecb5;
+  vertical-align: middle;
+  text-align: center;
+}
+
+.alert-success {
+  color: #0f5132;
+  background-color: #d1e7dd;
+  border-color: #badbcc;
+  vertical-align: middle;
+  text-align: center;
+}
+
+.mat-column-demo-position {
+  width: 32px;
+  border-right: 1px solid currentColor;
+  padding-right: 24px;
+  text-align: center;
+}
