@@ -1,84 +1,64 @@
 <mat-card class="secao-administrativo">
   <div class="grupo-conteudo">
   <div class="container container-faixas box-shadow-border-dark">
-    <form class="row g-3 needs-validation" novalidate >
+    <form class="row g-3 needs-validation" novalidate>
 
+      <mat-form-field *ngIf="getTypeUser()" appearance="fill"  class="col-md-4">
+        <mat-label>Municípios / Unidades</mat-label>
+        <mat-select [formControl]="municipiosControl">
+          <mat-optgroup *ngFor="let municipio of municipios" [label]="municipio.nome">
+            <mat-option *ngFor="let unidade of municipio.unidades" [value]="unidade.nome" required>
+              {{unidade.nome}}
+            </mat-option>
+          </mat-optgroup>
+        </mat-select>
+        <mat-hint>É preciso selecionar uma Unidade ou Município</mat-hint>
+        <mat-error *ngIf="municipiosControl.hasError('required')">É preciso selecionar uma Unidade ou Município</mat-error>
+      </mat-form-field>
 
-        <mat-form-field appearance="fill"  class="col-md-4">
-          <mat-label>Municípios / Unidades</mat-label>
-          <mat-select [formControl]="formControl">
-            <mat-optgroup *ngFor="let municipio of municipios" [label]="municipio.nome">
-              <mat-option *ngFor="let unidade of municipio.unidades" [value]="unidade.nome">
-                {{unidade.nome}}
-              </mat-option>
-            </mat-optgroup>
-          </mat-select>
-        </mat-form-field>
+      <mat-form-field appearance="fill" class="col-md-4">
+        <mat-label>Tipo de Faixa</mat-label>
+        <mat-select [formControl]="tipoFaixaControl">
+          <mat-option *ngFor="let faixa of tipoFaixas" [value]="faixa" required>
+            {{faixa}}
+          </mat-option>
+        </mat-select>
+        <mat-error *ngIf="tipoFaixaControl.hasError('required')">É preciso selecionar um tipo de faixa</mat-error>
+      </mat-form-field>
 
+      <mat-form-field appearance="fill" class="col-md-4">
+        <mat-label>Competência</mat-label>
+        <mat-select [formControl]="competenciaControl">
+          <mat-option *ngFor="let ano of anos" [value]="ano" required>
+            {{ano}}
+          </mat-option>
+        </mat-select>
+        <mat-error *ngIf="tipoFaixaControl.hasError('required')">É preciso selecionar o ano da competência</mat-error>
+      </mat-form-field>
 
-      <div class="col-md-4">
-        <label for="tipoFaixa" class="form-label">Tipo de Faixa</label>
-        <select id="tipoFaixa" class="form-select" required aria-label="select tipo-faixa">
-            <option value="1">AIH Comum</option>
-            <option value="5">AIH Eleitva</option>
-            <option value="2">APAC Comum</option>
-            <option value="6">APAC Eleitva</option>
-        </select>
-        <div class="invalid-feedback">
-            O tipo de faixa precisa ser selecionada
-        </div>
-      </div>
+      <mat-form-field appearance="fill" class="col-md-4">
+        <mat-label>Quantidade de faixas</mat-label>
+        <input [formControl]="qtdCotasControl" matInput placeholder="500" mask="9999" required>
+        <mat-error *ngIf="tipoFaixaControl.hasError('required')">É preciso informar a quantidade de faixas</mat-error>
+      </mat-form-field>
 
-      <div class="col-md-4">
-          <label for="faixaCompetencia" class="form-label">Competência</label>
+      <mat-form-field appearance="fill" class="col-md-4">
+        <mat-label>Cotas Disponíveis</mat-label>
+        <input [formControl]="cotasDisponiveisControl" matInput  placeholder="500" mask="0000">
+      </mat-form-field>
 
-          <select *ngIf="crossedLimitYear()" id="faixaCompetencia" class="form-select" required>
-            <option *ngFor="let ano of anos" [value]="ano" selected>{{ano}}</option>
-          </select>
-          <select *ngIf="!crossedLimitYear()" id="faixaCompetencia" class="form-select" required>
-            <option *ngFor="let ano of anos" [value]="ano" selected>{{ano}}</option>
-          </select>
+      <mat-form-field appearance="fill" class="col-md-4">
+        <mat-label>Cotas Usadas</mat-label>
+        <input [formControl]="cotasUsadasControl" matInput  placeholder="500" mask="0000" >
+      </mat-form-field>
 
-          <div class="invalid-feedback">
-              O ano de competência precisa ser informado
-          </div>
-      </div>
+      <mat-form-field appearance="fill" class="col-md-4">
+        <mat-label>Cota Padrão</mat-label>
+        <input [formControl]="cotasPadraoControl" matInput  placeholder="500" mask="0000">
+      </mat-form-field>
 
-      <div class="col-md-4">
-          <label for="faixaMeses" class="form-label">Mês</label>
-          <select id="faixaMeses" class="form-select" required>
-            <option *ngFor="let mes of meses" [value]="mes" selected>{{mes}}</option>
-          </select>
-          <div class="invalid-feedback">
-              O mês de competência precisa ser informado
-          </div>
-      </div>
-
-      <div class="col-md-4">
-          <label for="quantidadeFaixasSolicitadas" class="form-label">Quantidade</label>
-          <input id="quantidadeFaixasSolicitadas" class="form-control" type="number" required>
-          <div class="invalid-feedback">
-              A quantidade de faixas precisa ser informada
-          </div>
-      </div>
-
-      <div class="col-md-4">
-          <label for="cotaDisponivel" class="form-label">Cota Disponível</label>
-          <input type="text" class="form-control" id="cotaDisponivel" readonly>
-      </div>
-
-      <div class="col-md-4">
-          <label for="cotaUsada" class="form-label">Cota Usada</label>
-          <input type="text" class="form-control" id="cotaUsada" readonly>
-      </div>
-
-      <div class="col-md-4">
-          <label for="cotaPadrao" class="form-label">Cota Padrão</label>
-          <input type="text" class="form-control" id="cotaPadrao" readonly>
-      </div>
-
-      <div class="col-12">
-          <button class="btn btn-primary" type="submit">Gerar Faixas</button>
+      <div class="col-12 container-btn-submit">
+          <button class="btn btn-primary" type="submit" [disabled]="!validFormSubmit()" (click)="formSub()">Gerar Faixas</button>
       </div>
     </form>
   </div>

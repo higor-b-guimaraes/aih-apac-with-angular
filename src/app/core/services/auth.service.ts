@@ -29,10 +29,13 @@ export class AuthService {
   }
 
   haspermission() {
-
     let credential: any | null = JSON.parse(this.getToken() || '{}');
     console.log(credential);
+  }
 
+  getCredentials() {
+    let credential: any | null = JSON.parse(this.getToken() || '{}');
+    return credential;
   }
 
   getProfile() {

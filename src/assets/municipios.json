@@ -1,0 +1,26 @@
+[
+  {
+    "nome": "Rio de Janeiro",
+    "unidades": [
+      {"id": 1, "nome": "Rio de Janeiro - Município"},
+      {"id": 2, "nome": "Rio de Janeiro"},
+      {"id": 3, "nome": "Belford Roxo"}
+    ]
+  },
+  {
+    "nome": "São Gonçalo",
+    "unidades": [
+      {"id": 4, "nome": "São Gonçalo - Município"},
+      {"id": 5, "nome": "Vila Lage"},
+      {"id": 6, "nome": "Gradim"}
+    ]
+  },
+  {
+    "nome": "Niteroi",
+    "unidades": [
+      {"id": 7, "nome": "Niteroi - Município"},
+      {"id": 8, "nome": "Icaraí"},
+      {"id": 9, "nome": "São Francisco"}
+    ]
+  }
+]

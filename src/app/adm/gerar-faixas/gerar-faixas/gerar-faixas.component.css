@@ -41,3 +41,10 @@
   text-align: left;
   padding-top: 15px;
 }
+
+.container-btn-submit {
+  display: flex;
+  width: 100%;
+  justify-content: center;
+  padding: 20px 0px;
+}

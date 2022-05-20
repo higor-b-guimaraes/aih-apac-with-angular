@@ -55,7 +55,6 @@ export class LoginComponent implements OnInit {
   }
 
   getErrorMessagePassword() {
-    console.log(this.formLogin.get('password')?.value)
     if (this.formLogin.get('password')?.touched && this.formLogin.get('password')?.value === '') {
       this.access = false;
       this.errorAccessMsg = 'A senha precisa ser informada!';

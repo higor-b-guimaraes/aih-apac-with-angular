@@ -1,4 +1,6 @@
+import { Faixas } from './../../home/models/faixas.model';
 
 export interface Unidades {
-    nome: string;
+  id: number;
+  nome: string;
 }

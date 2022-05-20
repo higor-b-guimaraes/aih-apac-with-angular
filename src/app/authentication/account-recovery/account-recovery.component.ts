@@ -125,7 +125,6 @@ export class AccountRecoveryComponent implements OnInit {
     this.blockBtnSubmit = false;
   }
 
-  /* 53080675037 */
   onSubmit() {
 
     let formData: FormData = new FormData();
