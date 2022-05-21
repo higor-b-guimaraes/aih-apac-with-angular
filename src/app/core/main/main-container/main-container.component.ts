@@ -94,7 +94,7 @@ export class MainContainerComponent implements OnInit {
 
 /* Get Type of user Access */
   typeOfUser() {
-    this.auth.getProfile()
+    this.auth.requestProfile()
     .subscribe({
       next: (data) => {
         this.controlAccessMenu(data);

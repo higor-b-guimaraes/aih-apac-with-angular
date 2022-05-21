@@ -19,7 +19,7 @@ export class HomeComponent implements OnInit {
 
 
   typeOfUser() {
-    this.auth.getProfile()
+    this.auth.requestProfile()
     .subscribe({
       next: (data: any) => {
         (data['profile'] === 'Administrador') ? this.perfil = 'Administrador' : '';

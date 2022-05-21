@@ -1,7 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
-import { tap } from 'rxjs';
+import { tap, map } from 'rxjs';
 import { environment } from 'src/environments/environment';
 
 @Injectable({
@@ -16,8 +16,24 @@ export class AuthService {
     localStorage.setItem(this.STORAGE_KEY, JSON.stringify(credentials));
   }
 
-  getToken(): string | null {
-    return localStorage.getItem(this.STORAGE_KEY);
+  getToken()  {
+    let credential: any = JSON.parse(localStorage.getItem(this.STORAGE_KEY) || '{}');
+    return credential.token;
+  }
+
+  getId()  {
+    let credential: any = JSON.parse(localStorage.getItem(this.STORAGE_KEY) || '{}');
+    return credential.id;
+  }
+
+  getAuth()  {
+    let credential: any = JSON.parse(localStorage.getItem(this.STORAGE_KEY) || '{}');
+    return credential.auth;
+  }
+
+  getProfile()  {
+    let credential: any = JSON.parse(localStorage.getItem(this.STORAGE_KEY) || '{}');
+    return credential.perfil;
   }
 
   clearToken(): void {
@@ -28,18 +44,18 @@ export class AuthService {
     return !!localStorage.getItem(this.STORAGE_KEY);
   }
 
-  haspermission() {
-    let credential: any | null = JSON.parse(this.getToken() || '{}');
-    console.log(credential);
-  }
+/*   haspermission() {
+    let credential: any | null = JSON.parse(localStorage.getItem(this.STORAGE_KEY) || '{}');
+    return credential;
+  } */
 
   getCredentials() {
-    let credential: any | null = JSON.parse(this.getToken() || '{}');
+    let credential: any | null = JSON.parse(localStorage.getItem(this.STORAGE_KEY) || '{}');
     return credential;
   }
 
-  getProfile() {
-    let credential: any | null = JSON.parse(this.getToken() || '{}');
+  requestProfile() {
+    let credential: any | null = JSON.parse(localStorage.getItem(this.STORAGE_KEY) || '{}');
     return this.http.post(`${environment.API}credential`, credential);
   }
 

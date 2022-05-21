@@ -6,10 +6,26 @@ body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
 
 /* MODALS */
 
-.modal-warning {
+.error-modal {
   background-color: #F8D7DA !important;
-  /* background-color: #FFF3CD !important; */
 }
+
+.warning-modal {
+  background-color: #FFF3CD !important;
+}
+
+.success-modal {
+  background-color: #D1E7DD !important;
+}
+
+.info-modal {
+  background-color: #FEFEFE !important;
+}
+
+.common-modal {
+  background-color: #F8F9FA !important;
+}
+
 
 .mat-dialog-container {
   background-color: transparent !important;

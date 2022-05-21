@@ -1,5 +1,5 @@
 
-import { HttpClientModule } from '@angular/common/http';
+import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { BrowserModule } from '@angular/platform-browser';
@@ -13,6 +13,7 @@ import { AppComponent } from './app.component';
 import { AuthenticationModule } from './authentication/authentication.module';
 import { LoginComponent } from './authentication/login/login.component';
 import { AuthGuardService } from './core/guards/main/auth-guard.service';
+import { AuthInterceptor } from './core/interceptors/auth.interceptor';
 import { MainContainerComponent } from './core/main/main-container/main-container.component';
 import { AuthService } from './core/services/auth.service';
 import { AppMaterialModule } from './shared/app-material/app-material.module';
@@ -39,7 +40,11 @@ import { ModalAlert } from './shared/modals/error-alert/modal-error-alert';
     AnalisarFaixasModule,
 
   ],
-  providers: [AuthService, AuthGuardService],
+  providers: [
+    AuthService,
+    AuthGuardService,
+    { provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true },
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

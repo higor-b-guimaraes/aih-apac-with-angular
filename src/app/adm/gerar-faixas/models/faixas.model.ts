@@ -1,11 +1,21 @@
-export interface Faixas {
-  userId: number;
-  userToken: string;
-  municipios: string,
+import { BasicCredential } from "src/app/core/models/credentials.model";
+
+export interface FaixasCompleta extends BasicCredential {
+  municipio: string,
   tipoFaixa: string,
   competencia: number,
+  mes: string,
   qtdCotas: number,
   cotasDisponiveis: number,
   cotasUsadas: number,
   cotasPadrao: number
 }
+
+export interface FaixasBasicas extends BasicCredential {
+  municipio: string,
+  tipoFaixa: string,
+  competencia: number,
+  mes: string,
+  qtdCotas: number,
+}
+
