@@ -1,1 +1,47 @@
-<p>alterar-senha works!</p>
+<div class="container-principal">
+  <div class="container-conteudo">
+    <div class="container container-faixas">
+      <div class="row g-3 container-form">
+        <mat-form-field
+        [formGroup]="formResetPassword"
+        appearance="outline">
+
+          <mat-label>Informe seu login de acesso</mat-label>
+          <input matInput
+          formControlName="cpf"
+          placeholder="Placeholder"
+          mask="000.000.000-00"
+          (focusout)="checkCpf()" required>
+          <mat-icon matSuffix>person_2</mat-icon>
+          <mat-error class="error-access" *ngIf="!validCpf">{{ errorCPFMsg }}</mat-error>
+        </mat-form-field>
+
+        <mat-form-field
+        *ngIf="!isAdm"
+        [formGroup]="formResetPassword"
+        appearance="outline">
+        <mat-label>Insira o ofício de autorização de recuperação de senha</mat-label>
+            <ngx-mat-file-input
+            formControlName="oficio"
+            placeholder="Ofício"
+            name="ofocio"
+            valuePlaceholder="Insira o ofício"
+            (change)="checkOficio()"
+            required></ngx-mat-file-input>
+            <mat-icon matSuffix>folder</mat-icon>
+            <mat-error class="error-access" *ngIf="!validOficio">{{ errorMsgOficio }}</mat-error>
+            <mat-error class="error-access"></mat-error>
+          </mat-form-field>
+
+          <mat-card-actions class="container-btn-access">
+            <button mat-button
+            [class]="(formResetPassword.valid) ? 'btn-login-active':''"
+            class="btn-login"
+            [disabled]="formResetPassword.invalid"
+            (click)="onSubmit()"
+            >Entrar</button>
+          </mat-card-actions>
+      </div>
+    </div>
+  </div>
+</div>

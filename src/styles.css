@@ -34,3 +34,11 @@ body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
 mat-sidenav-content.mat-drawer-content.mat-sidenav-content.ng-star-inserted {
   display: initial;
 }
+
+/* Material */
+
+.mat-error {
+  color: #f44336;
+  font-size: 12px;
+  font-weight: 500;
+}

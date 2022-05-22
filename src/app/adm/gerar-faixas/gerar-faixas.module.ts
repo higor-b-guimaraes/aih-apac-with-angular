@@ -1,10 +1,11 @@
-import { GerarFaixasComponent } from './gerar-faixas/gerar-faixas.component';
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { GerarFaixasRoutingModule } from './gerar-faixas-routing.module';
 
 import { AppMaterialModule } from 'src/app/shared/app-material/app-material.module';
-import { GerarFaixasRoutingModule } from './gerar-faixas-routing.module';
-import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+
+import { GerarFaixasComponent } from './gerar-faixas/gerar-faixas.component';
 
 
 
@@ -12,10 +13,10 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
   declarations: [GerarFaixasComponent],
   imports: [
     CommonModule,
-    AppMaterialModule,
     FormsModule,
     ReactiveFormsModule,
     GerarFaixasRoutingModule,
+    AppMaterialModule,
   ]
 })
 export class GerarFaixasModule { }

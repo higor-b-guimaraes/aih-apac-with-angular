@@ -15,7 +15,7 @@ export class LoginComponent implements OnInit {
 
 
   logoRJ: string = "../../../assets/resources/images/logoTISESRJ.png";
-  invalidCPF: boolean = false;
+  invalidCPF: boolean = true;
   ErrorCPFMsg: string = "";
   invalidPassword: boolean = false;
   access: boolean = true;

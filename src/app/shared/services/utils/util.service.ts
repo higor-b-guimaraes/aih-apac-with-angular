@@ -1,3 +1,4 @@
+import { FormControl, FormBuilder, FormGroup } from '@angular/forms';
 import { Inject, Injectable } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { map } from 'rxjs';
@@ -17,6 +18,48 @@ export class UtilService {
 
   }
 
+  removeMaskCPF(input: FormControl) {
+    return input.value.replaceAll('.', '').replace('-', '');
+  }
+
+  checkCPF(cpfField: FormGroup, nameField: string): any {
+
+    if (cpfField?.get(`${nameField}`)?.touched && cpfField?.controls[`${nameField}`].hasError('cpfIncompleto')) {
+      return {
+        isValid: false,
+        msg: 'O CPF não foi inserido ou está incompleto!',
+      }
+    }else if(cpfField?.get(`${nameField}`)?.touched && cpfField?.controls[`${nameField}`].hasError('cpfInvalido')) {
+      return {
+        isValid: false,
+        msg: 'Este CPF não é válido!',
+      }
+    }
+    return {
+      isValid: true,
+      msg: '',
+    }
+  }
+
+  checkOficio(oficioField: FormGroup, nameField: string): any {
+
+    if(oficioField?.get(`${nameField}`)?.touched && oficioField?.controls[`${nameField}`].getError('maxContentSize')) {
+      return {
+        isValid: false,
+        msg: 'O arquivo de ofício não pode ultrapassar 10Mb de tamanho!',
+      }
+    }
+    else if(oficioField?.get(`${nameField}`)?.touched && oficioField?.controls[`${nameField}`].hasError('tipoArquivoInvalido')) {
+      return {
+        isValid: false,
+        msg: 'O formato do arquivo inserido não é válido, por favor, insira um arquivo no formato: .pdf, .png ou .jpeg!',
+      }
+    }
+    return {
+      isValid: true,
+      msg: '',
+    }
+  }
 
   getMonths(): string[] {
     return ['Janeiro', 'Fevereiro', 'Março', 'Abril', 'Maio', 'Junho', 'Julho', 'Agosto', 'Setembro', 'Outubro', 'Novembro', 'Dezembro'];

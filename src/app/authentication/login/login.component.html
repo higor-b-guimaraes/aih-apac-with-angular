@@ -11,12 +11,13 @@
         <mat-form-field
         [formGroup]="formLogin"
         appearance="outline">
-
           <mat-label>CPF</mat-label>
           <input matInput
           formControlName="cpf"
           mask="000.000.000-00"
           (focusout)="getErrorMessageCPF()" required>
+          <mat-icon matSuffix *ngIf="invalidCPF">person_2</mat-icon>
+          <mat-icon matSuffix *ngIf="!invalidCPF">how_to_reg</mat-icon>
           <mat-error class="error-access" *ngIf="invalidCPF">{{ ErrorCPFMsg }}</mat-error>
         </mat-form-field>
 
