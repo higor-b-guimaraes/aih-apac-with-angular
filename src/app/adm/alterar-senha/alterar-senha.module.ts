@@ -18,6 +18,6 @@ import { AlterarSenhaComponent } from './alterar-senha/alterar-senha.component';
     ReactiveFormsModule,
     AlterarSenhaRoutingModule,
     AppMaterialModule,
-  ]
+  ],
 })
 export class AlterarSenhaModule { }

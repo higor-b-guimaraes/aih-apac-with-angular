@@ -1,7 +1,9 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-
 import { ConsultarFaixasRoutingModule } from './consultar-faixas-routing.module';
+
+import { AppMaterialModule } from './../../shared/app-material/app-material.module';
+
 import { ConsultarFaixasComponent } from './consultar-faixas/consultar-faixas.component';
 
 
@@ -11,7 +13,8 @@ import { ConsultarFaixasComponent } from './consultar-faixas/consultar-faixas.co
   ],
   imports: [
     CommonModule,
-    ConsultarFaixasRoutingModule
+    ConsultarFaixasRoutingModule,
+    AppMaterialModule,
   ]
 })
-export class ConsultarFaixasModule { }
+export class ConsultarFaixasModule {}

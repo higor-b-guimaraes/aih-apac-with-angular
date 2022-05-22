@@ -14,7 +14,10 @@ export class AlterarSenhaService {
   }
 
   submitResetPassword( oficio: FormData, data: {id: number, cpf: string}): any {
-    return this.http.post(`${environment.API}resetPassword`, oficio, {params: data});
+    return this.http.post(`${environment.API}resetPassword`, oficio, {
+      params: data,
+      observe: 'events',
+      reportProgress: true
+    });
   }
-
 }

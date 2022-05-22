@@ -12,6 +12,8 @@ import {MatToolbarModule} from '@angular/material/toolbar';
 import {MatTableModule} from '@angular/material/table';
 import { FileInputConfig, MaterialFileInputModule, NGX_MAT_FILE_INPUT_CONFIG } from 'ngx-material-file-input';
 import {MatSelectModule} from '@angular/material/select';
+import {MatPaginatorModule} from '@angular/material/paginator';
+import {MatProgressSpinnerModule} from '@angular/material/progress-spinner';
 
 const config: FileInputConfig = {
   sizeUnit: 'Octet'
@@ -35,6 +37,8 @@ const config: FileInputConfig = {
     MatToolbarModule,
     MatTableModule,
     MatSelectModule,
+    MatPaginatorModule,
+    MatProgressSpinnerModule,
     NgxMaskModule,
   ],
   providers: [{ provide: NGX_MAT_FILE_INPUT_CONFIG, useValue: config }]

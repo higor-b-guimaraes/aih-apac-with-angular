@@ -1,4 +1,5 @@
 
+
 <mat-sidenav class="offcanvas offcanvas-start" #nav fixedTopGap="0">
   <div class="offcanvas-header">
     <button type="button" class="btn-close text-reset" (click)="nav.toggle()"></button>
@@ -11,6 +12,11 @@
   *ngFor="let item of menu">{{item.nome}}</button>
 </mat-nav-list>
 </mat-sidenav>
+
+
+<div *ngIf="loading" class="loading-data">
+  <mat-spinner></mat-spinner>
+</div>
 
 <header>
   <div class="container-topo-site">

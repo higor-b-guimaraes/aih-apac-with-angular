@@ -1,6 +1,7 @@
+import { UtilService } from 'src/app/shared/services/utils/util.service';
 import {MediaMatcher} from '@angular/cdk/layout';
 import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
-import { tap } from 'rxjs';
+import { Subscription, tap } from 'rxjs';
 import { AuthService } from '../../services/auth.service';
 import { MatDialog } from '@angular/material/dialog';
 import { ModalAlert } from '../../../shared/modals/error-alert/modal-error-alert';
@@ -14,6 +15,7 @@ import { ModalAlert } from '../../../shared/modals/error-alert/modal-error-alert
 export class MainContainerComponent implements OnInit {
   showFiller = false;
   logoSESRJ = '../../../assets/resources/images/logo-ses-rj.svg';
+  loading: boolean = false;
 
   menu: Array<any> = [
     {
@@ -84,7 +86,10 @@ export class MainContainerComponent implements OnInit {
     },
   ];
 
-  constructor(private auth: AuthService, private dialog: MatDialog) {
+  private subscribeLoading!: Subscription;
+
+  constructor(private cdRef: ChangeDetectorRef, private auth: AuthService, private dialog: MatDialog, private util: UtilService) {
+
   }
 
   logout() {
@@ -124,8 +129,6 @@ export class MainContainerComponent implements OnInit {
     }
   }
 
-
-
   openDialog(): void {
     const dialogRef = this.dialog.open(ModalAlert, {
       width: '320px',
@@ -138,8 +141,15 @@ export class MainContainerComponent implements OnInit {
     dialogRef.afterClosed().subscribe(result => {});
   }
 
+  ngAfterContentChecked() {
+    this.cdRef.detectChanges();
+  }
+
   ngOnInit(): void {
+    this.subscribeLoading = this.util.loadingActivated().subscribe((res: any) => this.loading = res);
     this.typeOfUser();
   }
 
+  ngOnDestroy(): void {
+  }
 }

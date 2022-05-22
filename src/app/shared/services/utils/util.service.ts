@@ -1,7 +1,7 @@
 import { FormControl, FormBuilder, FormGroup } from '@angular/forms';
 import { Inject, Injectable } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
-import { map } from 'rxjs';
+import { map, Subject, Observable } from 'rxjs';
 import { AuthService } from 'src/app/core/services/auth.service';
 
 import { ModalAlert } from '../../modals/error-alert/modal-error-alert';
@@ -12,7 +12,7 @@ import { Profile } from '../../modals/models/profile.model';
 })
 export class UtilService {
 
-
+  loading = new Subject()
 
   constructor(private dialog: MatDialog, private auth: AuthService) {
 
@@ -78,6 +78,10 @@ export class UtilService {
     return new Promise((resolve, reject) => {
       dialogRef.afterClosed().subscribe(() => resolve(true))
     })
+  }
+
+  loadingActivated() {
+    return this.loading.asObservable();
   }
 
   async userIsAdm(profile: Profile): Promise<Profile> {

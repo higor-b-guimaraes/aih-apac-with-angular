@@ -1,3 +1,5 @@
+import { HttpEvent } from '@angular/common/http';
+
 import { AuthService } from './../../../core/services/auth.service';
 import { AlterarSenhaService } from './../services/alterar-senha.service';
 import { UtilService } from 'src/app/shared/services/utils/util.service';
@@ -32,6 +34,7 @@ export class AlterarSenhaComponent implements OnInit {
       ]
     ]
   });
+
 
   constructor(private cdRef: ChangeDetectorRef, private formBuilder: FormBuilder, private validator: CustomValidators, private util: UtilService, private alterarSenhaService: AlterarSenhaService, private auth: AuthService) { }
 
@@ -68,6 +71,9 @@ export class AlterarSenhaComponent implements OnInit {
   }
 
 
+
+  /* 06969181022 */
+
   onSubmit() {
     const formData = new FormData();
     formData.append('oficio', this.formResetPassword.get('oficio')?.value._files[0])
@@ -75,8 +81,10 @@ export class AlterarSenhaComponent implements OnInit {
       id: this.auth.getId(),
       cpf: this.formResetPassword.get('cpf')?.value
     }
+    this.util.loading.next(true);
     this.alterarSenhaService.submitResetPassword(formData, data).subscribe({
-
+      next: (event: HttpEvent<boolean>) => {if(event.type === 4) this.util.loading.next(false)},
+      error: () => this.util.loading.next(false)
     })
   }
 
