@@ -1,6 +1,8 @@
+import { ConsultarFaixas } from './../../../consultar-faixas/models/consultar-faixas.model';
 import { Component, Input, OnInit, Optional, ViewChild } from '@angular/core';
 import { MatSort } from '@angular/material/sort';
 import { MatTable, MatTableDataSource } from '@angular/material/table';
+import { MatPaginator } from '@angular/material/paginator';
 
 
 @Component({
@@ -12,11 +14,26 @@ import { MatTable, MatTableDataSource } from '@angular/material/table';
 
 export class FaixasComponent implements OnInit {
 
-  @Input() public colunas: string[] = [];
-  @Input() public linhas: string[] | any;
-  @ViewChild(MatSort) sort: MatSort | undefined;
+  @Input() colunas: string[] = [];
+  @Input() data!: ConsultarFaixas[];
 
+  @ViewChild(MatPaginator) paginator!: MatPaginator;
+  @ViewChild(MatSort) sort!: MatSort;
 
+  dataSource: any;
+
+  ngAfterViewInit() {
+    this.dataSource.paginator = this.paginator;
+    this.dataSource.sort = this.sort;
+  }
+
+  applyFilter(event: Event) {
+    const filterValue = (event.target as HTMLInputElement).value;
+    this.dataSource.filter = filterValue.trim().toLowerCase();
+    if (this.dataSource.paginator) {
+      this.dataSource.paginator.firstPage();
+    }
+  }
 
   getClass(status: string) {
 
@@ -35,21 +52,12 @@ export class FaixasComponent implements OnInit {
   }
 
 
-/*   addData() {
-    const randomElementIndex = Math.floor(Math.random() * ELEMENT_DATA.length);
-    this.linhas.push(ELEMENT_DATA[randomElementIndex]);
-    this.table.renderRows();
+  constructor() {
+
   }
 
-  removeData() {
-    this.linhas.pop();
-    this.table.renderRows();
-  } */
-
-
-  constructor() { }
-
   ngOnInit(): void {
+    this.dataSource = new MatTableDataSource(this.data);
   }
 
 }

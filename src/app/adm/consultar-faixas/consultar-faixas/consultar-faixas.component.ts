@@ -2,46 +2,7 @@ import { Component, OnInit, ViewChild } from '@angular/core';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
-
-export interface UserData {
-  id: string;
-  name: string;
-  progress: string;
-  fruit: string;
-}
-
-const FRUITS: string[] = [
-  'blueberry',
-  'lychee',
-  'kiwi',
-  'mango',
-  'peach',
-  'lime',
-  'pomegranate',
-  'pineapple',
-];
-
-const NAMES: string[] = [
-  'Maia',
-  'Asher',
-  'Olivia',
-  'Atticus',
-  'Amelia',
-  'Jack',
-  'Charlotte',
-  'Theodore',
-  'Isla',
-  'Oliver',
-  'Isabella',
-  'Jasper',
-  'Cora',
-  'Levi',
-  'Violet',
-  'Arthur',
-  'Mia',
-  'Thomas',
-  'Elizabeth',
-];
+import { ConsultarFaixas } from '../models/consultar-faixas.model';
 
 @Component({
   selector: 'app-consultar-faixas',
@@ -51,19 +12,141 @@ const NAMES: string[] = [
 
 export class ConsultarFaixasComponent implements OnInit {
 
-  colunas: string[] = ['id', 'name', 'progress', 'fruit'];
-  dataSource: MatTableDataSource<UserData>;
+  displayedColumns: string[] = ['solicitante', 'usuario', 'dtSolicitacao', 'tipoSolicitacao', 'tipoFaixa', 'qtdFaixasSolicitadas', 'competencia', 'status', 'motivo', 'oficioAutorizacao'];
+
+  data: ConsultarFaixas[] = [
+    {
+      solicitante: 'São Gonçalo - Municipio',
+      usuario: 'João',
+      dtSolicitacao: '20/04/2023',
+      tipoSolicitacao: 'Faixa Extra',
+      tipoFaixa: 'AIH-COMUM',
+      qtdFaixasSolicitadas: '500',
+      competencia: '2023',
+      status: 'Aprovado',
+      motivo: '',
+      oficioAutorizacao: '',
+    },
+    {
+      solicitante: 'São Gonçalo - Municipio',
+      usuario: 'João',
+      dtSolicitacao: '21/04/2022',
+      tipoSolicitacao: 'Resete de Senha',
+      tipoFaixa: '',
+      qtdFaixasSolicitadas: '0',
+      competencia: '',
+      status: 'Pendente',
+      motivo: 'Sem Motivo',
+      oficioAutorizacao: 'http://localhost:3000/imagens',
+    },{
+      solicitante: 'Niteroi - Municipio',
+      usuario: 'João',
+      dtSolicitacao: '20/04/2021',
+      tipoSolicitacao: 'Resete de Senha',
+      tipoFaixa: '',
+      qtdFaixasSolicitadas: '0',
+      competencia: '',
+      status: 'Aprovado',
+      motivo: '',
+      oficioAutorizacao: 'http://localhost:3000/imagens',
+    },{
+      solicitante: 'Unidade Z',
+      usuario: 'João',
+      dtSolicitacao: '11/04/2022',
+      tipoSolicitacao: 'Faixa Extra',
+      tipoFaixa: 'APAC-COMUM',
+      qtdFaixasSolicitadas: '700',
+      competencia: '2022',
+      status: 'Pendente',
+      motivo: 'Sem Motivo',
+      oficioAutorizacao: '',
+    },{
+      solicitante: 'Unidade C',
+      usuario: 'João',
+      dtSolicitacao: '20/05/2021',
+      tipoSolicitacao: 'Faixa Extra',
+      tipoFaixa: 'APAC-ELETIVA',
+      qtdFaixasSolicitadas: '500',
+      competencia: '2021',
+      status: 'Aprovado',
+      motivo: '',
+      oficioAutorizacao: '',
+    },{
+      solicitante: 'Rio de Janeiro - Municipio',
+      usuario: 'João',
+      dtSolicitacao: '33/04/2021',
+      tipoSolicitacao: 'Faixa Extra',
+      tipoFaixa: 'AIH-ELETIVA',
+      qtdFaixasSolicitadas: '300',
+      competencia: '2021',
+      status: 'Reprovado',
+      motivo: 'Sem Motivo',
+      oficioAutorizacao: '',
+    },{
+      solicitante: 'São Gonçalo - Municipio',
+      usuario: 'João',
+      dtSolicitacao: '21/04/2022',
+      tipoSolicitacao: 'Resete de Senha',
+      tipoFaixa: '',
+      qtdFaixasSolicitadas: '0',
+      competencia: '',
+      status: 'Pendente',
+      motivo: 'Sem Motivo',
+      oficioAutorizacao: 'http://localhost:3000/imagens',
+    },{
+      solicitante: 'Niteroi - Municipio',
+      usuario: 'João',
+      dtSolicitacao: '20/04/2021',
+      tipoSolicitacao: 'Resete de Senha',
+      tipoFaixa: '',
+      qtdFaixasSolicitadas: '0',
+      competencia: '',
+      status: 'Aprovado',
+      motivo: '',
+      oficioAutorizacao: 'http://localhost:3000/imagens',
+    },{
+      solicitante: 'Unidade Z',
+      usuario: 'João',
+      dtSolicitacao: '11/04/2022',
+      tipoSolicitacao: 'Faixa Extra',
+      tipoFaixa: 'APAC-COMUM',
+      qtdFaixasSolicitadas: '700',
+      competencia: '2022',
+      status: 'Pendente',
+      motivo: 'Sem Motivo',
+      oficioAutorizacao: '',
+    },{
+      solicitante: 'Unidade C',
+      usuario: 'João',
+      dtSolicitacao: '20/05/2021',
+      tipoSolicitacao: 'Faixa Extra',
+      tipoFaixa: 'APAC-ELETIVA',
+      qtdFaixasSolicitadas: '500',
+      competencia: '2021',
+      status: 'Aprovado',
+      motivo: '',
+      oficioAutorizacao: '',
+    },{
+      solicitante: 'Rio de Janeiro - Municipio',
+      usuario: 'João',
+      dtSolicitacao: '33/04/2021',
+      tipoSolicitacao: 'Faixa Extra',
+      tipoFaixa: 'AIH-ELETIVA',
+      qtdFaixasSolicitadas: '300',
+      competencia: '2021',
+      status: 'Reprovado',
+      motivo: 'Sem Motivo',
+      oficioAutorizacao: '',
+    },
+  ];
 
   @ViewChild(MatPaginator) paginator!: MatPaginator;
   @ViewChild(MatSort) sort!: MatSort;
+  dataSource = new MatTableDataSource(this.data);
+
 
   constructor() {
-
-    // Create 100 users
-    const users = Array.from({length: 100}, (_, k) => this.createNewUser(k + 1));
-
     // Assign the data to the data source for the table to render
-    this.dataSource = new MatTableDataSource(users);
   }
 
   ngAfterViewInit() {
@@ -74,28 +157,29 @@ export class ConsultarFaixasComponent implements OnInit {
   applyFilter(event: Event) {
     const filterValue = (event.target as HTMLInputElement).value;
     this.dataSource.filter = filterValue.trim().toLowerCase();
-
     if (this.dataSource.paginator) {
       this.dataSource.paginator.firstPage();
     }
   }
 
-  createNewUser(id: number): UserData {
-    const name =
-      NAMES[Math.round(Math.random() * (NAMES.length - 1))] +
-      ' ' +
-      NAMES[Math.round(Math.random() * (NAMES.length - 1))].charAt(0) +
-      '.';
+  getClass(status: string) {
 
-    return {
-      id: id.toString(),
-      name: name,
-      progress: Math.round(Math.random() * 100).toString(),
-      fruit: FRUITS[Math.round(Math.random() * (FRUITS.length - 1))],
-    };
+    switch(status) {
+      case 'Reprovado':
+        return 'alert-danger'
+      break
+
+      case 'Pendente':
+        return 'alert-warning';
+      break;
+
+      default:
+        return 'alert-success'
+    }
   }
 
   ngOnInit(): void {
+
   }
 
 }

@@ -3,10 +3,11 @@
 
 
 
+
+
 .container-topo-site {
   background-color: #363636;
-  min-height: 5vh;
-  max-height: 10vh;
+  height: 5vh;
   direction: rtl;
 }
 
@@ -99,8 +100,7 @@ nav.navbar.navbar-expand-lg.nav-bg-color {
 
 .container-menu-principal {
   display: flex;
-  min-height: 5vh;
-  max-height: 10vh;
+  height: 5vh;
   border-bottom: 1px solid;
   width: 100%;
   place-items: center;
@@ -109,8 +109,7 @@ nav.navbar.navbar-expand-lg.nav-bg-color {
 .btn.btn-primary.modal-menu-principal {
   display: flex;
   align-items: center;
-  min-height: 5vh;
-  max-height: 10vh;
+  height: 5vh;
   width: 60px;
   border-radius: 0px;
   background: transparent;
@@ -236,6 +235,10 @@ h1.example-app-name {
 }
 
 
+.main-container {
+  height: 80vh;
+}
+
 
 
 .loading-data {
@@ -259,8 +262,7 @@ h1.example-app-name {
 @media (max-width: 575px) {
 
   nav.navbar.navbar-expand-lg.nav-bg-color {
-    min-height: 10vh;
-    max-height: 15vh;
+    height: 10vh;
   }
 
   .logo-top {

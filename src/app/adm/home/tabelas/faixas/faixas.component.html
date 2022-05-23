@@ -1,40 +1,67 @@
 
-<table mat-table [dataSource]="linhas" class="mat-elevation-z8 table">
-  <ng-container matColumnDef="dtSolicitacao" >
-    <th mat-header-cell class="header-table" *matHeaderCellDef>Data da Solicitação</th>
-    <td mat-cell [class]="getClass(linha.status)" *matCellDef="let linha">{{linha.dtSolicitacao}}</td>
+<div class="container-table">
+
+  <mat-form-field appearance="standard">
+    <mat-label>Pesquisar</mat-label>
+    <input matInput (keyup)="applyFilter($event)" placeholder="Ex.AIH-Comum" #input>
+  </mat-form-field>
+
+<table mat-table [dataSource]="dataSource" matSort class="mat-elevation-z8 table">
+  <ng-container matColumnDef="solicitante" >
+    <th mat-header-cell class="header-table" *matHeaderCellDef mat-sort-header> Solicitante (Unidade ou Município) </th>
+    <td mat-cell [class]="getClass(row.status)" *matCellDef="let row"> {{row.solicitante}} </td>
   </ng-container>
 
-  <ng-container matColumnDef="tipoSolicitaca">
-    <th mat-header-cell class="header-table" *matHeaderCellDef>Tipo de Solicitação</th>
-    <td mat-cell [class]="getClass(linha.status)" *matCellDef="let linha">{{linha.tipoSolicitaca}}</td>
+  <ng-container matColumnDef="usuario">
+    <th mat-header-cell class="header-table" *matHeaderCellDef mat-sort-header> Usuário </th>
+    <td mat-cell [class]="getClass(row.status)" *matCellDef="let row"> {{row.usuario}} </td>
+  </ng-container>
+
+  <ng-container matColumnDef="dtSolicitacao">
+    <th mat-header-cell class="header-table" *matHeaderCellDef mat-sort-header> Data da Solicitação </th>
+    <td mat-cell [class]="getClass(row.status)" *matCellDef="let row"> {{row.dtSolicitacao}} </td>
+  </ng-container>
+
+  <ng-container matColumnDef="tipoSolicitacao">
+    <th mat-header-cell class="header-table" *matHeaderCellDef mat-sort-header> Tipo de Solicitação </th>
+    <td mat-cell [class]="getClass(row.status)" *matCellDef="let row"> {{row.tipoSolicitacao}} </td>
   </ng-container>
 
   <ng-container matColumnDef="tipoFaixa">
-    <th mat-header-cell class="header-table" *matHeaderCellDef>Tipo de Faixa</th>
-    <td [class]="getClass(linha.status)" mat-cell *matCellDef="let linha">{{linha.tipoFaixa}}</td>
+    <th mat-header-cell class="header-table" *matHeaderCellDef mat-sort-header> Tipo de Faixa </th>
+    <td mat-cell [class]="getClass(row.status)" *matCellDef="let row"> {{row.tipoFaixa}} </td>
   </ng-container>
 
-  <ng-container matColumnDef="qtdFaixasExtras">
-    <th mat-header-cell class="header-table" *matHeaderCellDef>Qnt de Faixas Extras</th>
-    <td mat-cell [class]="getClass(linha.status)" *matCellDef="let linha">{{linha.qtdFaixasExtras}}</td>
+  <ng-container matColumnDef="qtdFaixasSolicitadas">
+    <th mat-header-cell class="header-table" *matHeaderCellDef mat-sort-header> Qtd de Faixas Extras Solicitadas	</th>
+    <td mat-cell [class]="getClass(row.status)" *matCellDef="let row"> {{row.qtdFaixasSolicitadas}} </td>
   </ng-container>
 
-  <ng-container matColumnDef="oficioAutorizacao">
-    <th mat-header-cell class="header-table" *matHeaderCellDef>Ofício de Autorização	</th>
-    <td mat-cell [class]="getClass(linha.status)" *matCellDef="let linha">{{linha.oficioAutorizacao}}</td>
+  <ng-container matColumnDef="competencia">
+    <th mat-header-cell class="header-table" *matHeaderCellDef mat-sort-header> Competência </th>
+    <td mat-cell [class]="getClass(row.status)" *matCellDef="let row"> {{row.competencia}} </td>
   </ng-container>
 
   <ng-container matColumnDef="status">
-    <th mat-header-cell class="header-table" *matHeaderCellDef>Status</th>
-    <td mat-cell [class]="getClass(linha.status)" *matCellDef="let linha">{{linha.status}}</td>
+    <th mat-header-cell class="header-table" *matHeaderCellDef mat-sort-header> Status	</th>
+    <td mat-cell [class]="getClass(row.status)" *matCellDef="let row"> {{row.status}} </td>
   </ng-container>
 
-  <ng-container matColumnDef="motivoCancelamento">
-    <th mat-header-cell class="header-table" *matHeaderCellDef>Motivo</th>
-    <td mat-cell [class]="getClass(linha.status)" *matCellDef="let linha">{{linha.motivoCancelamento}}</td>
+  <ng-container matColumnDef="motivo">
+    <th mat-header-cell class="header-table" *matHeaderCellDef mat-sort-header> Motivo	</th>
+    <td mat-cell [class]="getClass(row.status)" *matCellDef="let row"> {{row.motivo}} </td>
   </ng-container>
 
-  <tr mat-header-row *matHeaderRowDef="colunas; sticky: true"></tr>
+  <ng-container matColumnDef="oficioAutorizacao">
+    <th mat-header-cell class="header-table" *matHeaderCellDef mat-sort-header> Ofício de Autorização </th>
+    <td mat-cell [class]="getClass(row.status)" *matCellDef="let row"><a [href]="row.oficioAutorizacao" target="_blank">{{row.oficioAutorizacao? 'Ofício de Autorização' : ''}}</a></td>
+  </ng-container>
+
+  <tr mat-header-row *matHeaderRowDef="colunas"></tr>
   <tr mat-row *matRowDef="let row; columns: colunas;"></tr>
+  <tr class="mat-row" *matNoDataRow>
+    <td class="mat-cell" colspan="4">Nenhum valor encontrado para o filtro: "{{input.value}}"</td>
+  </tr>
 </table>
+<mat-paginator [pageSizeOptions]="[10]" [disabled]="true" [hidePageSize]="true" ></mat-paginator>
+</div>

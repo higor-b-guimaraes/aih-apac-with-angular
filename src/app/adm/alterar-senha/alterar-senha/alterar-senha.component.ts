@@ -70,10 +70,6 @@ export class AlterarSenhaComponent implements OnInit {
     this.errorMsgOficio = statusOficio?.msg;
   }
 
-
-
-  /* 06969181022 */
-
   onSubmit() {
     const formData = new FormData();
     formData.append('oficio', this.formResetPassword.get('oficio')?.value._files[0])

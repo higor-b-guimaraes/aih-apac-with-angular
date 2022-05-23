@@ -14,6 +14,7 @@ import { FileInputConfig, MaterialFileInputModule, NGX_MAT_FILE_INPUT_CONFIG } f
 import {MatSelectModule} from '@angular/material/select';
 import {MatPaginatorModule} from '@angular/material/paginator';
 import {MatProgressSpinnerModule} from '@angular/material/progress-spinner';
+import {MatSortModule} from '@angular/material/sort';
 
 const config: FileInputConfig = {
   sizeUnit: 'Octet'
@@ -39,6 +40,7 @@ const config: FileInputConfig = {
     MatSelectModule,
     MatPaginatorModule,
     MatProgressSpinnerModule,
+    MatSortModule,
     NgxMaskModule,
   ],
   providers: [{ provide: NGX_MAT_FILE_INPUT_CONFIG, useValue: config }]

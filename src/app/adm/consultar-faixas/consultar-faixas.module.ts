@@ -1,3 +1,4 @@
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ConsultarFaixasRoutingModule } from './consultar-faixas-routing.module';
@@ -13,6 +14,8 @@ import { ConsultarFaixasComponent } from './consultar-faixas/consultar-faixas.co
   ],
   imports: [
     CommonModule,
+    FormsModule,
+    ReactiveFormsModule,
     ConsultarFaixasRoutingModule,
     AppMaterialModule,
   ]

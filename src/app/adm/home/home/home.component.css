@@ -1,14 +1,8 @@
 
-
-
 .container-table {
-  padding: 50px 10px 10px 10px;
-  width: 100%;
-}
-
-app-faixas {
-  width: 100%;
-  display: flex;
-  max-height: 70vh;
-  overflow-y: auto;
+  display: block;
+  padding: 0px 20px;
+  height: 80vh;
+  overflow-x: auto;
+  box-sizing: border-box;
 }
