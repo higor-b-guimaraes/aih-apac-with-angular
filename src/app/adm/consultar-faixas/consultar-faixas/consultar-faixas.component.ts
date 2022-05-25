@@ -1,8 +1,13 @@
+import { UtilService } from './../../../shared/services/utils/util.service';
+import { AuthService } from 'src/app/core/services/auth.service';
+import { ConsultarFaixas } from './../models/consultar-faixas.model';
+import { ConsultarFaixasService } from './../services/consultar-faixas.service';
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
-import { ConsultarFaixas } from '../models/consultar-faixas.model';
+import { AnyCatcher } from 'rxjs/internal/AnyCatcher';
+import { Subject } from 'rxjs';
 
 @Component({
   selector: 'app-consultar-faixas',
@@ -12,251 +17,40 @@ import { ConsultarFaixas } from '../models/consultar-faixas.model';
 
 export class ConsultarFaixasComponent implements OnInit {
 
-  displayedColumns: string[] = ['solicitante', 'usuario', 'dtSolicitacao', 'tipoSolicitacao', 'tipoFaixa', 'qtdFaixasSolicitadas', 'competencia', 'status', 'motivo', 'oficioAutorizacao'];
-
-  data: ConsultarFaixas[] = [
-    {
-      solicitante: 'São Gonçalo - Municipio',
-      usuario: 'João',
-      dtSolicitacao: '20/04/2023',
-      tipoSolicitacao: 'Faixa Extra',
-      tipoFaixa: 'AIH-COMUM',
-      qtdFaixasSolicitadas: '500',
-      competencia: '2023',
-      status: 'Aprovado',
-      motivo: '',
-      oficioAutorizacao: '',
-    },
-    {
-      solicitante: 'São Gonçalo - Municipio',
-      usuario: 'João',
-      dtSolicitacao: '21/04/2022',
-      tipoSolicitacao: 'Resete de Senha',
-      tipoFaixa: '',
-      qtdFaixasSolicitadas: '0',
-      competencia: '',
-      status: 'Pendente',
-      motivo: 'Sem Motivo',
-      oficioAutorizacao: 'http://localhost:3000/imagens',
-    },
-    {
-      solicitante: 'Niteroi - Municipio',
-      usuario: 'João',
-      dtSolicitacao: '20/04/2021',
-      tipoSolicitacao: 'Resete de Senha',
-      tipoFaixa: '',
-      qtdFaixasSolicitadas: '0',
-      competencia: '',
-      status: 'Aprovado',
-      motivo: '',
-      oficioAutorizacao: 'http://localhost:3000/imagens',
-    },
-    {
-      solicitante: 'Unidade Z',
-      usuario: 'João',
-      dtSolicitacao: '11/04/2022',
-      tipoSolicitacao: 'Faixa Extra',
-      tipoFaixa: 'APAC-COMUM',
-      qtdFaixasSolicitadas: '700',
-      competencia: '2022',
-      status: 'Pendente',
-      motivo: 'Sem Motivo',
-      oficioAutorizacao: '',
-    },
-    {
-      solicitante: 'Unidade C',
-      usuario: 'João',
-      dtSolicitacao: '20/05/2021',
-      tipoSolicitacao: 'Faixa Extra',
-      tipoFaixa: 'APAC-ELETIVA',
-      qtdFaixasSolicitadas: '500',
-      competencia: '2021',
-      status: 'Aprovado',
-      motivo: '',
-      oficioAutorizacao: '',
-    },
-    {
-      solicitante: 'Rio de Janeiro - Municipio',
-      usuario: 'João',
-      dtSolicitacao: '33/04/2021',
-      tipoSolicitacao: 'Faixa Extra',
-      tipoFaixa: 'AIH-ELETIVA',
-      qtdFaixasSolicitadas: '300',
-      competencia: '2021',
-      status: 'Reprovado',
-      motivo: 'Sem Motivo',
-      oficioAutorizacao: '',
-    },
-    {
-      solicitante: 'São Gonçalo - Municipio',
-      usuario: 'João',
-      dtSolicitacao: '21/04/2022',
-      tipoSolicitacao: 'Resete de Senha',
-      tipoFaixa: '',
-      qtdFaixasSolicitadas: '0',
-      competencia: '',
-      status: 'Pendente',
-      motivo: 'Sem Motivo',
-      oficioAutorizacao: 'http://localhost:3000/imagens',
-    },
-    {
-      solicitante: 'Niteroi - Municipio',
-      usuario: 'João',
-      dtSolicitacao: '20/04/2021',
-      tipoSolicitacao: 'Resete de Senha',
-      tipoFaixa: '',
-      qtdFaixasSolicitadas: '0',
-      competencia: '',
-      status: 'Aprovado',
-      motivo: '',
-      oficioAutorizacao: 'http://localhost:3000/imagens',
-    },
-    {
-      solicitante: 'Unidade Z',
-      usuario: 'João',
-      dtSolicitacao: '11/04/2022',
-      tipoSolicitacao: 'Faixa Extra',
-      tipoFaixa: 'APAC-COMUM',
-      qtdFaixasSolicitadas: '700',
-      competencia: '2022',
-      status: 'Pendente',
-      motivo: 'Sem Motivo',
-      oficioAutorizacao: '',
-    },
-    {
-      solicitante: 'Unidade C',
-      usuario: 'João',
-      dtSolicitacao: '20/05/2021',
-      tipoSolicitacao: 'Faixa Extra',
-      tipoFaixa: 'APAC-ELETIVA',
-      qtdFaixasSolicitadas: '500',
-      competencia: '2021',
-      status: 'Aprovado',
-      motivo: '',
-      oficioAutorizacao: '',
-    },
-    {
-      solicitante: 'Rio de Janeiro - Municipio',
-      usuario: 'João',
-      dtSolicitacao: '33/04/2021',
-      tipoSolicitacao: 'Faixa Extra',
-      tipoFaixa: 'AIH-ELETIVA',
-      qtdFaixasSolicitadas: '300',
-      competencia: '2021',
-      status: 'Reprovado',
-      motivo: 'Sem Motivo',
-      oficioAutorizacao: '',
-    },
-    {
-      solicitante: 'Unidade Z',
-      usuario: 'João',
-      dtSolicitacao: '11/04/2022',
-      tipoSolicitacao: 'Faixa Extra',
-      tipoFaixa: 'APAC-COMUM',
-      qtdFaixasSolicitadas: '700',
-      competencia: '2022',
-      status: 'Pendente',
-      motivo: 'Sem Motivo',
-      oficioAutorizacao: '',
-    },
-    {
-      solicitante: 'Unidade C',
-      usuario: 'João',
-      dtSolicitacao: '20/05/2021',
-      tipoSolicitacao: 'Faixa Extra',
-      tipoFaixa: 'APAC-ELETIVA',
-      qtdFaixasSolicitadas: '500',
-      competencia: '2021',
-      status: 'Aprovado',
-      motivo: '',
-      oficioAutorizacao: '',
-    },
-    {
-      solicitante: 'Rio de Janeiro - Municipio',
-      usuario: 'João',
-      dtSolicitacao: '33/04/2021',
-      tipoSolicitacao: 'Faixa Extra',
-      tipoFaixa: 'AIH-ELETIVA',
-      qtdFaixasSolicitadas: '300',
-      competencia: '2021',
-      status: 'Reprovado',
-      motivo: 'Sem Motivo',
-      oficioAutorizacao: '',
-    },
-    {
-      solicitante: 'São Gonçalo - Municipio',
-      usuario: 'João',
-      dtSolicitacao: '21/04/2022',
-      tipoSolicitacao: 'Resete de Senha',
-      tipoFaixa: '',
-      qtdFaixasSolicitadas: '0',
-      competencia: '',
-      status: 'Pendente',
-      motivo: 'Sem Motivo',
-      oficioAutorizacao: 'http://localhost:3000/imagens',
-    },
-    {
-      solicitante: 'Niteroi - Municipio',
-      usuario: 'João',
-      dtSolicitacao: '20/04/2021',
-      tipoSolicitacao: 'Resete de Senha',
-      tipoFaixa: '',
-      qtdFaixasSolicitadas: '0',
-      competencia: '',
-      status: 'Aprovado',
-      motivo: '',
-      oficioAutorizacao: 'http://localhost:3000/imagens',
-    },
-    {
-      solicitante: 'Unidade Z',
-      usuario: 'João',
-      dtSolicitacao: '11/04/2022',
-      tipoSolicitacao: 'Faixa Extra',
-      tipoFaixa: 'APAC-COMUM',
-      qtdFaixasSolicitadas: '700',
-      competencia: '2022',
-      status: 'Pendente',
-      motivo: 'Sem Motivo',
-      oficioAutorizacao: '',
-    },
-    {
-      solicitante: 'Unidade C',
-      usuario: 'João',
-      dtSolicitacao: '20/05/2021',
-      tipoSolicitacao: 'Faixa Extra',
-      tipoFaixa: 'APAC-ELETIVA',
-      qtdFaixasSolicitadas: '500',
-      competencia: '2021',
-      status: 'Aprovado',
-      motivo: '',
-      oficioAutorizacao: '',
-    },
-    {
-      solicitante: 'Rio de Janeiro - Municipio',
-      usuario: 'João',
-      dtSolicitacao: '33/04/2021',
-      tipoSolicitacao: 'Faixa Extra',
-      tipoFaixa: 'AIH-ELETIVA',
-      qtdFaixasSolicitadas: '300',
-      competencia: '2021',
-      status: 'Reprovado',
-      motivo: 'Sem Motivo',
-      oficioAutorizacao: '',
-    },
-  ];
-
+  columns: string[] = [];
+  lenght!: number;
+  dataSource!: any
+  getFaixas = new Subject<any>()
   @ViewChild(MatPaginator) paginator!: MatPaginator;
   @ViewChild(MatSort) sort!: MatSort;
-  dataSource = new MatTableDataSource(this.data);
 
+  constructor(private consultarFaixasService: ConsultarFaixasService, private auth: AuthService, private util: UtilService) {
 
-  constructor() {
-    // Assign the data to the data source for the table to render
-  }
+    this.getFaixas.subscribe({
+      next: (data) => {
+        this.consultarFaixasService.getFaixas(data).subscribe({
+          next: (res:any) => {
+            this.columns = [...res?.headerTable];
+            let data: ConsultarFaixas[] = [...res?.bodyTable];
+            this.lenght = res?.tableLength;
+            this.dataSource = new MatTableDataSource(data);
+            this.dataSource.paginator = this.paginator;
+            this.dataSource.sort = this.sort;
+            this.util.loading.next(false);
+          },
+          error: (e) => {this.util.loading.next(false)}
+        })
+      },
+      error: () => {this.util.loading.next(false)}
+    })
 
-  ngAfterViewInit() {
-    this.dataSource.paginator = this.paginator;
-    this.dataSource.sort = this.sort;
+    let data = {
+      id: this.auth.getId(),
+      pageIndex: 0,
+      pageSize: 0,
+    }
+
+    this.getFaixas.next(data);
   }
 
   applyFilter(event: Event) {
@@ -283,12 +77,22 @@ export class ConsultarFaixasComponent implements OnInit {
     }
   }
 
+  getNewElements() {
+    this.util.loading.next(true);
+
+    let data = {
+      id: this.auth.getId(),
+      pageIndex: (this.dataSource?.paginator?.pageIndex) ? this.dataSource?.paginator?.pageIndex : 0 ,
+      pageSize: (this.dataSource?.paginator?.pageSize) ? this.dataSource?.paginator?.pageSize : 0 ,
+    }
+
+    this.getFaixas.next(data);
+  }
+
+  ngAfterViewInit() {
+  }
+
   ngOnInit(): void {
-
+    this.util.loading.next(true);
   }
-
-  pageClick($event: Event): void {
-      const page = this.dataSource.paginator?.pageIndex;
-  }
-
 }

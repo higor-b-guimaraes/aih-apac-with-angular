@@ -5,6 +5,7 @@ import { Router } from '@angular/router';
 import { AuthenticationService } from '../services/authentication/authentication.service';
 
 import { CustomValidators } from '../../shared/validators/custom-validators'
+import { HttpRequest } from '@angular/common/http';
 
 @Component({
   selector: 'app-login',
@@ -70,9 +71,12 @@ export class LoginComponent implements OnInit {
           password: this.formLogin.value?.password
         })
         .subscribe({
-          next: (dados) => { this.router.navigate(['/'])
+          next: (dados: HttpRequest<any>) => { this.router.navigate(['/'])
+          console.log(dados)
+
         },
           error: (e) => {
+            console.log(e)
             if( e.status === 500) {
               this.access = false;
               this.errorAccessMsg = "Por favor, verifique o login e senha informados e tente novamente!";

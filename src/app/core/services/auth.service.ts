@@ -21,7 +21,7 @@ export class AuthService {
     return credential.token;
   }
 
-  getId()  {
+  getId(): number  {
     let credential: any = JSON.parse(localStorage.getItem(this.STORAGE_KEY) || '{}');
     return credential.id;
   }

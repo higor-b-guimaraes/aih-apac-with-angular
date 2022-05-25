@@ -24,7 +24,7 @@ export class AuthInterceptor implements HttpInterceptor {
 
     return next.handle(request).pipe(
       tap({
-        next: (event: HttpEvent<any>) => {},
+        next: (event: HttpEvent<any>) => {console.log(event)},
         error: async (err: any) => {
           if (err instanceof HttpErrorResponse) {
             if (err.status === 401) {
