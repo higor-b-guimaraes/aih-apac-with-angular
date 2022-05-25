@@ -15,6 +15,10 @@ export class GerarFaixasService {
     return this.http.get(`${environment.API}gerarFaixas/cotas`, {params: credentials})
   }
 
+  /* async getQuotas(credentials: {id: number, isAdm: boolean, municipio: string}): Promise<any> {
+    return this.http.get(`${environment.API}gerarFaixas/cotas`, { params: credentials }).toPromise();
+  } */
+
   listOfCounties(id: any) {
     /* `${environment.API}gerarFaixas/municipios` */
     return this.http.get<Municipios[]>(`${environment.API}gerarFaixas/municipios`, {params: id})

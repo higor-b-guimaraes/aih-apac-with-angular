@@ -1,6 +1,6 @@
 
 <div class="container-table">
-
+  <div class="group">
   <mat-form-field appearance="standard">
     <mat-label>Pesquisar</mat-label>
     <input matInput (keyup)="applyFilter($event)" placeholder="Ex.AIH-Comum" #input>
@@ -63,5 +63,6 @@
     <td class="mat-cell" colspan="4">Nenhum valor encontrado para o filtro: "{{input.value}}"</td>
   </tr>
 </table>
-<mat-paginator [pageSizeOptions]="[5, 10, 25, 100]" aria-label="Select page of users"></mat-paginator>
+<mat-paginator (click)="pageClick($event);" [pageSizeOptions]="[5, 10, 25, 100]" aria-label="Select page of users"></mat-paginator>
+</div>
 </div>

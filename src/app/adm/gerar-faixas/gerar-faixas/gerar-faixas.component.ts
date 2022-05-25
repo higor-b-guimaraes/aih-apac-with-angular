@@ -74,7 +74,7 @@ export class GerarFaixasComponent implements OnInit {
     return this.profile.Administrador;
   }
 
-  getQuotes() {
+  async getQuotes() {
     console.log(this.municipiosControl.value)
     let credentials = {
       id: this.auth.getId(),
@@ -89,6 +89,11 @@ export class GerarFaixasComponent implements OnInit {
         this.cotasPadraoControl.setValue(data.cotas['padrao']);
       }
     })
+    /* const data = await this.cotas.getQuotas(credentials);
+    console.log(data);
+    this.cotasDisponiveisControl.setValue(data.cotas['disponiveis']);
+    this.cotasUsadasControl.setValue(data.cotas['usadas']);
+    this.cotasPadraoControl.setValue(data.cotas['padrao']); */
   }
 
   formSub() {
@@ -129,6 +134,12 @@ export class GerarFaixasComponent implements OnInit {
         this.cotasPadraoControl.setValue(data.cotas['padrao']);
       }
     })
+
+    /* const data = await this.cotas.getQuotas(credentials);
+    console.log(await data);
+    this.cotasDisponiveisControl.setValue(data.cotas['disponiveis']);
+    this.cotasUsadasControl.setValue(data.cotas['usadas']);
+    this.cotasPadraoControl.setValue(data.cotas['padrao']); */
   }
 }
 

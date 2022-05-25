@@ -38,7 +38,8 @@ export class ConsultarFaixasComponent implements OnInit {
       status: 'Pendente',
       motivo: 'Sem Motivo',
       oficioAutorizacao: 'http://localhost:3000/imagens',
-    },{
+    },
+    {
       solicitante: 'Niteroi - Municipio',
       usuario: 'João',
       dtSolicitacao: '20/04/2021',
@@ -49,7 +50,8 @@ export class ConsultarFaixasComponent implements OnInit {
       status: 'Aprovado',
       motivo: '',
       oficioAutorizacao: 'http://localhost:3000/imagens',
-    },{
+    },
+    {
       solicitante: 'Unidade Z',
       usuario: 'João',
       dtSolicitacao: '11/04/2022',
@@ -60,7 +62,8 @@ export class ConsultarFaixasComponent implements OnInit {
       status: 'Pendente',
       motivo: 'Sem Motivo',
       oficioAutorizacao: '',
-    },{
+    },
+    {
       solicitante: 'Unidade C',
       usuario: 'João',
       dtSolicitacao: '20/05/2021',
@@ -71,7 +74,8 @@ export class ConsultarFaixasComponent implements OnInit {
       status: 'Aprovado',
       motivo: '',
       oficioAutorizacao: '',
-    },{
+    },
+    {
       solicitante: 'Rio de Janeiro - Municipio',
       usuario: 'João',
       dtSolicitacao: '33/04/2021',
@@ -82,7 +86,8 @@ export class ConsultarFaixasComponent implements OnInit {
       status: 'Reprovado',
       motivo: 'Sem Motivo',
       oficioAutorizacao: '',
-    },{
+    },
+    {
       solicitante: 'São Gonçalo - Municipio',
       usuario: 'João',
       dtSolicitacao: '21/04/2022',
@@ -93,7 +98,8 @@ export class ConsultarFaixasComponent implements OnInit {
       status: 'Pendente',
       motivo: 'Sem Motivo',
       oficioAutorizacao: 'http://localhost:3000/imagens',
-    },{
+    },
+    {
       solicitante: 'Niteroi - Municipio',
       usuario: 'João',
       dtSolicitacao: '20/04/2021',
@@ -104,7 +110,8 @@ export class ConsultarFaixasComponent implements OnInit {
       status: 'Aprovado',
       motivo: '',
       oficioAutorizacao: 'http://localhost:3000/imagens',
-    },{
+    },
+    {
       solicitante: 'Unidade Z',
       usuario: 'João',
       dtSolicitacao: '11/04/2022',
@@ -115,7 +122,8 @@ export class ConsultarFaixasComponent implements OnInit {
       status: 'Pendente',
       motivo: 'Sem Motivo',
       oficioAutorizacao: '',
-    },{
+    },
+    {
       solicitante: 'Unidade C',
       usuario: 'João',
       dtSolicitacao: '20/05/2021',
@@ -126,7 +134,104 @@ export class ConsultarFaixasComponent implements OnInit {
       status: 'Aprovado',
       motivo: '',
       oficioAutorizacao: '',
-    },{
+    },
+    {
+      solicitante: 'Rio de Janeiro - Municipio',
+      usuario: 'João',
+      dtSolicitacao: '33/04/2021',
+      tipoSolicitacao: 'Faixa Extra',
+      tipoFaixa: 'AIH-ELETIVA',
+      qtdFaixasSolicitadas: '300',
+      competencia: '2021',
+      status: 'Reprovado',
+      motivo: 'Sem Motivo',
+      oficioAutorizacao: '',
+    },
+    {
+      solicitante: 'Unidade Z',
+      usuario: 'João',
+      dtSolicitacao: '11/04/2022',
+      tipoSolicitacao: 'Faixa Extra',
+      tipoFaixa: 'APAC-COMUM',
+      qtdFaixasSolicitadas: '700',
+      competencia: '2022',
+      status: 'Pendente',
+      motivo: 'Sem Motivo',
+      oficioAutorizacao: '',
+    },
+    {
+      solicitante: 'Unidade C',
+      usuario: 'João',
+      dtSolicitacao: '20/05/2021',
+      tipoSolicitacao: 'Faixa Extra',
+      tipoFaixa: 'APAC-ELETIVA',
+      qtdFaixasSolicitadas: '500',
+      competencia: '2021',
+      status: 'Aprovado',
+      motivo: '',
+      oficioAutorizacao: '',
+    },
+    {
+      solicitante: 'Rio de Janeiro - Municipio',
+      usuario: 'João',
+      dtSolicitacao: '33/04/2021',
+      tipoSolicitacao: 'Faixa Extra',
+      tipoFaixa: 'AIH-ELETIVA',
+      qtdFaixasSolicitadas: '300',
+      competencia: '2021',
+      status: 'Reprovado',
+      motivo: 'Sem Motivo',
+      oficioAutorizacao: '',
+    },
+    {
+      solicitante: 'São Gonçalo - Municipio',
+      usuario: 'João',
+      dtSolicitacao: '21/04/2022',
+      tipoSolicitacao: 'Resete de Senha',
+      tipoFaixa: '',
+      qtdFaixasSolicitadas: '0',
+      competencia: '',
+      status: 'Pendente',
+      motivo: 'Sem Motivo',
+      oficioAutorizacao: 'http://localhost:3000/imagens',
+    },
+    {
+      solicitante: 'Niteroi - Municipio',
+      usuario: 'João',
+      dtSolicitacao: '20/04/2021',
+      tipoSolicitacao: 'Resete de Senha',
+      tipoFaixa: '',
+      qtdFaixasSolicitadas: '0',
+      competencia: '',
+      status: 'Aprovado',
+      motivo: '',
+      oficioAutorizacao: 'http://localhost:3000/imagens',
+    },
+    {
+      solicitante: 'Unidade Z',
+      usuario: 'João',
+      dtSolicitacao: '11/04/2022',
+      tipoSolicitacao: 'Faixa Extra',
+      tipoFaixa: 'APAC-COMUM',
+      qtdFaixasSolicitadas: '700',
+      competencia: '2022',
+      status: 'Pendente',
+      motivo: 'Sem Motivo',
+      oficioAutorizacao: '',
+    },
+    {
+      solicitante: 'Unidade C',
+      usuario: 'João',
+      dtSolicitacao: '20/05/2021',
+      tipoSolicitacao: 'Faixa Extra',
+      tipoFaixa: 'APAC-ELETIVA',
+      qtdFaixasSolicitadas: '500',
+      competencia: '2021',
+      status: 'Aprovado',
+      motivo: '',
+      oficioAutorizacao: '',
+    },
+    {
       solicitante: 'Rio de Janeiro - Municipio',
       usuario: 'João',
       dtSolicitacao: '33/04/2021',
@@ -180,6 +285,10 @@ export class ConsultarFaixasComponent implements OnInit {
 
   ngOnInit(): void {
 
+  }
+
+  pageClick($event: Event): void {
+      const page = this.dataSource.paginator?.pageIndex;
   }
 
 }

@@ -9,8 +9,7 @@
 
 .table {
   width: 100%;
-  height: 60vh;
-  display: block !important;
+  max-height: 60vh;
   contain: content;
   overflow: inherit;
 }
