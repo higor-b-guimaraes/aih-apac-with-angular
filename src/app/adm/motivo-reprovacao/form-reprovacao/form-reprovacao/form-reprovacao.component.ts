@@ -1,21 +1,20 @@
-import { UtilService } from './../../../shared/services/utils/util.service';
-import { AuthService } from 'src/app/core/services/auth.service';
-import { ConsultarFaixas } from './../models/consultar-faixas.model';
-import { ConsultarFaixasService } from './../services/consultar-faixas.service';
+import { MotivoReprovacaoService } from './../../services/motivo-reprovacao.service';
+import { MotivoReprovacao } from './../../models/motivoReprovacao.model';
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
-import { AnyCatcher } from 'rxjs/internal/AnyCatcher';
 import { Subject } from 'rxjs';
+import { ConsultarFaixas } from 'src/app/adm/consultar-faixas/models/consultar-faixas.model';
+import { AuthService } from 'src/app/core/services/auth.service';
+import { UtilService } from 'src/app/shared/services/utils/util.service';
 
 @Component({
-  selector: 'app-consultar-faixas',
-  templateUrl: './consultar-faixas.component.html',
-  styleUrls: ['./consultar-faixas.component.css']
+  selector: 'app-form-reprovacao',
+  templateUrl: './form-reprovacao.component.html',
+  styleUrls: ['./form-reprovacao.component.css']
 })
-
-export class ConsultarFaixasComponent implements OnInit {
+export class FormReprovacaoComponent implements OnInit {
 
   columns: string[] = [];
   lenght!: number;
@@ -24,11 +23,13 @@ export class ConsultarFaixasComponent implements OnInit {
   @ViewChild(MatPaginator) paginator!: MatPaginator;
   @ViewChild(MatSort) sort!: MatSort;
 
-  constructor(private consultarFaixasService: ConsultarFaixasService, private auth: AuthService, private util: UtilService) {
+  constructor(private motivosReprovacaoService: MotivoReprovacaoService,
+    private auth: AuthService,
+    private util: UtilService) {
 
     this.getFaixas.subscribe({
       next: (data) => {
-        this.consultarFaixasService.getFaixas(data).subscribe({
+        this.motivosReprovacaoService.getMotivosReprovacao(data).subscribe({
           next: (res:any) => {
             this.columns = [...res?.headerTable];
             let data: ConsultarFaixas[] = [...res?.bodyTable];
@@ -64,16 +65,16 @@ export class ConsultarFaixasComponent implements OnInit {
   getClass(status: string) {
 
     switch(status) {
-      case 'Reprovado':
-        return 'alert-danger'
+      case 'Ativo':
+        return 'alert-success'
       break
 
-      case 'Pendente':
-        return 'alert-warning';
+      case 'Inativo':
+        return 'alert-danger';
       break;
 
       default:
-        return 'alert-success'
+        return ''
     }
   }
 
@@ -95,4 +96,5 @@ export class ConsultarFaixasComponent implements OnInit {
   ngOnInit(): void {
     this.util.loading.next(true);
   }
+
 }

@@ -17,7 +17,6 @@ const routes: Routes = [
   },
   {
     path: '',
-    canLoad: [AuthGuardService],
     canActivate: [AuthGuardService],
     component: MainContainerComponent,
     children: [

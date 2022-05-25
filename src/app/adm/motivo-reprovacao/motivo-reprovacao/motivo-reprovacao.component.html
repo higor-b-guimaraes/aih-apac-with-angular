@@ -1,1 +1,23 @@
-<p>motivo-reprovacao works!</p>
+
+<div class="section-main">
+
+  <div class="empty-data" *ngIf="!hasData">
+    <mat-card>
+      <mat-card class="container-card">
+        <mat-card-title>Não há Motivos de Reprovação Cadastrados</mat-card-title>
+        <mat-divider inset></mat-divider>
+
+        <mat-card-content class="container-card-btn">
+          <button mat-button (click)="openDialog()">Cadastrar Motivo de Reprovação</button>
+        </mat-card-content>
+      </mat-card>
+    </mat-card>
+  </div>
+
+  <div class="has-data" *ngIf="hasData">
+    <div class="main-container-form">
+      <app-form-reprovacao></app-form-reprovacao>
+    </div>
+  </div>
+
+</div>

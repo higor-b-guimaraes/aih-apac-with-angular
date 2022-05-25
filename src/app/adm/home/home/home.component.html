@@ -2,7 +2,5 @@
   <app-menu></app-menu>
 </div>
 
+<app-faixas *ngIf="perfil !== 'Administrador'" class="table-a" [colunas]="titulos" [data]="this.data"></app-faixas>
 
-<div class="container-table" *ngIf="perfil !== 'Administrador'" >
-  <app-faixas class="table-a" [colunas]="titulos" [data]="this.data"></app-faixas>
-</div>

@@ -1,0 +1,48 @@
+<div class="container-table">
+
+  <mat-form-field appearance="standard">
+    <mat-label>Pesquisar</mat-label>
+    <input matInput (keyup)="applyFilter($event)" placeholder="Ex.AIH-Comum" #input>
+  </mat-form-field>
+
+  <table mat-table [dataSource]="dataSource" matSort class="mat-elevation-z8 table">
+    <ng-container matColumnDef="id" >
+      <th mat-header-cell class="header-table" *matHeaderCellDef mat-sort-header> ID </th>
+      <td mat-cell [class]="getClass(row.status)" *matCellDef="let row"> {{row.id}} </td>
+    </ng-container>
+
+    <ng-container matColumnDef="motivoReprovacao">
+      <th mat-header-cell class="header-table" *matHeaderCellDef mat-sort-header> Motivo de Reprovação	</th>
+      <td mat-cell [class]="getClass(row.status)" *matCellDef="let row"> {{row.motivoReprovacao}} </td>
+    </ng-container>
+
+    <ng-container matColumnDef="status">
+      <th mat-header-cell class="header-table" *matHeaderCellDef mat-sort-header> Status do Motivo	</th>
+      <td mat-cell [class]="getClass(row.status)" *matCellDef="let row"> {{row.status}} </td>
+    </ng-container>
+
+    <ng-container matColumnDef="btnDesativar">
+      <th mat-header-cell class="header-table" *matHeaderCellDef mat-sort-header> Desativar Motivo	</th>
+        <button mat-fab color="primary" aria-label="Example icon button with a delete icon">test
+          <mat-icon>delete</mat-icon>
+        </button>
+    </ng-container>
+
+    <ng-container matColumnDef="btnAtivar">
+      <th mat-header-cell class="header-table" *matHeaderCellDef mat-sort-header> Ativar Motivo	</th>
+        <button mat-fab color="primary" aria-label="Example icon button with a delete icon">teste
+          <mat-icon>delete</mat-icon>
+        </button>
+    </ng-container>
+
+
+
+    <tr mat-header-row *matHeaderRowDef="columns"></tr>
+    <tr mat-row *matRowDef="let row; columns: columns;"></tr>
+    <tr class="mat-row" *matNoDataRow>
+      <td class="mat-cell" colspan="4">Nenhum valor encontrado para o filtro: "{{input.value}}"</td>
+    </tr>
+  </table>
+
+  <mat-paginator (page)="getNewElements()" [pageSizeOptions]="[5, 10, 50, lenght]" aria-label="Select page of users"></mat-paginator>
+</div>

@@ -123,7 +123,6 @@ export class GerarFaixasComponent implements OnInit {
 
     this.cotas.getQuotas(credentials).subscribe({
       next: (data: any) => {
-        console.log(data.cotas)
         this.cotasDisponiveisControl.setValue(data.cotas['disponiveis']);
         this.cotasUsadasControl.setValue(data.cotas['usadas']);
         this.cotasPadraoControl.setValue(data.cotas['padrao']);
