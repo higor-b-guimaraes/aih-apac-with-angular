@@ -1,3 +1,5 @@
+import { AuthService } from './../../../core/services/auth.service';
+import { MotivoReprovacaoService } from './../services/motivo-reprovacao.service';
 import { MotivoReprovacao } from './../models/motivoReprovacao.model';
 import { ModalCadastroReprovacaoComponent } from './../modal-cadastro-reprovacao/modal-cadastro-reprovacao.component';
 import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
@@ -11,11 +13,35 @@ import { MatDialog } from '@angular/material/dialog';
 export class MotivoReprovacaoComponent implements OnInit {
 
   public content!: MotivoReprovacao;
-  hasData:boolean = true;
+  hasData:boolean = false;
+  headerTable: string[] = []
+  bodyTable: MotivoReprovacao[] = []
+  tableLength: number = 0;
+  /* DEPOIS PRECISA READAPTAR O CÓDIGO PARA PASSAR INFORMAÇÕES DESTA PÁGINA PARA A TABELA DIRETO */
 
   constructor(public modal: MatDialog,
-    private cdRef: ChangeDetectorRef) { }
+    private motivoReprovacaoService: MotivoReprovacaoService,
+    private auth: AuthService,
+    private cdRef: ChangeDetectorRef) {
 
+      let request = {idUser: this.auth.getId()}
+      this.motivoReprovacaoService.getVerificaDadosExistentes(request).subscribe({
+
+        next: (data: any) => {
+
+          if(data.hasData) {
+            this.headerTable = [...data['headerTable']];
+            this.bodyTable = [...data['bodyTable']];
+            this.tableLength = data['tableLength'];
+            this.hasData = true;
+          }else {
+            this.hasData = false;
+          }
+
+        },
+        error: (e) => {console.log(e)}
+      })
+    }
 
   openDialog() {
     const dialogRef = this.modal.open(ModalCadastroReprovacaoComponent, {
@@ -23,7 +49,6 @@ export class MotivoReprovacaoComponent implements OnInit {
       panelClass: 'common-modal'});
 
     dialogRef.afterClosed().subscribe(result => {
-      console.log(result);
       if(result === true) this.hasData = true;
     });
   }

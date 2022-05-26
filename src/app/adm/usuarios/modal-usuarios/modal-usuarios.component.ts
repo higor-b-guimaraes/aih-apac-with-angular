@@ -1,18 +1,17 @@
-import { MotivoReprovacaoComponent } from './../motivo-reprovacao/motivo-reprovacao.component';
-import { AuthService } from 'src/app/core/services/auth.service';
-import { MotivoReprovacaoService } from './../services/motivo-reprovacao.service';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ChangeDetectorRef, Component, Inject, OnInit } from '@angular/core';
-import { MotivoReprovacao } from '../models/motivoReprovacao.model';
-import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
-
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { AuthService } from 'src/app/core/services/auth.service';
+import { MotivoReprovacao } from '../../motivo-reprovacao/models/motivoReprovacao.model';
+import { MotivoReprovacaoComponent } from '../../motivo-reprovacao/motivo-reprovacao/motivo-reprovacao.component';
+import { MotivoReprovacaoService } from '../../motivo-reprovacao/services/motivo-reprovacao.service';
 
 @Component({
-  selector: 'app-modal-cadastro-reprovacao',
-  templateUrl: './modal-cadastro-reprovacao.component.html',
-  styleUrls: ['./modal-cadastro-reprovacao.component.css']
+  selector: 'app-modal-usuarios',
+  templateUrl: './modal-usuarios.component.html',
+  styleUrls: ['./modal-usuarios.component.css']
 })
-export class ModalCadastroReprovacaoComponent implements OnInit {
+export class ModalUsuariosComponent implements OnInit {
 
   isEdit:boolean = false;
   statusMotivo: string[] = ['Ativo', 'Inativo'];

@@ -72,11 +72,8 @@ export class LoginComponent implements OnInit {
         })
         .subscribe({
           next: (dados: HttpRequest<any>) => { this.router.navigate(['/'])
-          console.log(dados)
-
         },
           error: (e) => {
-            console.log(e)
             if( e.status === 500) {
               this.access = false;
               this.errorAccessMsg = "Por favor, verifique o login e senha informados e tente novamente!";

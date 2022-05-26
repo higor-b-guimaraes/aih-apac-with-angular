@@ -1,12 +1,12 @@
-import { environment } from 'src/environments/environment';
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { MotivoReprovacao } from '../models/motivoReprovacao.model';
+import { environment } from 'src/environments/environment';
+import { MotivoReprovacao } from '../../motivo-reprovacao/models/motivoReprovacao.model';
 
 @Injectable({
   providedIn: 'root'
 })
-export class MotivoReprovacaoService {
+export class UnidadesService {
 
   constructor(private http: HttpClient) { }
 

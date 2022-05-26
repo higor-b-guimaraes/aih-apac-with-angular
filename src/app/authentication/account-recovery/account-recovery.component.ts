@@ -135,8 +135,8 @@ export class AccountRecoveryComponent implements OnInit {
           cpf: this.tools.removeMaskCPF(<FormControl>this.formRecovery.controls['cpf']),
           oficio})
         .subscribe({
-          next: (res: any) => {console.log(res)},
-          error: (e: { status: any; }) => console.log(e.status)
+          next: (res: any) => {},
+          error: (e: { status: any; }) => {}
         }
       );
     }
