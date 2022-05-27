@@ -1,9 +1,9 @@
-import { Faixas } from './../../adm/home/models/faixas.model';
-import { Unidade } from './unidade.model';
+import { Faixas } from './faixas.model';
+import { UnidadePartialData } from './unidade.model';
 import { Municipio } from './municipio.model';
 
 
-export interface Usuario {
+export interface Usuario extends UnidadePartialData, Municipio, Faixas {
   id: number;
   cpf: string;
   nome: string;
@@ -12,17 +12,8 @@ export interface Usuario {
   perfil: string;
   nickname: string;
   situacao: string;
-  oficio: string;
-}
-
-export interface UsuarioUnidade extends Unidade, Faixas{
-  usuario: Usuario;
-  faixas: Faixas;
-  unidade: Unidade;
-}
-
-export interface UsuarioMunicipal extends Municipio, Faixas{
-  usuario: Usuario;
-  faixas: Faixas;
+  oficiorRequerido?: any;
+  unidade?: UnidadePartialData;
   municipio: Municipio;
+  faixas: Faixas;
 }

@@ -6,6 +6,7 @@ export class CustomValidators {
 
 
   cpfValidator(input: FormControl) {
+
     input.hasError('cpfInvalido');
     input.hasError('cpfIncompleto');
 

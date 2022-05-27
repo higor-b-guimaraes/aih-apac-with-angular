@@ -1,3 +1,4 @@
+import { ModalUsuariosComponent } from './../modal-usuarios/modal-usuarios.component';
 import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { AuthService } from 'src/app/core/services/auth.service';
@@ -17,6 +18,7 @@ export class UsuariosComponent implements OnInit {
   headerTable: string[] = []
   bodyTable: MotivoReprovacao[] = []
   tableLength: number = 0;
+
   /* DEPOIS PRECISA READAPTAR O CÓDIGO PARA PASSAR INFORMAÇÕES DESTA PÁGINA PARA A TABELA DIRETO */
 
   constructor(public modal: MatDialog,
@@ -24,7 +26,7 @@ export class UsuariosComponent implements OnInit {
     private auth: AuthService,
     private cdRef: ChangeDetectorRef) {
 
-      let request = {idUser: this.auth.getId()}
+      /* let request = {idUser: this.auth.getId()}
       this.motivoReprovacaoService.getVerificaDadosExistentes(request).subscribe({
 
         next: (data: any) => {
@@ -40,16 +42,20 @@ export class UsuariosComponent implements OnInit {
 
         },
         error: (e) => {console.log(e)}
-      })
+      }) */
     }
 
   openDialog() {
-    const dialogRef = this.modal.open(ModalCadastroReprovacaoComponent, {
+    const dialogRef = this.modal.open(ModalUsuariosComponent, {
       width: '100%',
       panelClass: 'common-modal'});
 
     dialogRef.afterClosed().subscribe(result => {
-      if(result === true) this.hasData = true;
+      console.log(result)
+      console.log(result)
+      console.log(result)
+      console.log(result)
+      /* if(result === true) this.hasData = true; */
     });
   }
 

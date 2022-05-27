@@ -18,8 +18,8 @@ export class UtilService {
 
   }
 
-  removeMaskCPF(input: FormControl) {
-    return input.value.replaceAll('.', '').replace('-', '');
+  removeMaskCPF(input: any) {
+    return input.replaceAll('.', '').replace('-', '');
   }
 
   checkCPF(cpfField: FormGroup, nameField: string): any {

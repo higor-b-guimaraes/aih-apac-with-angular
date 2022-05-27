@@ -1,7 +1,9 @@
 
 export interface Municipio {
-  id: number;
-  codIBGE: number;
+  id?: number;
+  codIBGE?: number;
   nomeMunicipio: string;
-  estado: string;
+  bairros?: any[];
+  unidades?: any[];
+  estado?: string;
 }
