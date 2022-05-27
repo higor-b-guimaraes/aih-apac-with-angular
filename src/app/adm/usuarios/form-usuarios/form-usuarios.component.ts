@@ -101,8 +101,6 @@ export class FormUsuariosComponent implements OnInit {
     this.openDialog(usuario.id)
   }
 
-
-
   getClass(situacao: string) {
 
     switch(situacao) {
@@ -147,7 +145,6 @@ export class FormUsuariosComponent implements OnInit {
     this.getUsuarios.next(data);
   }
 
-
   applyFilter(event: Event) {
     const filterValue = (event.target as HTMLInputElement).value;
     this.dataSource.filter = filterValue.trim().toLowerCase();
@@ -155,7 +152,6 @@ export class FormUsuariosComponent implements OnInit {
       this.dataSource.paginator.firstPage();
     }
   }
-
 
   ativarDesativarUsuario(row: any)  {
 
@@ -173,7 +169,6 @@ export class FormUsuariosComponent implements OnInit {
       },
     })
   }
-
 
   ngAfterViewInit() {
   }
