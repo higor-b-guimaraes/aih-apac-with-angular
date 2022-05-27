@@ -23,7 +23,7 @@ export class UsuariosService {
     return this.http.put(`${environment.API}atualizaUsuario`, request);
   }
 
-  desativarUsuario(request: {idUser: number, data: Usuario}) {
+  desativarUsuario(request: {idUser: number, idRequest: number}) {
     return this.http.put(`${environment.API}desativaUsuario`, request);
   }
 

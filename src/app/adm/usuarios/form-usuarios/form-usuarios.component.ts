@@ -75,7 +75,7 @@ export class FormUsuariosComponent implements OnInit {
         panelClass: 'common-modal',
         data: {
           idUser: this.auth.getId(),
-          idRquest: usuario
+          idRequest: usuario
         }
       });
 
@@ -101,9 +101,7 @@ export class FormUsuariosComponent implements OnInit {
     this.openDialog(usuario.id)
   }
 
-  ativarDesativarUsuario(row:any)  {
 
-  }
 
   getClass(situacao: string) {
 
@@ -157,6 +155,25 @@ export class FormUsuariosComponent implements OnInit {
       this.dataSource.paginator.firstPage();
     }
   }
+
+
+  ativarDesativarUsuario(row: any)  {
+
+    let request = {
+      idUser: this.auth.getId(),
+      idRequest: row?.id,
+    }
+
+    this.usuariosService.desativarUsuario(request).subscribe({
+      next: () => {
+        this.util.openAlertModal("320px", "success-modal", "Usuário desativado!", `O usuário ${row.nome}, foi desativado no sistema!`);
+      },
+      error: () => {
+        this.util.openAlertModal("320px", "error-modal", "Erro ao desativar o usuário", `Houve um erro ao tentarmos desativar o usuário ${row.nome}! Por favor, tente novamente! Caso o problema persista, entre em contato via e-mail: sistemas.supinf@saude.rj.gov.br`);
+      },
+    })
+  }
+
 
   ngAfterViewInit() {
   }
