@@ -12,8 +12,11 @@ export interface Usuario extends UnidadePartialData, Municipio, Faixas {
   perfil: string;
   nickname: string;
   situacao: string;
-  oficiorRequerido?: any;
+  oficioRequerido?: any;
   unidade?: UnidadePartialData;
   municipio: Municipio;
   faixas: Faixas;
 }
+
+
+

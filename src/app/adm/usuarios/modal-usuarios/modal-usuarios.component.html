@@ -21,7 +21,7 @@
           <mat-label>Município</mat-label>
           <mat-select
           formControlName="municipio">
-          <mat-optgroup *ngFor="let municipio of municipioModel" [label]="municipio.nomeMunicipio">
+          <mat-optgroup *ngFor="let municipio of municipiosModel" [label]="municipio.nomeMunicipio">
             <mat-option *ngFor="let bairro of municipio?.bairros" [value]="bairro?.nome" required>
               {{bairro?.nome}}
             </mat-option>
@@ -34,7 +34,7 @@
           <mat-label>Unidade</mat-label>
           <mat-select
           formControlName="unidade">
-          <mat-optgroup *ngFor="let municipio of municipioModel" [label]="municipio.nomeMunicipio">
+          <mat-optgroup *ngFor="let municipio of municipiosModel" [label]="municipio.nomeMunicipio">
             <mat-option *ngFor="let unidade of municipio.unidades" [value]="unidade?.nome" required>
               {{unidade.nome}}
             </mat-option>
@@ -109,7 +109,7 @@
     <div class="row">
         <mat-form-field appearance="outline" class="col-md-12" *ngIf="formUsuario.get('perfil')?.value !== 'Administrador'">
           <ngx-mat-file-input
-          formControlName="oficiorRequerido"
+          formControlName="oficioRequerido"
           placeholder="Ofício"
           valuePlaceholder="Insira o ofício"
           (change)="checkOficio()"></ngx-mat-file-input>

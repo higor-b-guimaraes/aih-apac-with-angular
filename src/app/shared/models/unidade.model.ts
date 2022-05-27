@@ -24,4 +24,5 @@ export interface UnidadePartialData {
   cep: string;
   bairro: string;
   cidade?: string;
+  unidade?: any;
 }

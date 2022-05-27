@@ -5,11 +5,16 @@ import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
 import { Subject } from 'rxjs';
 import { AuthService } from 'src/app/core/services/auth.service';
+
+import { Usuario } from 'src/app/shared/models/usuario.model';
+
 import { UtilService } from 'src/app/shared/services/utils/util.service';
 import { ConsultarFaixas } from '../../consultar-faixas/models/consultar-faixas.model';
 import { ModalCadastroReprovacaoComponent } from '../../motivo-reprovacao/modal-cadastro-reprovacao/modal-cadastro-reprovacao.component';
 import { MotivoReprovacao } from '../../motivo-reprovacao/models/motivoReprovacao.model';
 import { MotivoReprovacaoService } from '../../motivo-reprovacao/services/motivo-reprovacao.service';
+import { UsuariosService } from '../services/usuarios.service';
+import { ModalUsuariosComponent } from '../modal-usuarios/modal-usuarios.component';
 
 @Component({
   selector: 'app-form-usuarios',
@@ -18,60 +23,59 @@ import { MotivoReprovacaoService } from '../../motivo-reprovacao/services/motivo
 })
 export class FormUsuariosComponent implements OnInit {
 
-  public content!: MotivoReprovacao;
   columns: string[] = [];
-  lenght!: number;
+  usuarios: Usuario[] = [];
   dataSource!: any
-  getFaixas = new Subject<any>()
+  lenght!: number;
+
   @ViewChild(MatPaginator) paginator!: MatPaginator;
   @ViewChild(MatSort) sort!: MatSort;
+  getUsuarios = new Subject<any>()
 
-  constructor(private motivosReprovacaoService: MotivoReprovacaoService,
+  constructor(private usuariosService: UsuariosService,
     private auth: AuthService,
     private util: UtilService,
     public modal: MatDialog,
     private cdRef: ChangeDetectorRef) {
 
-    this.getFaixas.subscribe({
-      next: (data) => {
-        this.motivosReprovacaoService.getMotivosReprovacao(data).subscribe({
-          next: (res:any) => {
-            this.columns = [...res?.headerTable];
-            let data: ConsultarFaixas[] = [...res?.bodyTable];
-            this.lenght = res?.tableLength;
-            this.dataSource = new MatTableDataSource(data);
-            this.dataSource.paginator = this.paginator;
-            this.dataSource.sort = this.sort;
-            this.util.loading.next(false);
-          },
-          error: (e) => {this.util.loading.next(false)}
-        })
-      },
-      error: () => {this.util.loading.next(false)}
+    this.getUsuarios.subscribe({
+        next: (data) => {
+          this.usuariosService.getUsuarios(data).subscribe({
+            next: (res:any) => {
+
+              this.columns = [...res.headerTable];
+              this.usuarios = [...res.bodyTable];
+              this.lenght = res.tableLength;
+
+              this.dataSource = new MatTableDataSource(this.usuarios);
+              this.dataSource.paginator = this.paginator;
+              this.dataSource.sort = this.sort;
+              this.util.loading.next(false);
+            },
+            error: (e) => {this.util.loading.next(false)}
+          })
+        },
+        error: () => {this.util.loading.next(false)}
     })
 
     let data = {
-      id: this.auth.getId(),
-      pageIndex: 0,
-      pageSize: 0,
+        id: this.auth.getId(),
     }
 
-    this.getFaixas.next(data);
+    this.getUsuarios.next(data);
   }
-  openDialog(data?: MotivoReprovacao) {
 
-    if(data) {
 
-      const dialogRef = this.modal.open(ModalCadastroReprovacaoComponent, {
+  openDialog(usuario?: number) {
+
+    if(usuario) {
+
+      const dialogRef = this.modal.open(ModalUsuariosComponent, {
         width: '100%',
         panelClass: 'common-modal',
         data: {
           idUser: this.auth.getId(),
-          content: {
-            id: data.id,
-            motivoReprovacao: data.motivoReprovacao,
-            status: data.status,
-          }
+          idRquest: usuario
         }
       });
 
@@ -89,29 +93,21 @@ export class FormUsuariosComponent implements OnInit {
     }
   }
 
-  novoMotivo() {
+  novoUsuario() {
     this.openDialog()
   }
 
-  editarMotivo(row:MotivoReprovacao) {
-    this.openDialog(row)
+  editarUsuario(usuario: Usuario) {
+    this.openDialog(usuario.id)
   }
 
-  ativarDesativarMotivo(row:any)  {
+  ativarDesativarUsuario(row:any)  {
 
   }
 
-  applyFilter(event: Event) {
-    const filterValue = (event.target as HTMLInputElement).value;
-    this.dataSource.filter = filterValue.trim().toLowerCase();
-    if (this.dataSource.paginator) {
-      this.dataSource.paginator.firstPage();
-    }
-  }
+  getClass(situacao: string) {
 
-  getClass(status: string) {
-
-    switch(status) {
+    switch(situacao) {
       case 'Ativo':
         return 'alert-success'
       break
@@ -150,7 +146,16 @@ export class FormUsuariosComponent implements OnInit {
       pageSize: (this.dataSource?.paginator?.pageSize) ? this.dataSource?.paginator?.pageSize : 0 ,
     }
 
-    this.getFaixas.next(data);
+    this.getUsuarios.next(data);
+  }
+
+
+  applyFilter(event: Event) {
+    const filterValue = (event.target as HTMLInputElement).value;
+    this.dataSource.filter = filterValue.trim().toLowerCase();
+    if (this.dataSource.paginator) {
+      this.dataSource.paginator.firstPage();
+    }
   }
 
   ngAfterViewInit() {
@@ -163,5 +168,4 @@ export class FormUsuariosComponent implements OnInit {
   ngOnInit(): void {
     this.util.loading.next(true);
   }
-
 }

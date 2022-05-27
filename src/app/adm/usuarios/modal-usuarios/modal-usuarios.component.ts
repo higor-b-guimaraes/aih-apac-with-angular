@@ -16,6 +16,7 @@ import { UnidadePartialData } from 'src/app/shared/models/unidade.model';
 import { Tools } from 'src/app/shared/tools/tools';
 import { CustomValidators } from 'src/app/shared/validators/custom-validators';
 import { FileValidator } from 'ngx-material-file-input';
+import { Unidade } from '../../../shared/models/unidade.model';
 
 @Component({
   selector: 'app-modal-usuarios',
@@ -32,8 +33,9 @@ export class ModalUsuariosComponent implements OnInit {
   readonly maxSize = 10485760;   //Max Filesize 10MB
 
   usuarioModel!: Usuario;
-  municipioModel!: Municipio[];
-  unidadePartialDataModel: UnidadePartialData[] = [];
+  municipioModel!: Municipio;
+  unidadePartialDataModel!: UnidadePartialData;
+  municipiosModel!: Municipio[];
   submitData!: Subject<any>
 
 
@@ -52,7 +54,7 @@ export class ModalUsuariosComponent implements OnInit {
     perfil: ['', Validators.required],
     nickname: ['', Validators.required],
     situacao: ['', Validators.required],
-    oficiorRequerido: [null, [Validators.required, FileValidator.maxContentSize(this.maxSize), this.validator.acceptTypeFileInput]],
+    oficioRequerido: [null, [Validators.required, FileValidator.maxContentSize(this.maxSize), this.validator.acceptTypeFileInput]],
     aihComum: ['', Validators.required],
     aihEletiva: ['', Validators.required],
     apacComum: ['', Validators.required],
@@ -69,27 +71,38 @@ export class ModalUsuariosComponent implements OnInit {
     private usuariosService: UsuariosService,
     private cdRef: ChangeDetectorRef) {
 
-      if(dataModal) {
-        this.usuarioModel = {...dataModal.content};
-        this.novoCadastro = false;
+      console.log(dataModal)
 
-        this.formUsuario.setValue({
-          tipoUnidade: (this.usuarioModel.unidade) ? 'Unidade' : 'Municipio',
-          municipio: this.usuarioModel.municipio,
-          unidade: this.usuarioModel.unidade,
-          cpf: this.usuarioModel.cpf,
-          nome: this.usuarioModel.nome,
-          telefone: this.usuarioModel.telefone,
-          email: this.usuarioModel.email,
-          perfil: this.usuarioModel.perfil,
-          nickname: this.usuarioModel.nickname,
-          situacao: this.usuarioModel.situacao,
-          oficiorRequerido: this.usuarioModel.oficiorRequerido,
-          aihComum: this.usuarioModel.aihComum,
-          aihEletiva: this.usuarioModel.aihEletiva,
-          apacComum: this.usuarioModel.apacComum,
-          apacEletiva: this.usuarioModel.apacEletiva,
-      });
+      if(dataModal.idRquest) {
+
+
+        this.usuariosService.getUsuario(dataModal).subscribe({
+          next: (res: any) => {
+
+            this.formUsuario.setValue({
+              tipoUnidade: (res?.unidade?.id) ? 'Unidade': 'Municipio',
+              municipio: (res?.municipio?.id) ? res?.municipio?.nome : "",
+              unidade: (res?.unidade?.id) ? res?.unidade?.nome : "",
+              cpf: res?.cpf,
+              nome: res?.nome,
+              telefone: res?.telefone,
+              email: res?.email,
+              perfil: res?.perfil,
+              nickname: res?.nickname,
+              situacao: res?.situacao,
+              oficioRequerido: null,
+              aihComum: res?.aihComum,
+              aihEletiva: res?.aihEletiva,
+              apacComum: res?.apacComum,
+              apacEletiva: res?.apacEletiva,
+            });
+            this.getMunicipioOuUnidade();
+          this.validaNecessidadeOficio();
+          },
+          error: () => {},
+        })
+
+
     }else {
       this.novoCadastro = true;
     }
@@ -104,7 +117,7 @@ export class ModalUsuariosComponent implements OnInit {
 
     this.usuariosService.getMunicipiosOuMunicipios(request).subscribe({
       next: async (data: any) => {
-          this.municipioModel = await [...data];
+          this.municipiosModel = await [...data];
       },
       error: (e) => console.log(e),
     })
@@ -152,7 +165,7 @@ export class ModalUsuariosComponent implements OnInit {
   }
 
   checkOficio() {
-    let statusOficio: any = this.util.checkOficio(this.formUsuario, 'oficiorRequerido');
+    let statusOficio: any = this.util.checkOficio(this.formUsuario, 'oficioRequerido');
     this.oficioValido =  statusOficio?.isValid;
     this.msgErroOficio = statusOficio?.msg;
   }
@@ -160,10 +173,10 @@ export class ModalUsuariosComponent implements OnInit {
   validaNecessidadeOficio() {
 
     if(this.formUsuario.get('perfil')?.value === "Administrador") {
-      this.formUsuario.get('oficiorRequerido')?.clearValidators();
-      this.formUsuario.get('oficiorRequerido')?.setValue(null);
+      this.formUsuario.get('oficioRequerido')?.clearValidators();
+      this.formUsuario.get('oficioRequerido')?.setValue(null);
     }else {
-      this.formUsuario.get('oficiorRequerido')?.setValidators([Validators.required, FileValidator.maxContentSize(this.maxSize), this.validator.acceptTypeFileInput]);
+      this.formUsuario.get('oficioRequerido')?.setValidators([Validators.required, FileValidator.maxContentSize(this.maxSize), this.validator.acceptTypeFileInput]);
     }
   }
 
@@ -172,18 +185,22 @@ export class ModalUsuariosComponent implements OnInit {
 
   async  salvar() {
 
+    console.log(this.formUsuario.value);
+
     if(this.formUsuario.valid) {
       if((this.novoCadastro) && (this.novoCadastro === true)) {
 
-        const oficiorRequerido = new FormData();
-        oficiorRequerido.append('oficiorRequerido', this.formUsuario.get('oficiorRequerido')?.value._files[0]);
+        const oficioRequerido = new FormData();
+        if((this.formUsuario.get('oficioRequerido')?.value) && (this.formUsuario.get('oficioRequerido')?.value !== null)) {
+          oficioRequerido.append('oficioRequerido', this.formUsuario.get('oficioRequerido')?.value._files[0]);
+        }
 
         let request = {
           idUser: this.auth.getId(),
           data: this.formUsuario.value,
         }
 
-         await this.usuariosService.salvarUsuarioOficio(oficiorRequerido, request).subscribe({
+         await this.usuariosService.salvarUsuarioOficio(oficioRequerido, request).subscribe({
           next: (x) => {},
           error: (e) => {},
         })
@@ -193,54 +210,13 @@ export class ModalUsuariosComponent implements OnInit {
           error: (e) => {},
         })
 
-        this.dialogRef.close(this.formUsuario.value);
+        this.dialogRef.close(true);
       }
     }
-
-  /*   if(this.formUsuario.valid) {
-      if((this.novoCadastro) && (this.novoCadastro === true)) {
-
-        let request = {
-          idUser: this.auth.getId(),
-          data: this.usuarioModel,
-        }
-
-        this.usuariosService.salvarUsuario(request).subscribe({
-          next: (x) => {
-
-            this.dialogRef.close(true);
-          },
-          error: (e) => {},
-        })
-
-      }else {
-
-        console.log(this.formUsuario.value)
-
-        this.motivoReprovacaoModel.motivoReprovacao = this.formMotivoReprovacao.get('motivoReprovacao')?.value;
-        this.motivoReprovacaoModel.status = this.formMotivoReprovacao.get('status')?.value
-
-        let request = {
-          idUser: this.auth.getId(),
-          data: this.motivoReprovacaoModel,
-        }
-
-        this.motivoReprovacaoService.atualizarMotivoReprovacao(request).subscribe({
-          next: (x) => {
-            this.dialogRef.close(this.motivoReprovacaoModel)
-          },
-          error: (e) => {},
-        })
-      }
-    } */
   }
 
-
-
-
-
   closeModal(): void {
-    this.dialogRef.close(true);
+    this.dialogRef.close(false);
   }
 
   ngAfterContentChecked() {

@@ -27,12 +27,20 @@ export class UsuariosService {
     return this.http.put(`${environment.API}desativaUsuario`, request);
   }
 
-  getUsuarios(request: {idUser:any, pageIndex: number, pageSize: number}) {
+  getUsuarios(request: {idUser:any}) {
     return this.http.get(`${environment.API}pegaUsuarios`, {params: request});
   }
 
-  getVerificaDadosExistentesUsuario(request: {idUser:number}) {
-    return this.http.get(`${environment.API}verificaDadosExistentesUsuarios`, {params: request});
+  getUsuario(request: {idUser:any, idRequest: number}) {
+    return this.http.get(`${environment.API}pegaUsuario`, {params: request});
+  }
+
+  /* getUsuarios(request: {idUser:any, pageIndex: number, pageSize: number}) {
+    return this.http.get(`${environment.API}pegaUsuarios`, {params: request});
+  }
+ */
+  getVerificaUsuariosExistentes(request: {idUser:number}) {
+    return this.http.get(`${environment.API}VerificaUsuariosExistentes`, {params: request});
   }
 
   getMunicipiosOuMunicipios(request: {idUser: number, tipoSolicitacao: string}) {

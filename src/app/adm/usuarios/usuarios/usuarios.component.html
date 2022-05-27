@@ -1,20 +1,20 @@
 
 <div class="section-main">
 
-  <div class="empty-data" *ngIf="!hasData">
+  <div class="empty-data" *ngIf="!getVerifyHasUser()">
     <mat-card>
       <mat-card class="container-card">
-        <mat-card-title>Não há Motivos de Reprovação Cadastrados</mat-card-title>
+        <mat-card-title>Não há usuários cadastrados no sistema!</mat-card-title>
         <mat-divider inset></mat-divider>
 
         <mat-card-content class="container-card-btn">
-          <button mat-button (click)="openDialog()">Cadastrar Motivo de Reprovação</button>
+          <button mat-button (click)="openDialog()">Cadastrar Novo Usuário</button>
         </mat-card-content>
       </mat-card>
     </mat-card>
   </div>
 
-  <div class="has-data" *ngIf="hasData">
+  <div class="has-data" *ngIf="getVerifyHasUser()">
     <div class="main-container-form">
       <app-form-usuarios></app-form-usuarios>
     </div>
