@@ -11,15 +11,10 @@ export class UsuariosService {
 
   constructor(private http: HttpClient) { }
 
-  salvarUsuarioOficio(oficioRequerido: FormData, request: {idUser: number, data: any}) {
-    return this.http.post(`${environment.API}cadastraUsuario`,oficioRequerido, {params: request});
-  }
-
-  salvarUsuarioData(request: {idUser: number, data: any}) {
+  salvarUsuario(request: FormData) {
     return this.http.post(`${environment.API}cadastraUsuario`, request);
   }
-
-  atualizarUsuario(request: {idUser: number, data: Usuario}) {
+  atualizarUsuario(request: FormData) {
     return this.http.put(`${environment.API}atualizaUsuario`, request);
   }
 
@@ -35,10 +30,6 @@ export class UsuariosService {
     return this.http.get(`${environment.API}pegaUsuario`, {params: request});
   }
 
-  /* getUsuarios(request: {idUser:any, pageIndex: number, pageSize: number}) {
-    return this.http.get(`${environment.API}pegaUsuarios`, {params: request});
-  }
- */
   getVerificaUsuariosExistentes(request: {idUser:number}) {
     return this.http.get(`${environment.API}VerificaUsuariosExistentes`, {params: request});
   }

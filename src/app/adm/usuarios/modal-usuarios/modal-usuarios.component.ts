@@ -1,6 +1,6 @@
-import { Subject } from 'rxjs';
+import { Subject, Observable, Subscription } from 'rxjs';
 import { UtilService } from './../../../shared/services/utils/util.service';
-import { FormUsuariosComponent } from './../form-usuarios/form-usuarios.component';
+import { TabelaUsuariosComponent } from '../tabela-usuarios/tabela-usuarios.component';
 import { ChangeDetectorRef, Component, Inject, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
@@ -36,7 +36,6 @@ export class ModalUsuariosComponent implements OnInit {
   municipioModel!: Municipio;
   unidadePartialDataModel!: UnidadePartialData;
   municipiosModel!: Municipio[];
-  submitData!: Subject<any>
 
   opcoesTipoUnidade: string[] = ['Municipio', 'Unidade'];
   opcoesPerfil: string[] = ['Operador', 'Autorizador', 'Administrador'];
@@ -73,6 +72,7 @@ export class ModalUsuariosComponent implements OnInit {
     if(dataModal?.idRequest) {
       this.usuariosService.getUsuario(dataModal).subscribe({
         next: (res: any) => {
+
           this.formUsuario.setValue({
             tipoUnidade: (res?.unidade?.id) ? 'Unidade': 'Municipio',
             municipio: (res?.municipio?.id) ? res?.municipio?.nome : "",
@@ -128,42 +128,13 @@ export class ModalUsuariosComponent implements OnInit {
   }
 
   validaNecessidadeOficio() {
-    if(this.formUsuario.get('perfil')?.value === "Administrador") {
-      this.formUsuario.get('oficioRequerido')?.clearValidators();
-      this.formUsuario.get('oficioRequerido')?.setValue(null);
-    }else {
-      this.formUsuario.get('oficioRequerido')?.setValidators([Validators.required, FileValidator.maxContentSize(this.maxSize), this.validator.acceptTypeFileInput]);
-    }
+    this.util.validateOficioRequired(this.formUsuario, 'oficioRequerido', 'perfil', this.maxSize);
   }
 
-  validaCPF() {
-    if (this.formUsuario.get('cpf')?.touched && this.formUsuario.controls['cpf'].hasError('cpfIncompleto')) {
-      this.exporMensagemErroCPF(1);
-    this.cpfValido = false;
-      return;
-    }else if(this.formUsuario.get('cpf')?.touched && this.formUsuario.controls['cpf'].hasError('cpfInvalido')) {
-      this.exporMensagemErroCPF(2);
-    this.cpfValido = false;
-      return;
-    }
-    this.cpfValido = true;
-    this.msgErroCPF = '';
-  }
-
-  exporMensagemErroCPF(tipoErro: number): any {
-
-    switch(tipoErro) {
-      case 1:
-        this.msgErroCPF = 'O CPF não foi inserido ou está incompleto!';
-        break
-
-      case 2:
-        this.msgErroCPF = 'Este CPF não é válido!';
-      break
-
-      default:
-        this.msgErroCPF = '';
-    }
+  checkCPF() {
+    let cpf: any = this.util.checkOficio(this.formUsuario, 'cpf');
+    this.cpfValido =  cpf?.isValid;
+    this.msgErroCPF = cpf?.msg;
   }
 
   checkOficio() {
@@ -173,50 +144,71 @@ export class ModalUsuariosComponent implements OnInit {
   }
 
   async salvar() {
-
     if(this.formUsuario.valid) {
+
+      this.util.loading.next(true);
+
+      const request = new FormData();
+      let data = {
+        idUser: this.auth.getId(),
+        data: this.formUsuario.value,
+      }
+
+      if((this.formUsuario.get('oficioRequerido')?.value) && (this.formUsuario.get('oficioRequerido')?.value !== null)) {
+        request.append('oficioRequerido', this.formUsuario.get('oficioRequerido')?.value._files[0]);
+      }
+
+      request.append('userDataRequest', JSON.stringify( data ))
+
       if(this.novoCadastro === true) {
-        await this.submit();
+        await this.submitNovoUsuario(request);
         this.util.openAlertModal("320px", "success-modal", "Usuário cadastrado!", `Usuário ${this.formUsuario.get(`nome`)?.value}, foi cadastrado com sucesso no sistema!`);
         this.dialogRef.close(true);
         return;
       }else {
-        this.submit();
+        await this.submitAtualizaUsuario(request);
         this.util.openAlertModal("320px", "success-modal", "Atualização de dados realizada!", `Os dados do usuário ${this.formUsuario.get(`nome`)?.value}, foram atualizados no sistema!`);
         this.dialogRef.close(true);
         return;
       }
     }
-    this.util.openAlertModal("320px", "error-modal", "Erro ao salvar usuário", "Houve um erro ao tentar salvar esse usuário em nossa base de dados! Por favor, tente novamente! Caso o problema persista, entre em contato via e-mail: sistemas.supinf@saude.rj.gov.br");
-    return;
   }
 
-  async submit() {
+  submitNovoUsuario(request: FormData): Promise<any> {
+    return new Promise(
+      (resolve, reject): void => {
+        this.usuariosService.salvarUsuario(request).subscribe({
+          next: () => {
+            this.util.loading.next(false)
+            resolve(true)
+          },
+          error: () => {
+            this.util.loading.next(false);
+            this.util.openAlertModal("320px", "error-modal", "Erro ao salvar usuário", `Houve um erro ao tentar salvar o usuário ${this.formUsuario.get(`nome`)?.value} em nossa base de dados! Por favor, tente novamente! Caso o problema persista, entre em contato via e-mail: sistemas.supinf@saude.rj.gov.br`);
+            reject(false);
+          },
+        })
+      }
+    )
+  }
 
-    const oficioRequerido = new FormData();
-    if((this.formUsuario.get('oficioRequerido')?.value) && (this.formUsuario.get('oficioRequerido')?.value !== null)) {
-      oficioRequerido.append('oficioRequerido', this.formUsuario.get('oficioRequerido')?.value._files[0]);
-    }
+  submitAtualizaUsuario(request: FormData): Promise<any> {
+    return new Promise(
+      (resolve, reject): void => {
 
-    let request = {
-      idUser: this.auth.getId(),
-      data: this.formUsuario.value,
-    }
-
-    /* PROCURAR UMA FORMA MELHOR DE TRATAR O ENVIO DE DADOS E ARQUIVOS, TALVEZ IMPLEMENTAR UM SUBJECT*/
-    await this.usuariosService.salvarUsuarioOficio(oficioRequerido, request).subscribe({
-      next: (x) => {},
-      error: (e) => {
-        this.util.openAlertModal("320px", "error-modal", "Erro ao salvar usuário", "Houve um erro ao tentar salvar esse usuário em nossa base de dados! Por favor, tente novamente! Caso o problema persista, entre em contato via e-mail: sistemas.supinf@saude.rj.gov.br");
-      },
-    })
-
-    await this.usuariosService.salvarUsuarioData(request).subscribe({
-      next: (x) => {},
-      error: (e) => {
-        this.util.openAlertModal("320px", "error-modal", "Erro ao salvar usuário", "Houve um erro ao tentar salvar esse usuário em nossa base de dados! Por favor, tente novamente! Caso o problema persista, entre em contato via e-mail: sistemas.supinf@saude.rj.gov.br");
-      },
-    })
+        this.usuariosService.atualizarUsuario(request).subscribe({
+          next: () => {
+            this.util.loading.next(false)
+            resolve(true)
+          },
+          error: () => {
+            this.util.loading.next(false);
+            this.util.openAlertModal("320px", "error-modal", "Erro ao salvar usuário", `Houve um erro ao tentar atualizar o usuário ${this.formUsuario.get(`nome`)?.value} em nossa base de dados! Por favor, tente novamente! Caso o problema persista, entre em contato via e-mail: sistemas.supinf@saude.rj.gov.br`);
+            reject(false);
+          },
+        })
+      }
+    )
   }
 
   closeModal(): void {

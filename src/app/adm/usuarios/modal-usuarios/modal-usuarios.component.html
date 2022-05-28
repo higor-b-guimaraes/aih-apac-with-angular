@@ -81,7 +81,7 @@
     appearance="outline"
     class="col-md-3">
       <mat-label>CPF</mat-label>
-      <input (focusout)="validaCPF()" matInput formControlName="cpf" mask="000.000.000-00">
+      <input (focusout)="checkCPF()" matInput formControlName="cpf" mask="000.000.000-00">
       <mat-error class="error-access" *ngIf="!cpfValido">{{ msgErroCPF }}</mat-error>
     </mat-form-field>
     </div>

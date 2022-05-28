@@ -1,12 +1,11 @@
-import { ModalUsuariosComponent } from './../modal-usuarios/modal-usuarios.component';
 import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
+import { Subscription } from 'rxjs';
+
 import { MatDialog } from '@angular/material/dialog';
+import { ModalUsuariosComponent } from './../modal-usuarios/modal-usuarios.component';
+
 import { AuthService } from 'src/app/core/services/auth.service';
-import { ModalCadastroReprovacaoComponent } from '../../motivo-reprovacao/modal-cadastro-reprovacao/modal-cadastro-reprovacao.component';
-import { MotivoReprovacao } from '../../motivo-reprovacao/models/motivoReprovacao.model';
-import { MotivoReprovacaoService } from '../../motivo-reprovacao/services/motivo-reprovacao.service';
 import { UsuariosService } from '../services/usuarios.service';
-import { Observable, Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-usuarios',
@@ -60,7 +59,6 @@ export class UsuariosComponent implements OnInit {
 
   ngOnDestroy() {
     this.subVerifyHasUser.unsubscribe();
-    console.log(this.subModalResponse)
     if(this.subModalResponse) this.subModalResponse.unsubscribe();
   }
 

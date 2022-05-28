@@ -1,4 +1,4 @@
-import { FormControl, FormBuilder, FormGroup } from '@angular/forms';
+import { FormControl, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Inject, Injectable } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { map, Subject, Observable } from 'rxjs';
@@ -6,6 +6,9 @@ import { AuthService } from 'src/app/core/services/auth.service';
 
 import { ModalAlert } from '../../modals/error-alert/modal-error-alert';
 import { Profile } from '../../modals/models/profile.model';
+import { FileValidator } from 'ngx-material-file-input';
+import { CustomValidators } from '../../validators/custom-validators';
+import { StringMap } from '@angular/compiler/src/compiler_facade_interface';
 
 @Injectable({
   providedIn: 'root'
@@ -14,12 +17,12 @@ export class UtilService {
 
   loading = new Subject()
 
-  constructor(private dialog: MatDialog, private auth: AuthService) {
+  constructor(private dialog: MatDialog, private auth: AuthService, private validator: CustomValidators) {
 
   }
 
-  removeMaskCPF(input: any) {
-    return input.replaceAll('.', '').replace('-', '');
+  removeMaskCPF(input: FormControl) {
+    return input.value.replaceAll('.', '').replace('-', '');
   }
 
   checkCPF(cpfField: FormGroup, nameField: string): any {
@@ -60,6 +63,17 @@ export class UtilService {
       msg: '',
     }
   }
+
+  validateOficioRequired(oficioField: FormGroup, nameFieldOficio: string, nameFieldProfile: string, fileSizeLimit: number) {
+
+    if(oficioField.get(`${nameFieldProfile}`)?.value === "Administrador") {
+      oficioField.get(`${nameFieldOficio}`)?.clearValidators();
+      oficioField.get(`${nameFieldOficio}`)?.setValue(null);
+    }else {
+      oficioField.get(`${nameFieldOficio}`)?.setValidators([Validators.required, FileValidator.maxContentSize(fileSizeLimit), this.validator.acceptTypeFileInput]);
+    }
+  }
+
 
   getMonths(): string[] {
     return ['Janeiro', 'Fevereiro', 'Março', 'Abril', 'Maio', 'Junho', 'Julho', 'Agosto', 'Setembro', 'Outubro', 'Novembro', 'Dezembro'];

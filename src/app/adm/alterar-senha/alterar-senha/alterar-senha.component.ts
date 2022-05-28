@@ -43,13 +43,15 @@ export class AlterarSenhaComponent implements OnInit {
     let statusCpf: any = this.util.checkCPF(this.formResetPassword, 'cpf');
     this.validCpf =  statusCpf?.isValid;
     this.errorCPFMsg = statusCpf?.msg;
+    console.log(statusCpf);
 
     if(this.validCpf) {
-      this.alterarSenhaService.recoveryUser(
-        {id: this.auth.getId(),
-        login: this.util.removeMaskCPF(<FormControl>this.formResetPassword.controls['cpf'])}
-        ).subscribe({
+      this.alterarSenhaService.recoveryUser({
+          id: this.auth.getId(),
+          login: this.util.removeMaskCPF(<FormControl>this.formResetPassword.controls['cpf'])
+        }).subscribe({
         next:(dados: any) => {
+          console.log(dados);
           if(dados['profile'] !== 'Administrador') {
             this.isAdm = false;
           }else {

@@ -1,27 +1,28 @@
 import { ChangeDetectorRef, Component, OnInit, ViewChild } from '@angular/core';
+import { Subject } from 'rxjs';
+
+import { ModalUsuariosComponent } from '../modal-usuarios/modal-usuarios.component';
+
+import { AuthService } from 'src/app/core/services/auth.service';
+import { UtilService } from 'src/app/shared/services/utils/util.service';
+import { UsuariosService } from '../services/usuarios.service';
+
+import { Usuario } from 'src/app/shared/models/usuario.model';
+
 import { MatDialog } from '@angular/material/dialog';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
-import { Subject } from 'rxjs';
-import { AuthService } from 'src/app/core/services/auth.service';
 
-import { Usuario } from 'src/app/shared/models/usuario.model';
 
-import { UtilService } from 'src/app/shared/services/utils/util.service';
-import { ConsultarFaixas } from '../../consultar-faixas/models/consultar-faixas.model';
-import { ModalCadastroReprovacaoComponent } from '../../motivo-reprovacao/modal-cadastro-reprovacao/modal-cadastro-reprovacao.component';
-import { MotivoReprovacao } from '../../motivo-reprovacao/models/motivoReprovacao.model';
-import { MotivoReprovacaoService } from '../../motivo-reprovacao/services/motivo-reprovacao.service';
-import { UsuariosService } from '../services/usuarios.service';
-import { ModalUsuariosComponent } from '../modal-usuarios/modal-usuarios.component';
+
 
 @Component({
-  selector: 'app-form-usuarios',
-  templateUrl: './form-usuarios.component.html',
-  styleUrls: ['./form-usuarios.component.css']
+  selector: 'app-tabela-usuarios',
+  templateUrl: './tabela-usuarios.component.html',
+  styleUrls: ['./tabela-usuarios.component.css']
 })
-export class FormUsuariosComponent implements OnInit {
+export class TabelaUsuariosComponent implements OnInit {
 
   columns: string[] = [];
   usuarios: Usuario[] = [];
@@ -65,8 +66,7 @@ export class FormUsuariosComponent implements OnInit {
     this.getUsuarios.next(data);
   }
 
-
-  openDialog(usuario?: number) {
+  abrirModalUsuario(usuario?: number) {
 
     if(usuario) {
 
@@ -83,7 +83,7 @@ export class FormUsuariosComponent implements OnInit {
       });
     }else {
 
-      const dialogRef = this.modal.open(ModalCadastroReprovacaoComponent, {
+      const dialogRef = this.modal.open(ModalUsuariosComponent, {
         width: '100%',
         panelClass: 'common-modal',
       });
@@ -94,11 +94,11 @@ export class FormUsuariosComponent implements OnInit {
   }
 
   novoUsuario() {
-    this.openDialog()
+    this.abrirModalUsuario()
   }
 
   editarUsuario(usuario: Usuario) {
-    this.openDialog(usuario.id)
+    this.abrirModalUsuario(usuario.id)
   }
 
   getClass(situacao: string) {
@@ -168,9 +168,6 @@ export class FormUsuariosComponent implements OnInit {
         this.util.openAlertModal("320px", "error-modal", "Erro ao desativar o usuário", `Houve um erro ao tentarmos desativar o usuário ${row.nome}! Por favor, tente novamente! Caso o problema persista, entre em contato via e-mail: sistemas.supinf@saude.rj.gov.br`);
       },
     })
-  }
-
-  ngAfterViewInit() {
   }
 
   ngAfterContentChecked() {
