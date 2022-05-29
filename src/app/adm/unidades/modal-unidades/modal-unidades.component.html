@@ -1,28 +1,94 @@
 
-<mat-dialog-content class="mat-typography">
 
-  <form [formGroup]="formMotivoReprovacao" class="row g-3">
+<form [formGroup]="formUnidade" class="row g-3">
 
-    <mat-form-field appearance="outline"  class="col-md-9">
-      <mat-label>Motivo de Reprovação</mat-label>
-      <input matInput formControlName="motivoReprovacao">
-      <mat-error *ngIf="formMotivoReprovacao.get('motivoReprovacao')?.hasError('required')">É preciso informar o motivo de cancelamento</mat-error>
-    </mat-form-field>
+  <fieldset>
+    <legend>Informações de Controle</legend>
 
-    <mat-form-field appearance="outline" class="col-md-3">
-      <mat-label>Tipo de Faixa</mat-label>
-      <mat-select
-      formControlName="status">
-        <mat-option *ngFor="let status of statusMotivo" [value]="status" required>
-          {{status}}
-        </mat-option>
-      </mat-select>
-      <mat-error *ngIf="formMotivoReprovacao.get('status')?.hasError('required')">É preciso selecionar o status do motivo de reprovação</mat-error>
-    </mat-form-field>
-  </form>
+    <div class="row">
+      <mat-form-field appearance="outline"  class="col-md-6">
+        <mat-label>Nome da Unidade</mat-label>
+        <input matInput formControlName="nomeUnidade">
+        <mat-error *ngIf="formUnidade.get('nomeUnidade')?.hasError('required')">É preciso informar o nome da unidade</mat-error>
+      </mat-form-field>
 
-</mat-dialog-content>
+      <mat-form-field appearance="outline"  class="col-md-3">
+        <mat-label>CNES da Unidade</mat-label>
+        <input matInput (focusout)="checkCNES()" formControlName="cnes"  mask="0000000">
+        <mat-error *ngIf="formUnidade.get('cnes')?.hasError('required')">É preciso informar o CNES da unidade</mat-error>
+      </mat-form-field>
+
+      <mat-form-field appearance="outline"  class="col-md-3">
+        <mat-label>Telefone da Unidade</mat-label>
+        <input matInput formControlName="telefone" mask="(00) 0000-0000">
+        <mat-error *ngIf="formUnidade.get('telefone')?.hasError('required')">É preciso informar telefone de contato da unidade</mat-error>
+      </mat-form-field>
+    </div>
+  </fieldset>
+
+  <fieldset>
+    <legend>Endereço</legend>
+
+    <div class="row container-preenchimentoAutomatico">
+      <mat-checkbox class="col-md-12" formControlName="preenchimentoAutomatico">Preencher automaticamente pelo CEP</mat-checkbox>
+    </div>
+
+    <div class="row">
+     <mat-form-field appearance="outline"  class="col-md-9">
+       <mat-label>Logradouro</mat-label>
+       <input matInput formControlName="logradouro">
+       <mat-error *ngIf="formUnidade.get('logradouro')?.hasError('required')">É preciso informar o logradouro da unidade</mat-error>
+     </mat-form-field>
+
+     <mat-form-field appearance="outline"  class="col-md-3">
+       <mat-label>Número</mat-label>
+       <input matInput formControlName="numero">
+     </mat-form-field>
+   </div>
+
+    <div class="row">
+      <mat-form-field appearance="outline"  class="col-md-9">
+        <mat-label>Complemento</mat-label>
+        <input matInput formControlName="complemento">
+      </mat-form-field>
+
+      <mat-form-field appearance="outline"  class="col-md-3">
+        <mat-label>Cep</mat-label>
+        <input (focusout)="getCep()" matInput formControlName="cep"mask="00000-000">
+        <mat-error *ngIf="formUnidade.get('cep')?.hasError('required')">É preciso informar o cep da unidade</mat-error>
+      </mat-form-field>
+    </div>
+
+    <div class="row">
+
+      <mat-form-field appearance="outline"  class="col-md-3">
+        <mat-label>Bairro da Unidade</mat-label>
+        <input matInput formControlName="bairro">
+        <mat-error *ngIf="formUnidade.get('bairro')?.hasError('required')">É preciso informar o bairro da unidade</mat-error>
+      </mat-form-field>
+
+      <mat-form-field appearance="outline"  class="col-md-3">
+        <mat-label>Município da Unidade</mat-label>
+        <input matInput formControlName="municipio">
+        <mat-error *ngIf="formUnidade.get('municipio')?.hasError('required')">É preciso informar o município da unidade</mat-error>
+      </mat-form-field>
+
+      <mat-form-field appearance="outline" class="col-md-3">
+        <mat-label>Estado</mat-label>
+        <mat-select
+        formControlName="estado">
+          <mat-option *ngFor="let estado of opcoesEstados" [value]="estado" required>
+            {{estado}}
+          </mat-option>
+        </mat-select>
+        <mat-error *ngIf="formUnidade.get('estado')?.hasError('required')">É preciso selecionar a Estado de origem da unidade</mat-error>
+      </mat-form-field>
+    </div>
+  </fieldset>
+
+</form>
+
 <mat-dialog-actions align="end">
   <button mat-button mat-dialog-close (click)="closeModal()">Fechar</button>
-  <button mat-button [mat-dialog-close]="motivoReprovacaoModel" cdkFocusInitial [disabled]="!formMotivoReprovacao.valid" (click)="salvar()">Salvar</button>
+  <button mat-button [mat-dialog-close]="unidadeModel" cdkFocusInitial [disabled]="!formUnidade.valid" (click)="salvar()">Salvar</button>
 </mat-dialog-actions>

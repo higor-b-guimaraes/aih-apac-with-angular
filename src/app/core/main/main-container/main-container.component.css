@@ -239,7 +239,10 @@ h1.example-app-name {
   height: 80vh;
 }
 
-
+.cdk-overlay-container {
+  position: fixed;
+  z-index: 1;
+}
 
 .loading-data {
   position: absolute;
@@ -249,7 +252,7 @@ h1.example-app-name {
   align-items: center;
   justify-content: center;
   background-color: rgb(54, 54, 54, 0.7);
-  z-index: 9;
+  z-index: 99999;
 }
 
 

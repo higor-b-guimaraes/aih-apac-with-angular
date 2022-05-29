@@ -1,9 +1,11 @@
 import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
+import { Subscription } from 'rxjs';
+
 import { MatDialog } from '@angular/material/dialog';
+import { ModalUsuariosComponent } from './../../usuarios/modal-usuarios/modal-usuarios.component';
+
 import { AuthService } from 'src/app/core/services/auth.service';
-import { ModalCadastroReprovacaoComponent } from '../../motivo-reprovacao/modal-cadastro-reprovacao/modal-cadastro-reprovacao.component';
-import { MotivoReprovacao } from '../../motivo-reprovacao/models/motivoReprovacao.model';
-import { MotivoReprovacaoService } from '../../motivo-reprovacao/services/motivo-reprovacao.service';
+import { UsuariosService } from './../../usuarios/services/usuarios.service';
 
 @Component({
   selector: 'app-unidades',
@@ -12,45 +14,39 @@ import { MotivoReprovacaoService } from '../../motivo-reprovacao/services/motivo
 })
 export class UnidadesComponent implements OnInit {
 
-  public content!: MotivoReprovacao;
-  hasData:boolean = false;
-  headerTable: string[] = []
-  bodyTable: MotivoReprovacao[] = []
-  tableLength: number = 0;
-  /* DEPOIS PRECISA READAPTAR O CÓDIGO PARA PASSAR INFORMAÇÕES DESTA PÁGINA PARA A TABELA DIRETO */
+  private hasUser!: boolean;
+  private subVerifyHasUser!: Subscription;
+  private subModalResponse!: Subscription;
 
   constructor(public modal: MatDialog,
-    private motivoReprovacaoService: MotivoReprovacaoService,
+    private UsuariosService: UsuariosService,
     private auth: AuthService,
     private cdRef: ChangeDetectorRef) {
 
-      let request = {idUser: this.auth.getId()}
-      this.motivoReprovacaoService.getVerificaDadosExistentes(request).subscribe({
-
-        next: (data: any) => {
-
-          if(data.hasData) {
-            this.headerTable = [...data['headerTable']];
-            this.bodyTable = [...data['bodyTable']];
-            this.tableLength = data['tableLength'];
-            this.hasData = true;
-          }else {
-            this.hasData = false;
-          }
-
-        },
-        error: (e) => {console.log(e)}
+      this.subVerifyHasUser = this.UsuariosService.getVerificaUsuariosExistentes(this.auth.getAuth()).subscribe({
+        next: (res: any) => (res?.hasUser) ? this.hasUser = true : this.hasUser = false,
+        error: () => {},
       })
     }
 
   openDialog() {
-    const dialogRef = this.modal.open(ModalCadastroReprovacaoComponent, {
+    const dialogRef = this.modal.open(ModalUsuariosComponent, {
       width: '100%',
       panelClass: 'common-modal'});
 
-    dialogRef.afterClosed().subscribe(result => {
-      if(result === true) this.hasData = true;
+    this.subModalResponse = dialogRef.afterClosed().subscribe(result => {
+      console.log(result)
+      if(result === true) {
+        this.hasUser = true;
+      }else {
+        this.subModalResponse.unsubscribe();
+        console.log(this.subModalResponse);
+      }
     });
+  }
+
+  getVerifyHasUser(): boolean {
+    return this.hasUser;
   }
 
   ngAfterContentChecked() {
@@ -58,6 +54,12 @@ export class UnidadesComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    console.log(this.hasUser)
+  }
+
+  ngOnDestroy() {
+    this.subVerifyHasUser.unsubscribe();
+    if(this.subModalResponse) this.subModalResponse.unsubscribe();
   }
 
 }

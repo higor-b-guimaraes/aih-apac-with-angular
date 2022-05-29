@@ -1,11 +1,12 @@
+import { ModalUnidadesComponent } from './../modal-unidades/modal-unidades.component';
 import { ChangeDetectorRef, Component, OnInit, ViewChild } from '@angular/core';
 import { Subject } from 'rxjs';
 
-import { ModalUsuariosComponent } from '../modal-usuarios/modal-usuarios.component';
+import { ModalUsuariosComponent } from '../../usuarios/modal-usuarios/modal-usuarios.component';
 
 import { AuthService } from 'src/app/core/services/auth.service';
 import { UtilService } from 'src/app/shared/services/utils/util.service';
-import { UsuariosService } from '../services/usuarios.service';
+import { UsuariosService } from '../../usuarios/services/usuarios.service';
 
 import { Usuario } from 'src/app/shared/models/usuario.model';
 
@@ -14,15 +15,12 @@ import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
 
-
-
-
 @Component({
-  selector: 'app-tabela-usuarios',
-  templateUrl: './tabela-usuarios.component.html',
-  styleUrls: ['./tabela-usuarios.component.css']
+  selector: 'app-tabela-unidades',
+  templateUrl: './tabela-unidades.component.html',
+  styleUrls: ['./tabela-unidades.component.css']
 })
-export class TabelaUsuariosComponent implements OnInit {
+export class TabelaUnidadesComponent implements OnInit {
 
   columns: string[] = [];
   usuarios: Usuario[] = [];
@@ -70,7 +68,7 @@ export class TabelaUsuariosComponent implements OnInit {
 
     if(usuario) {
 
-      const dialogRef = this.modal.open(ModalUsuariosComponent, {
+      const dialogRef = this.modal.open(ModalUnidadesComponent, {
         width: '100%',
         panelClass: 'common-modal',
         data: {
@@ -83,7 +81,7 @@ export class TabelaUsuariosComponent implements OnInit {
       });
     }else {
 
-      const dialogRef = this.modal.open(ModalUsuariosComponent, {
+      const dialogRef = this.modal.open(ModalUnidadesComponent, {
         width: '100%',
         panelClass: 'common-modal',
       });

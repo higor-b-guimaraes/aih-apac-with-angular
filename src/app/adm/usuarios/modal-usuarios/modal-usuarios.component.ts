@@ -1,6 +1,5 @@
-import { Subject, Observable, Subscription } from 'rxjs';
+
 import { UtilService } from './../../../shared/services/utils/util.service';
-import { TabelaUsuariosComponent } from '../tabela-usuarios/tabela-usuarios.component';
 import { ChangeDetectorRef, Component, Inject, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
@@ -13,10 +12,8 @@ import { UsuariosService } from './../services/usuarios.service';
 import { Usuario } from './../../../shared/models/usuario.model';
 import { Municipio } from './../../../shared/models/municipio.model';
 import { UnidadePartialData } from 'src/app/shared/models/unidade.model';
-import { Tools } from 'src/app/shared/tools/tools';
 import { CustomValidators } from 'src/app/shared/validators/custom-validators';
 import { FileValidator } from 'ngx-material-file-input';
-import { Unidade } from '../../../shared/models/unidade.model';
 
 @Component({
   selector: 'app-modal-usuarios',

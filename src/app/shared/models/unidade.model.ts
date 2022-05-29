@@ -10,7 +10,7 @@ export interface Unidade extends Municipio {
   complemento: string;
   cep: string;
   bairro: string;
-  municipio: Municipio;
+  municipio?: Municipio;
 }
 
 export interface UnidadePartialData {
