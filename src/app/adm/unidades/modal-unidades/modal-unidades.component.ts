@@ -52,26 +52,30 @@ export class ModalUnidadesComponent implements OnInit {
     private unidadeService: UnidadesService,
     private cdRef: ChangeDetectorRef) {
 
+    this.util.loading.next(true);
+    this.getEstados();
+
     if(dataModal?.idRequest) {
       this.unidadeService.getUnidade(dataModal).subscribe({
-        next: (res: any) => {
-          this.unidadeModel = {...res.data}
+      next: (res: any) => {
+        this.unidadeModel = {...res.data}
 
-          this.formUnidade.patchValue({
-            nomeUnidade: res?.data?.nomeUnidade,
-            cnes: res?.data?.cnes,
-            telefone: res?.data?.telefone,
-            logradouro: res?.data?.logradouro,
-            numero: res?.data?.numero,
-            complemento: res?.data?.complemento,
-            cep: res?.data?.cep,
-            bairro: res?.data?.bairro,
-            municipio: res?.data?.municipio?.nomeMunicipio,
-            estado: res?.data?.municipio?.estado,
-          });
+        this.formUnidade.patchValue({
+          nomeUnidade: res?.data?.nomeUnidade,
+          cnes: res?.data?.cnes,
+          telefone: res?.data?.telefone,
+          logradouro: res?.data?.logradouro,
+          numero: res?.data?.numero,
+          complemento: res?.data?.complemento,
+          cep: res?.data?.cep,
+          bairro: res?.data?.bairro,
+          municipio: res?.data?.municipio?.nomeMunicipio,
+          estado: res?.data?.municipio?.estado,
+        });
 
           this.novoCadastro = false;
         },
+
         error: () => {},
       })
     }else {
@@ -87,12 +91,13 @@ export class ModalUnidadesComponent implements OnInit {
 
     this.unidadeService.getEstados(request).subscribe({
       next: async (data: any) => {
-          this.opcoesEstados = await [...data.listaEstados];
-          this.util.loading.next(false);
+        this.opcoesEstados = await [...data.listaEstados];
+        this.util.loading.next(false);
       },
       error: (e) => {
         console.log(e)
-        this.util.loading.next(false);},
+        this.util.loading.next(false);
+      },
     })
   }
 
@@ -103,7 +108,6 @@ export class ModalUnidadesComponent implements OnInit {
         cnes: this.formUnidade.get('cnes')?.value,
         idUnidade: (this.unidadeModel?.id) ? this.unidadeModel.id : 0,
       }
-      console.log(request)
       this.util.loading.next(true);
       this.validateCNES(request);
     }
@@ -118,11 +122,13 @@ export class ModalUnidadesComponent implements OnInit {
           if((this.novoCadastro) && (res?.cnesUsado === 3)) {
             this.util.openAlertModal('320px', 'warning-modal', 'CNES já cadastrado', 'Este CNES já foi cadastrado em nossa base dedados');
             this.formUnidade.patchValue({cnes: ''});
+            this.util.loading.next(false);
             resolve(false);
           }else if((res?.cnesUsado === 2) && (this.unidadeModel.id !== res?.idUnidade)) {
 
             this.util.openAlertModal('320px', 'warning-modal', 'CNES ao verificar CNES', 'Este CNES não pertence a unidade que está sendo atualizada!')
             this.formUnidade.patchValue({cnes: ''});
+            this.util.loading.next(false);
             resolve(false);
           };
 
@@ -194,12 +200,12 @@ export class ModalUnidadesComponent implements OnInit {
         if(this.novoCadastro === true) {
           await this.submitNovaUnidade(request);
           this.util.openAlertModal("320px", "success-modal", "Unidade cadastrada!", `A unidade ${this.formUnidade.get(`nomeUnidade`)?.value}, foi cadastrado com sucesso no sistema!`);
-          this.dialogRef.close(true);
+          this.closeModal(1);
           return;
         }else {
           await this.submitAtualizaUnidade(request);
           this.util.openAlertModal("320px", "success-modal", "Atualização de dados realizada!", `Os dados da unidade ${this.formUnidade.get(`nomeUnidade`)?.value}, foram atualizados no sistema!`);
-          this.dialogRef.close(true);
+          this.closeModal(1);
           return;
         }
       }
@@ -211,8 +217,8 @@ export class ModalUnidadesComponent implements OnInit {
       (resolve, reject): void => {
         this.unidadeService.salvarUnidade(request).subscribe({
           next: () => {
-            this.util.loading.next(false)
-            resolve(true)
+            this.util.loading.next(false);
+            resolve(true);
           },
           error: () => {
             this.util.loading.next(false);
@@ -230,8 +236,8 @@ export class ModalUnidadesComponent implements OnInit {
 
         this.unidadeService.atualizarUnidade(request).subscribe({
           next: () => {
-            this.util.loading.next(false)
-            resolve(true)
+            this.util.loading.next(false);
+            resolve(true);
           },
           error: () => {
             this.util.loading.next(false);
@@ -243,8 +249,8 @@ export class ModalUnidadesComponent implements OnInit {
     )
   }
 
-  closeModal(): void {
-    this.dialogRef.close(false);
+  closeModal(status: any): void {
+    this.dialogRef.close(status);
   }
 
   ngAfterContentChecked() {
@@ -252,10 +258,5 @@ export class ModalUnidadesComponent implements OnInit {
   }
 
   ngOnInit(): void {
-
-    this.util.loading.next(true);
-    this.getEstados();
-
   }
-
 }

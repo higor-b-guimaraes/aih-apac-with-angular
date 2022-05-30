@@ -10,6 +10,11 @@ export class UnidadesService {
 
   constructor(private http: HttpClient) { }
 
+  checksHasUnit(request: {idUser:number}) {
+
+    return this.http.get(`${environment.API}verificaDadosExistentesUnidade`, {params: request});
+  }
+
   salvarUnidade(request: any) {
     return this.http.post(`${environment.API}cadastraUnidade`, request);
   }
@@ -27,11 +32,6 @@ export class UnidadesService {
 
   getUnidade(request: {idUser:any, idRequest: number}) {
     return this.http.get(`${environment.API}unidade`, {params: request});
-  }
-
-
-  getVerificaUnidadesExistentes(request: {idUser:number}) {
-    return this.http.get(`${environment.API}VerificaUnidadesExistentes`, {params: request});
   }
 
   getEstados(request: {idUser: number}) {

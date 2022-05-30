@@ -1,20 +1,20 @@
 
 <div class="section-main">
 
-  <div class="empty-data" *ngIf="!getVerifyHasUser()">
+  <div class="empty-data" *ngIf="hasUnit === 2">
     <mat-card>
       <mat-card class="container-card">
         <mat-card-title>Não há usuários cadastrados no sistema!</mat-card-title>
         <mat-divider inset></mat-divider>
 
         <mat-card-content class="container-card-btn">
-          <button mat-button (click)="openDialog()">Cadastrar Novo Usuário</button>
+          <button mat-button (click)="openModalUnit()">Cadastrar Novo Usuário</button>
         </mat-card-content>
       </mat-card>
     </mat-card>
   </div>
 
-  <div class="has-data" *ngIf="getVerifyHasUser()">
+  <div class="has-data" *ngIf="hasUnit === 1">
     <div class="main-container-form">
       <app-tabela-unidades></app-tabela-unidades>
     </div>

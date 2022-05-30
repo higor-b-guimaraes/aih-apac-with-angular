@@ -7,8 +7,6 @@ import { UtilService } from 'src/app/shared/services/utils/util.service';
 
 import { UnidadesService } from './../services/unidades.service';
 
-import { Usuario } from 'src/app/shared/models/usuario.model';
-
 import { MatDialog } from '@angular/material/dialog';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';

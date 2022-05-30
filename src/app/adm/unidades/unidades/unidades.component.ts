@@ -2,10 +2,13 @@ import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { Subscription } from 'rxjs';
 
 import { MatDialog } from '@angular/material/dialog';
-import { ModalUsuariosComponent } from './../../usuarios/modal-usuarios/modal-usuarios.component';
+import { ModalUnidadesComponent } from './../modal-unidades/modal-unidades.component';
 
 import { AuthService } from 'src/app/core/services/auth.service';
-import { UsuariosService } from './../../usuarios/services/usuarios.service';
+import { UtilService } from './../../../shared/services/utils/util.service';
+import { UnidadesService } from './../services/unidades.service';
+
+
 
 @Component({
   selector: 'app-unidades',
@@ -14,52 +17,74 @@ import { UsuariosService } from './../../usuarios/services/usuarios.service';
 })
 export class UnidadesComponent implements OnInit {
 
-  private hasUser!: boolean;
-  private subVerifyHasUser!: Subscription;
+  hasUnit!: number;
+  private subVerifyHasUnit!: Subscription;
   private subModalResponse!: Subscription;
 
   constructor(public modal: MatDialog,
-    private UsuariosService: UsuariosService,
+    private unitService: UnidadesService,
     private auth: AuthService,
+    private util: UtilService,
     private cdRef: ChangeDetectorRef) {
-
-      this.subVerifyHasUser = this.UsuariosService.getVerificaUsuariosExistentes(this.auth.getAuth()).subscribe({
-        next: (res: any) => (res?.hasUser) ? this.hasUser = true : this.hasUser = false,
-        error: () => {},
-      })
     }
 
-  openDialog() {
-    const dialogRef = this.modal.open(ModalUsuariosComponent, {
-      width: '100%',
-      panelClass: 'common-modal'});
+  openModalUnit() {
 
-    this.subModalResponse = dialogRef.afterClosed().subscribe(result => {
-      console.log(result)
-      if(result === true) {
-        this.hasUser = true;
-      }else {
-        this.subModalResponse.unsubscribe();
-        console.log(this.subModalResponse);
-      }
+    const dialogRef = this.modal.open(ModalUnidadesComponent, {
+      width: '100%',
+      panelClass: 'common-modal',
+      data: {
+        idRequest: false,
+      },
     });
+
+      this.subModalResponse = dialogRef.afterClosed().subscribe({
+        next: async (res) => {
+        console.log(res);
+        (res === 1) ? this.hasUnit = res : "";
+      },
+      error: ()=> {
+        this.subModalResponse.unsubscribe();
+      }
+
+    })
   }
 
-  getVerifyHasUser(): boolean {
-    return this.hasUser;
+  getVerifyHasUser(): Promise<number> {
+
+    return new Promise((resolve, reject) => {
+
+      let request = {
+        idUser: this.auth.getId()
+      }
+
+      this.subVerifyHasUnit = this.unitService.checksHasUnit(request).subscribe({
+        next: (res: any) => {
+
+          this.util.loading.next(false);
+          (res?.hasUnit) ? resolve(1) : resolve(2);
+        },
+        error: (erro) => {
+          this.util.loading.next(false);
+          reject(0);
+        },
+      })
+    })
   }
 
   ngAfterContentChecked() {
     this.cdRef.detectChanges();
   }
 
-  ngOnInit(): void {
-    console.log(this.hasUser)
+  async ngOnInit(): Promise<void> {
+    this.util.loading.next(true);
+    this.hasUnit = await this.getVerifyHasUser();
+    this.util.loading.next(false);
+
   }
 
   ngOnDestroy() {
-    this.subVerifyHasUser.unsubscribe();
+    this.subVerifyHasUnit.unsubscribe();
     if(this.subModalResponse) this.subModalResponse.unsubscribe();
   }
-
 }
