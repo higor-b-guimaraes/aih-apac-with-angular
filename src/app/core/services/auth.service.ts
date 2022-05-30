@@ -56,10 +56,8 @@ export class AuthService {
 
   requestProfile() {
     let credential: any | null = JSON.parse(localStorage.getItem(this.STORAGE_KEY) || '{}');
-    return this.http.post(`${environment.API}credential`, credential);
+    return this.http.get(`${environment.BASE_URL}Perfil?token=${credential.token}`);
   }
-
-
 
   whiteoutPermission() {
     this.router.navigateByUrl('/login');

@@ -12,20 +12,20 @@ export class GerarFaixasService {
 
   /* Adicionei a opção de isAdm para poder montar retornos diferentes na API do Backend */
   getQuotas(credentials: {id: number, isAdm: boolean, municipio: string}) {
-    return this.http.get(`${environment.API}gerarFaixas/cotas`, {params: credentials})
+    return this.http.get(`${environment.BASE_URL}gerarFaixas/cotas`, {params: credentials})
   }
 
   /* async getQuotas(credentials: {id: number, isAdm: boolean, municipio: string}): Promise<any> {
-    return this.http.get(`${environment.API}gerarFaixas/cotas`, { params: credentials }).toPromise();
+    return this.http.get(`${environment.BASE_URL}gerarFaixas/cotas`, { params: credentials }).toPromise();
   } */
 
   listOfCounties(id: any) {
-    /* `${environment.API}gerarFaixas/municipios` */
-    return this.http.get<Municipios[]>(`${environment.API}gerarFaixas/municipios`, {params: id})
+    /* `${environment.BASE_URL}gerarFaixas/municipios` */
+    return this.http.get<Municipios[]>(`${environment.BASE_URL}gerarFaixas/municipios`, {params: id})
   }
 
   submitTracks(data: any) {
-    return this.http.post(`${environment.API}gerarFaixas/submit/faixas`, data)
+    return this.http.post(`${environment.BASE_URL}gerarFaixas/submit/faixas`, data)
   }
 }
 

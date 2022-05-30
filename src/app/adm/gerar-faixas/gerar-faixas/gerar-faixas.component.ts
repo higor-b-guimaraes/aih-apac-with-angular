@@ -40,8 +40,12 @@ export class GerarFaixasComponent implements OnInit {
   municipios: Municipios[] = [];
 
   constructor(
-    private auth: AuthService, private faixaService: GerarFaixasService, private cdRef: ChangeDetectorRef, private utils: UtilService, private cotas: GerarFaixasService) {
-
+    private auth: AuthService,
+    private faixaService: GerarFaixasService,
+    private cdRef: ChangeDetectorRef,
+    private utils: UtilService,
+    private cotas: GerarFaixasService
+  ) {
       this.meses = utils.getMonths();
       this.crossedLimitYear();
       this.faixaService.listOfCounties(this.auth.getId()).subscribe((municipios) => this.municipios = municipios)

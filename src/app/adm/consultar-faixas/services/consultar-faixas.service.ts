@@ -11,7 +11,7 @@ export class ConsultarFaixasService {
 
 
   getFaixas(request: {id:any, pageIndex: number, pageSize: number}) {
-    return this.http.get(`${environment.API}consultarFaixas`, {params: request});
+    return this.http.get(`${environment.BASE_URL}consultarFaixas`, {params: request});
   }
 
 }

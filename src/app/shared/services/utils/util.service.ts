@@ -102,10 +102,13 @@ export class UtilService {
     return new Promise((resolve, reject) => {
       this.auth.requestProfile().subscribe({
         next: (data: any) => {
+          alert(data);
           (data['profile'] === 'Administrador') ? profile.Administrador = true :  profile.Administrador = false;
           resolve(profile);
         },
-        error: async () => {if(await this.openAlertModal("320px","warning-modal","Erro ao verificar permissão!","Não conseguimos verificar suas credenciais de acesso, por favor, atualize a página! Caso o problema persista, contate o suporte técnico via e-mail: sistemas.supinf@saude.rj.gov.br.")) window.location.reload();
+        error: async () => {
+          if(await this.openAlertModal("320px","warning-modal","Erro ao verificar permissão!","Não conseguimos verificar suas credenciais de acesso, por favor, atualize a página! Caso o problema persista, contate o suporte técnico via e-mail: sistemas.supinf@saude.rj.gov.br."))
+            window.location.reload();
           reject('Falha ao verificar perfil de usuário!');
         }
       },

@@ -11,11 +11,11 @@ export class UnidadesService {
   constructor(private http: HttpClient) { }
 
   salvarMotivoReprovacao(request: {idUser: number, data: MotivoReprovacao}) {
-    return this.http.post(`${environment.API}cadastrarMotivo`, request);
+    return this.http.post(`${environment.BASE_URL}cadastrarMotivo`, request);
   }
 
   atualizarMotivoReprovacao(request: {idUser: number, data: MotivoReprovacao}) {
-    return this.http.put(`${environment.API}atualizarMotivo`, request);
+    return this.http.put(`${environment.BASE_URL}atualizarMotivo`, request);
   }
 
   desativarMotivoReprovacao(request: {idUser: number, data: MotivoReprovacao}) {
