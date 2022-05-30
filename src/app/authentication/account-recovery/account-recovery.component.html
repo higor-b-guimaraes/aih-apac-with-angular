@@ -1,4 +1,8 @@
 
+<div *ngIf="loading" class="loading-data">
+  <mat-spinner></mat-spinner>
+</div>
+
 <section class="main">
   <div class="container-main">
     <mat-card class="login-container-card">
@@ -16,8 +20,8 @@
           <input matInput
           formControlName="cpf"
           mask="000.000.000-00"
-          (focusout)="getErrorMessageCPF()" required>
-          <mat-error class="error-access" *ngIf="invalidCPF">{{ errorCPFMsg }}</mat-error>
+          (focusout)="checkCpf()" required>
+          <mat-error class="error-access" *ngIf="!validCpf">{{ errorCpfMsg }}</mat-error>
         </mat-form-field>
 
         <mat-form-field
@@ -28,21 +32,21 @@
           formControlName="oficio"
           placeholder="Ofício"
           valuePlaceholder="Insira o ofício"
-          (change)="getErrorMessageOficio()" [required]="false"></ngx-mat-file-input>
+          (change)="checkOficio()" [required]="false"></ngx-mat-file-input>
           <mat-icon matSuffix>folder</mat-icon>
-          <mat-error class="error-access" *ngIf="invalidOficio">{{ errorMsgOficio }}</mat-error>
+          <mat-error class="error-access" *ngIf="validOficio">{{ errorMsgOficio }}</mat-error>
         </mat-form-field>
 
         <mat-card-actions class="container-btn-access">
           <button mat-button
           [class]="(formRecovery.valid) ? 'btn-login-active':''"
           class="btn-login"
-          [disabled]="blockBtnSubmit"
+          [disabled]="!this.formRecovery.valid"
           (click)="onSubmit()"
           >Entrar</button>
         </mat-card-actions>
       </mat-card-content>
-      <!-- <mat-card-actions></mat-card-actions> -->
+
     </mat-card>
   </div>
 </section>

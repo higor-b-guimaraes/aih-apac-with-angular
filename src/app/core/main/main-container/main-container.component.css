@@ -244,7 +244,7 @@ h1.example-app-name {
   z-index: 1;
 }
 
-.loading-data {
+/* .loading-data {
   position: absolute;
   display: flex;
   width: 100%;
@@ -253,7 +253,7 @@ h1.example-app-name {
   justify-content: center;
   background-color: rgb(54, 54, 54, 0.7);
   z-index: 99999;
-}
+} */
 
 
 

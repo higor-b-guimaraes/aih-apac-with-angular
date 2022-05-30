@@ -22,11 +22,11 @@ export class UnidadesService {
   }
 
   getUnidades(request: {idUser:any}) {
-    return this.http.get(`${environment.API}pegaUnidades`, {params: request});
+    return this.http.get(`${environment.API}unidades`, {params: request});
   }
 
   getUnidade(request: {idUser:any, idRequest: number}) {
-    return this.http.get(`${environment.API}pegaUnidade`, {params: request});
+    return this.http.get(`${environment.API}unidade`, {params: request});
   }
 
 
@@ -38,7 +38,7 @@ export class UnidadesService {
     return this.http.get(`${environment.API}pegaEstados`, {params: request});
   }
 
-  getCheckCNES(request: {idUser:number, cnes: string}) {
+  getCheckCNES(request: {idUser:number, cnes: string, idUnidade: string}) {
     return this.http.get(`${environment.API}VerificaCnesExistentes`, {params: request});
   }
 

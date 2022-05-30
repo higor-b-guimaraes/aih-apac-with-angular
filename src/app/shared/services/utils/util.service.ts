@@ -17,9 +17,7 @@ export class UtilService {
 
   loading = new Subject()
 
-  constructor(private dialog: MatDialog, private auth: AuthService, private validator: CustomValidators) {
-
-  }
+  constructor(private dialog: MatDialog, private auth: AuthService, private validator: CustomValidators) {}
 
   removeMaskCPF(input: FormControl) {
     return input.value.replaceAll('.', '').replace('-', '');
@@ -71,6 +69,17 @@ export class UtilService {
       oficioField.get(`${nameFieldOficio}`)?.setValue(null);
     }else {
       oficioField.get(`${nameFieldOficio}`)?.setValidators([Validators.required, FileValidator.maxContentSize(fileSizeLimit), this.validator.acceptTypeFileInput]);
+    }
+  }
+
+  validateOficioRequiredByBackend(oficioField: FormGroup, nameFieldOficio: string, profile: string, fileSizeLimit: number): boolean {
+    if(profile === "Administrador") {
+      oficioField.get(`${nameFieldOficio}`)?.clearValidators();
+      oficioField.get(`${nameFieldOficio}`)?.setValue(null);
+      return true;
+    }else {
+      oficioField.get(`${nameFieldOficio}`)?.setValidators([Validators.required, FileValidator.maxContentSize(fileSizeLimit), this.validator.acceptTypeFileInput]);
+      return false;
     }
   }
 

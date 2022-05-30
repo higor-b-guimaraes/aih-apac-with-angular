@@ -55,18 +55,19 @@ export class ModalUnidadesComponent implements OnInit {
     if(dataModal?.idRequest) {
       this.unidadeService.getUnidade(dataModal).subscribe({
         next: (res: any) => {
+          this.unidadeModel = {...res.data}
 
-          this.formUnidade.setValue({
-            nomeUnidade: res?.nomeUnidade,
-            cnes: res?.cnes,
-            telefone: res?.telefone,
-            logradouro: res?.logradouro,
-            numero: res?.numero,
-            complemento: res?.complemento,
-            cep: res?.cep,
-            bairro: res?.bairro,
-            municipio: res?.municipio,
-            estado: res?.estado,
+          this.formUnidade.patchValue({
+            nomeUnidade: res?.data?.nomeUnidade,
+            cnes: res?.data?.cnes,
+            telefone: res?.data?.telefone,
+            logradouro: res?.data?.logradouro,
+            numero: res?.data?.numero,
+            complemento: res?.data?.complemento,
+            cep: res?.data?.cep,
+            bairro: res?.data?.bairro,
+            municipio: res?.data?.municipio?.nomeMunicipio,
+            estado: res?.data?.municipio?.estado,
           });
 
           this.novoCadastro = false;
@@ -86,7 +87,6 @@ export class ModalUnidadesComponent implements OnInit {
 
     this.unidadeService.getEstados(request).subscribe({
       next: async (data: any) => {
-        console.log(data)
           this.opcoesEstados = await [...data.listaEstados];
           this.util.loading.next(false);
       },
@@ -101,8 +101,9 @@ export class ModalUnidadesComponent implements OnInit {
       let request = {
         idUser: this.auth.getId(),
         cnes: this.formUnidade.get('cnes')?.value,
+        idUnidade: (this.unidadeModel?.id) ? this.unidadeModel.id : 0,
       }
-
+      console.log(request)
       this.util.loading.next(true);
       this.validateCNES(request);
     }
@@ -114,12 +115,11 @@ export class ModalUnidadesComponent implements OnInit {
       this.unidadeService.getCheckCNES(request).subscribe({
         next: (res: any) => {
 
-          if((this.novoCadastro) && (res?.cnesUsado === true)) {
-
+          if((this.novoCadastro) && (res?.cnesUsado === 3)) {
             this.util.openAlertModal('320px', 'warning-modal', 'CNES já cadastrado', 'Este CNES já foi cadastrado em nossa base dedados');
             this.formUnidade.patchValue({cnes: ''});
             resolve(false);
-          }else if((res?.cnesUsado === true) && (this.unidadeModel.id !== res?.idUnidade)) {
+          }else if((res?.cnesUsado === 2) && (this.unidadeModel.id !== res?.idUnidade)) {
 
             this.util.openAlertModal('320px', 'warning-modal', 'CNES ao verificar CNES', 'Este CNES não pertence a unidade que está sendo atualizada!')
             this.formUnidade.patchValue({cnes: ''});
@@ -130,7 +130,8 @@ export class ModalUnidadesComponent implements OnInit {
           resolve(true);
         },
 
-        error: () => {
+        error: (e) => {
+          console.log(e)
           this.util.openAlertModal('320px', 'error-modal', 'Erro ao acessar o servidor', 'Houve um erro ao tentarmos acessar o servidor para consultar se o CNES informado já foi cadastrado, por favor, tente novamente e caso o problema persista, entre em contato via e-mail: sistemas.supinf@saude.rj.gov.br');
           this.util.loading.next(false);
           resolve(false);

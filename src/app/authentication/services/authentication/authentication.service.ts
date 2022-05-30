@@ -11,12 +11,11 @@ export class AuthenticationService {
 
   constructor(private http: HttpClient, private auth: AuthService) {}
 
-  login(user: { login: string; password: string }) {
-    return this.http.post(`${environment.API}login`, user)
+  login(request: { login: string; password: string }) {
+    return this.http.post(`${environment.API}login`, request)
     .pipe(
-        take(1),
-        tap((res: any) => this.auth.setToken(res)
-      )
-    )
+      take(1),
+      tap((res: any) => this.auth.setToken(res))
+    );
   }
 }

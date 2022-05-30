@@ -2,11 +2,10 @@ import { ModalUnidadesComponent } from './../modal-unidades/modal-unidades.compo
 import { ChangeDetectorRef, Component, OnInit, ViewChild } from '@angular/core';
 import { Subject } from 'rxjs';
 
-import { ModalUsuariosComponent } from '../../usuarios/modal-usuarios/modal-usuarios.component';
-
 import { AuthService } from 'src/app/core/services/auth.service';
 import { UtilService } from 'src/app/shared/services/utils/util.service';
-import { UsuariosService } from '../../usuarios/services/usuarios.service';
+
+import { UnidadesService } from './../services/unidades.service';
 
 import { Usuario } from 'src/app/shared/models/usuario.model';
 
@@ -14,6 +13,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
+import { Unidade } from 'src/app/shared/models/unidade.model';
 
 @Component({
   selector: 'app-tabela-unidades',
@@ -23,30 +23,29 @@ import { MatTableDataSource } from '@angular/material/table';
 export class TabelaUnidadesComponent implements OnInit {
 
   columns: string[] = [];
-  usuarios: Usuario[] = [];
+  unidade: Unidade[] = [];
   dataSource!: any
   lenght!: number;
 
   @ViewChild(MatPaginator) paginator!: MatPaginator;
   @ViewChild(MatSort) sort!: MatSort;
-  getUsuarios = new Subject<any>()
+  getUnidade = new Subject<any>()
 
-  constructor(private usuariosService: UsuariosService,
+  constructor(private unidadeService: UnidadesService,
     private auth: AuthService,
     private util: UtilService,
     public modal: MatDialog,
     private cdRef: ChangeDetectorRef) {
 
-    this.getUsuarios.subscribe({
+    this.getUnidade.subscribe({
         next: (data) => {
-          this.usuariosService.getUsuarios(data).subscribe({
+          this.unidadeService.getUnidades(data).subscribe({
             next: (res:any) => {
-
               this.columns = [...res.headerTable];
-              this.usuarios = [...res.bodyTable];
+              this.unidade = [...res.bodyTable];
               this.lenght = res.tableLength;
 
-              this.dataSource = new MatTableDataSource(this.usuarios);
+              this.dataSource = new MatTableDataSource(this.unidade);
               this.dataSource.paginator = this.paginator;
               this.dataSource.sort = this.sort;
               this.util.loading.next(false);
@@ -61,19 +60,19 @@ export class TabelaUnidadesComponent implements OnInit {
       id: this.auth.getId(),
     }
 
-    this.getUsuarios.next(data);
+    this.getUnidade.next(data);
   }
 
-  abrirModalUsuario(usuario?: number) {
+  abrirModalUnidade(unidade?: number) {
 
-    if(usuario) {
+    if(unidade) {
 
       const dialogRef = this.modal.open(ModalUnidadesComponent, {
         width: '100%',
         panelClass: 'common-modal',
         data: {
           idUser: this.auth.getId(),
-          idRequest: usuario
+          idRequest: unidade
         }
       });
 
@@ -91,16 +90,15 @@ export class TabelaUnidadesComponent implements OnInit {
     }
   }
 
-  novoUsuario() {
-    this.abrirModalUsuario()
+  novaUnidade() {
+    this.abrirModalUnidade()
   }
 
-  editarUsuario(usuario: Usuario) {
-    this.abrirModalUsuario(usuario.id)
+  editarUnidade(unidade: Unidade) {
+    this.abrirModalUnidade(unidade.id)
   }
 
   getClass(situacao: string) {
-
     switch(situacao) {
       case 'Ativo':
         return 'alert-success'
@@ -140,7 +138,7 @@ export class TabelaUnidadesComponent implements OnInit {
       pageSize: (this.dataSource?.paginator?.pageSize) ? this.dataSource?.paginator?.pageSize : 0 ,
     }
 
-    this.getUsuarios.next(data);
+    this.getUnidade.next(data);
   }
 
   applyFilter(event: Event) {
@@ -151,14 +149,14 @@ export class TabelaUnidadesComponent implements OnInit {
     }
   }
 
-  ativarDesativarUsuario(row: any)  {
+  ativarDesativarUnidade(row: any)  {
 
     let request = {
       idUser: this.auth.getId(),
       idRequest: row?.id,
     }
 
-    this.usuariosService.desativarUsuario(request).subscribe({
+    this.unidadeService.desativarUnidade(request).subscribe({
       next: () => {
         this.util.openAlertModal("320px", "success-modal", "Usuário desativado!", `O usuário ${row.nome}, foi desativado no sistema!`);
       },
