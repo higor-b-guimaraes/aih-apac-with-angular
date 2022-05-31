@@ -20,30 +20,28 @@ import { Unidade } from 'src/app/shared/models/unidade.model';
 })
 export class TabelaUnidadesComponent implements OnInit {
 
-  columns: string[] = [];
-  unidade: Unidade[] = [];
+  tableHeader: string[] = ['unitName', 'cnes', 'phone', 'address', 'number', 'complement', 'zipCode', 'district', 'county', 'state', 'status', 'editUnit', 'desableEnableUnit'];
+  unitModel: Unidade[] = [];
   dataSource!: any
   lenght!: number;
 
   @ViewChild(MatPaginator) paginator!: MatPaginator;
   @ViewChild(MatSort) sort!: MatSort;
-  getUnidade = new Subject<any>()
+  private getUnit = new Subject<any>()
 
-  constructor(private unidadeService: UnidadesService,
+  constructor(private unitService: UnidadesService,
     private auth: AuthService,
     private util: UtilService,
     public modal: MatDialog,
     private cdRef: ChangeDetectorRef) {
 
-    this.getUnidade.subscribe({
-        next: (data) => {
-          this.unidadeService.getUnidades(data).subscribe({
+    this.getUnit.subscribe({
+        next: async (request) => {
+          this.unitService.getUnits(request).subscribe({
             next: (res:any) => {
-              this.columns = [...res.headerTable];
-              this.unidade = [...res.bodyTable];
+              this.unitModel = [...res.bodyTable];
               this.lenght = res.tableLength;
-
-              this.dataSource = new MatTableDataSource(this.unidade);
+              this.dataSource = new MatTableDataSource(this.unitModel);
               this.dataSource.paginator = this.paginator;
               this.dataSource.sort = this.sort;
               this.util.loading.next(false);
@@ -54,23 +52,23 @@ export class TabelaUnidadesComponent implements OnInit {
         error: () => {this.util.loading.next(false)}
     })
 
-    let data = {
-      id: this.auth.getId(),
+    let request = {
+      userId: this.auth.getId(),
     }
 
-    this.getUnidade.next(data);
+    this.getUnit.next(request);
   }
 
-  abrirModalUnidade(unidade?: number) {
+  openModalUnit(unit?: number) {
 
-    if(unidade) {
-
+    if(unit) {
+      console.log(unit)
       const dialogRef = this.modal.open(ModalUnidadesComponent, {
         width: '100%',
         panelClass: 'common-modal',
         data: {
-          idUser: this.auth.getId(),
-          idRequest: unidade
+          userId: this.auth.getId(),
+          idUnit: unit
         }
       });
 
@@ -88,12 +86,40 @@ export class TabelaUnidadesComponent implements OnInit {
     }
   }
 
-  novaUnidade() {
-    this.abrirModalUnidade()
+  newUnit() {
+    this.openModalUnit()
   }
 
-  editarUnidade(unidade: Unidade) {
-    this.abrirModalUnidade(unidade.id)
+  editUnit(unit: Unidade) {
+    this.openModalUnit(unit.id)
+  }
+
+  disableEnableUnit(row: any)  {
+
+    let request = {
+      userId: this.auth.getId(),
+      idUnit: row?.id,
+    }
+
+    this.util.loading.next(true);
+
+    this.unitService.putDisableEnableUnit(request).subscribe({
+      next: (res: any) => {
+        if(res?.status === 1) {
+          this.util.openAlertModal("320px", "success-modal", "Usuário desativado!", `O usuário ${row.unitName}, foi desativado no sistema!`);
+        }else{
+          this.util.openAlertModal("320px", "success-modal", "Usuário ativado!", `O usuário ${row.unitName}, foi ativado no sistema!`);
+        }
+
+        this.util.loading.next(false);
+      },
+
+      error: () => {
+        this.util.openAlertModal("320px", "error-modal", "Erro na requisição", `Houve um erro interno de comunicação com o servidor! Por favor, tente novamente! Caso o problema persista, entre em contato via e-mail: sistemas.supinf@saude.rj.gov.br`);
+
+        this.util.loading.next(false);
+      },
+    })
   }
 
   getClass(situacao: string) {
@@ -128,15 +154,16 @@ export class TabelaUnidadesComponent implements OnInit {
   }
 
   getNewElements() {
+
     this.util.loading.next(true);
 
-    let data = {
-      id: this.auth.getId(),
+    let request = {
+      userId: this.auth.getId(),
       pageIndex: (this.dataSource?.paginator?.pageIndex) ? this.dataSource?.paginator?.pageIndex : 0 ,
       pageSize: (this.dataSource?.paginator?.pageSize) ? this.dataSource?.paginator?.pageSize : 0 ,
     }
 
-    this.getUnidade.next(data);
+    this.getUnit.next(request);
   }
 
   applyFilter(event: Event) {
@@ -145,23 +172,6 @@ export class TabelaUnidadesComponent implements OnInit {
     if (this.dataSource.paginator) {
       this.dataSource.paginator.firstPage();
     }
-  }
-
-  ativarDesativarUnidade(row: any)  {
-
-    let request = {
-      idUser: this.auth.getId(),
-      idRequest: row?.id,
-    }
-
-    this.unidadeService.desativarUnidade(request).subscribe({
-      next: () => {
-        this.util.openAlertModal("320px", "success-modal", "Usuário desativado!", `O usuário ${row.nome}, foi desativado no sistema!`);
-      },
-      error: () => {
-        this.util.openAlertModal("320px", "error-modal", "Erro ao desativar o usuário", `Houve um erro ao tentarmos desativar o usuário ${row.nome}! Por favor, tente novamente! Caso o problema persista, entre em contato via e-mail: sistemas.supinf@saude.rj.gov.br`);
-      },
-    })
   }
 
   ngAfterContentChecked() {

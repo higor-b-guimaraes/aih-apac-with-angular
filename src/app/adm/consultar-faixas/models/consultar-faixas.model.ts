@@ -1,13 +1,15 @@
 export interface ConsultarFaixas {
 
-  solicitante: string;
-  usuario: string;
-  dtSolicitacao: string;
-  tipoSolicitacao: string;
-  tipoFaixa: string;
-  qtdFaixasSolicitadas: string;
-  competencia: string;
+  id?: number;
+  requester: string;
+  user: string;
+  dtRequest: string;
+  TypeRequest: string;
+  TypeTrack: string;
+  qtyRequestedTracks: string;
+  Competence: string;
   status: string;
-  motivo: string;
-  oficioAutorizacao: string;
+  reason: string;
+  authorizationOffice: string;
 }
+

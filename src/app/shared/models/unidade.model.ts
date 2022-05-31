@@ -3,27 +3,27 @@ import { Municipio } from './municipio.model';
 export interface Unidade extends Municipio {
   id: number;
   cnes: number;
-  nomeUnidade: string;
-  telefone: string;
-  logradouro: string;
-  numero: string;
-  complemento: string;
-  cep: string;
-  bairro: string;
-  municipio?: Municipio;
-  situacao?: string;
+  unitName: string;
+  phone: string;
+  address: string;
+  number: string;
+  complement: string;
+  zipCode: string;
+  district: string;
+  status?: string;
+  county?: Municipio;
 }
 
 export interface UnidadePartialData {
   id: number;
   cnes: number;
-  nomeUnidade: string;
-  telefone: string;
-  logradouro: string;
-  numero: string;
-  complemento: string;
-  cep: string;
-  bairro: string;
-  cidade?: string;
-  unidade?: any;
+  unitName: string;
+  phone: string;
+  address: string;
+  number: string;
+  complement: string;
+  zipCode: string;
+  district: string;
+  county?: string;
+  unit?: string;
 }

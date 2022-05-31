@@ -17,48 +17,46 @@ import { Subject } from 'rxjs';
 
 export class ConsultarFaixasComponent implements OnInit {
 
-  columns: string[] = [];
+  id: number = this.auth.getId();
+  tableHeader: string[] = ['requester', 'user', 'dtRequest', 'TypeRequest', 'TypeTrack', 'qtyRequestedTracks', 'Competence', 'status', 'reason', 'authorizationOffice'];
+
+
   lenght!: number;
   dataSource!: any
-  getFaixas = new Subject<any>()
+  getTracks = new Subject<any>()
   @ViewChild(MatPaginator) paginator!: MatPaginator;
   @ViewChild(MatSort) sort!: MatSort;
 
-  constructor(private consultarFaixasService: ConsultarFaixasService, private auth: AuthService, private util: UtilService) {
+  constructor(private consultTracksService: ConsultarFaixasService, private auth: AuthService, private util: UtilService) {
 
-    this.getFaixas.subscribe({
-      next: (data) => {
-        this.consultarFaixasService.getFaixas(data).subscribe({
-          next: (res:any) => {
-            this.columns = [...res?.headerTable];
-            let data: ConsultarFaixas[] = [...res?.bodyTable];
-            this.lenght = res?.tableLength;
-            this.dataSource = new MatTableDataSource(data);
-            this.dataSource.paginator = this.paginator;
-            this.dataSource.sort = this.sort;
-            this.util.loading.next(false);
-          },
-          error: (e) => {this.util.loading.next(false)}
-        })
+    this.getTracks.subscribe({
+      next: (request) => {
+
+        this.consultTracksService.getTracks(request).subscribe({
+        next: (res:any) => {
+
+          let data: ConsultarFaixas[] = [...res?.bodyTable];
+          this.lenght = res?.tableLength;
+
+          this.dataSource = new MatTableDataSource(data);
+          this.dataSource.paginator = this.paginator;
+          this.dataSource.sort = this.sort;
+          this.util.loading.next(false);
+        },
+
+        error: (error) => {this.util.loading.next(false)}})
       },
+
       error: () => {this.util.loading.next(false)}
     })
 
-    let data = {
-      id: this.auth.getId(),
+    let request = {
+      userId: this.auth.getId(),
       pageIndex: 0,
       pageSize: 0,
     }
 
-    this.getFaixas.next(data);
-  }
-
-  applyFilter(event: Event) {
-    const filterValue = (event.target as HTMLInputElement).value;
-    this.dataSource.filter = filterValue.trim().toLowerCase();
-    if (this.dataSource.paginator) {
-      this.dataSource.paginator.firstPage();
-    }
+    this.getTracks.next(request);
   }
 
   getClass(status: string) {
@@ -77,16 +75,25 @@ export class ConsultarFaixasComponent implements OnInit {
     }
   }
 
+  applyFilter(event: Event) {
+    const filterValue = (event.target as HTMLInputElement).value;
+    this.dataSource.filter = filterValue.trim().toLowerCase();
+    if (this.dataSource.paginator) {
+      this.dataSource.paginator.firstPage();
+    }
+  }
+
   getNewElements() {
+
     this.util.loading.next(true);
 
-    let data = {
-      id: this.auth.getId(),
+    let request = {
+      userId: this.auth.getId(),
       pageIndex: (this.dataSource?.paginator?.pageIndex) ? this.dataSource?.paginator?.pageIndex : 0 ,
       pageSize: (this.dataSource?.paginator?.pageSize) ? this.dataSource?.paginator?.pageSize : 0 ,
     }
 
-    this.getFaixas.next(data);
+    this.getTracks.next(request);
   }
 
   ngAfterViewInit() {

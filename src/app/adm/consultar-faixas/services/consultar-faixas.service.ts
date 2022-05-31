@@ -10,8 +10,13 @@ export class ConsultarFaixasService {
   constructor(private http: HttpClient) {}
 
 
-  getFaixas(request: {id:any, pageIndex: number, pageSize: number}) {
+  getTracks(request: {userId: any, pageIndex: number, pageSize: number}) {
     return this.http.get(`${environment.API}consultarFaixas`, {params: request});
   }
+
+  /* getAuthorizationOffice(request: {userId: any}) {
+
+    return this.http.get(`${environment.API}pegarOficioAutorizacao`, {params: request});
+  } */
 
 }

@@ -21,9 +21,9 @@
           <mat-label>Município</mat-label>
           <mat-select
           formControlName="municipio">
-          <mat-optgroup *ngFor="let municipio of municipiosModel" [label]="municipio.nomeMunicipio">
-            <mat-option *ngFor="let bairro of municipio?.bairros" [value]="bairro?.nome" required>
-              {{bairro?.nome}}
+          <mat-optgroup *ngFor="let county of countiesModel" [label]="county.countyName">
+            <mat-option *ngFor="let district of county?.districts" [value]="district?.nome" required>
+              {{district?.nome}}
             </mat-option>
           </mat-optgroup>
           </mat-select>
@@ -34,9 +34,9 @@
           <mat-label>Unidade</mat-label>
           <mat-select
           formControlName="unidade">
-          <mat-optgroup *ngFor="let municipio of municipiosModel" [label]="municipio.nomeMunicipio">
-            <mat-option *ngFor="let unidade of municipio.unidades" [value]="unidade?.nome" required>
-              {{unidade.nome}}
+          <mat-optgroup *ngFor="let county of countiesModel" [label]="county.countyName">
+            <mat-option *ngFor="let unit of county.units" [value]="unit?.nome" required>
+              {{unit.nome}}
             </mat-option>
           </mat-optgroup>
           </mat-select>

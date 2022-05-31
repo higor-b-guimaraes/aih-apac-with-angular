@@ -40,7 +40,6 @@ export class UnidadesComponent implements OnInit {
 
       this.subModalResponse = dialogRef.afterClosed().subscribe({
         next: async (res) => {
-        console.log(res);
         (res === 1) ? this.hasUnit = res : "";
       },
       error: ()=> {
@@ -55,7 +54,7 @@ export class UnidadesComponent implements OnInit {
     return new Promise((resolve, reject) => {
 
       let request = {
-        idUser: this.auth.getId()
+        userId: this.auth.getId()
       }
 
       this.subVerifyHasUnit = this.unitService.checksHasUnit(request).subscribe({
@@ -80,7 +79,6 @@ export class UnidadesComponent implements OnInit {
     this.util.loading.next(true);
     this.hasUnit = await this.getVerifyHasUser();
     this.util.loading.next(false);
-
   }
 
   ngOnDestroy() {

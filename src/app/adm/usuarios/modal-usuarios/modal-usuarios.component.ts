@@ -32,7 +32,7 @@ export class ModalUsuariosComponent implements OnInit {
   usuarioModel!: Usuario;
   municipioModel!: Municipio;
   unidadePartialDataModel!: UnidadePartialData;
-  municipiosModel!: Municipio[];
+  countiesModel!: Municipio[];
 
   opcoesTipoUnidade: string[] = ['Municipio', 'Unidade'];
   opcoesPerfil: string[] = ['Operador', 'Autorizador', 'Administrador'];
@@ -108,7 +108,7 @@ export class ModalUsuariosComponent implements OnInit {
 
     this.usuariosService.getMunicipiosOuMunicipios(request).subscribe({
       next: async (data: any) => {
-          this.municipiosModel = await [...data];
+          this.countiesModel = await [...data];
       },
       error: (e) => console.log(e),
     })
