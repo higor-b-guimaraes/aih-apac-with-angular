@@ -30,8 +30,8 @@ export class UsuariosService {
     return this.http.get(`${environment.API}pegaUsuario`, {params: request});
   }
 
-  getVerificaUsuariosExistentes(request: {idUser:number}) {
-    return this.http.get(`${environment.API}VerificaUsuariosExistentes`, {params: request});
+  getVerificaUsuariosExistentes(request: {token: string}) {
+    return this.http.get(`${environment.BASE_URL}Usuario&token=${request.token}`);
   }
 
   getMunicipiosOuMunicipios(request: {idUser: number, tipoSolicitacao: string}) {

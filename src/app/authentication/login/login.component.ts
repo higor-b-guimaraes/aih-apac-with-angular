@@ -1,4 +1,4 @@
-import { Tools } from './../../shared/tools/tools';
+import { UtilService } from './../../shared/services/utils/util.service';
 import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
@@ -6,6 +6,7 @@ import { AuthenticationService } from '../services/authentication/authentication
 
 import { CustomValidators } from '../../shared/validators/custom-validators'
 import { HttpRequest } from '@angular/common/http';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-login',
@@ -16,77 +17,76 @@ export class LoginComponent implements OnInit {
 
 
   logoRJ: string = "../../../assets/resources/images/logoTISESRJ.png";
-  invalidCPF: boolean = true;
-  ErrorCPFMsg: string = "";
-  invalidPassword: boolean = false;
-  access: boolean = true;
+
+  validCpf:boolean = false;
+  errorCpfMsg: string = "";
+  validPassword: boolean = false;
   errorAccessMsg: string = "";
-  hide: boolean = true;
+  hidePassword: boolean = true;
 
   formLogin: FormGroup = this.formBuilder.group({
     cpf: ['', [this.validator.cpfValidator]],
     password: ['', Validators.required]
   });
 
+  private subscribeLoading!: Subscription;
+  loading: boolean = false;
+
   constructor(
     private formBuilder: FormBuilder,
     private auth: AuthenticationService,
     private validator: CustomValidators,
-    private tools: Tools,
     private cdRef: ChangeDetectorRef,
     private router: Router,
+    private util: UtilService
   ) {}
 
-  verifyFiledValidTouched(campo: any): any {
-    return !this.formLogin.get(campo)?.valid && this.formLogin.get(campo)?.touched;
+  checkCpf() {
+    let statusCpf = this.util.checkCPF(this.formLogin, 'cpf');
+    this.validCpf =  statusCpf?.isValid;
+    this.errorCpfMsg = statusCpf?.msg;
   }
 
-  getErrorMessageCPF() {
-    if (this.formLogin.get('cpf')?.touched && this.formLogin.controls['cpf'].hasError('cpfIncompleto')) {
-      this.invalidCPF = true;
-      this.ErrorCPFMsg = 'O CPF não foi inserido ou está incompleto!';
-      return;
-    }else if(this.formLogin.get('cpf')?.touched && this.formLogin.controls['cpf'].hasError('cpfInvalido')) {
-      this.invalidCPF = true;
-      this.ErrorCPFMsg = 'Este CPF não é válido!';
-      return;
-    }
-    this.invalidCPF = false;
-    this.ErrorCPFMsg = '';
-  }
-
-  getErrorMessagePassword() {
+  checkPassword() {
     if (this.formLogin.get('password')?.touched && this.formLogin.get('password')?.value === '') {
-      this.access = false;
+      this.validPassword = false;
       this.errorAccessMsg = 'A senha precisa ser informada!';
       return;
     }
-    this.access = true;
+    this.validPassword = true;
   }
 
   onSubmit() {
+
+    this.util.loading.next(true);
+
     if(this.formLogin.valid) {
         this.auth.login({
-          login: this.tools.removeMaskCPF(<FormControl>this.formLogin.controls['cpf']),
-          password: this.formLogin.value?.password
+          login: this.util.removeMaskCPF(<FormControl>this.formLogin.controls['cpf']),
+          password: this.formLogin.get('password')?.value,
         })
         .subscribe({
-          next: (dados: HttpRequest<any>) => { this.router.navigate(['/'])
-        },
-          error: (e) => {
-            if( e.status === 500) {
-              this.access = false;
+          next: () => {
+            this.util.loading.next(false);
+            this.router.navigate(['/']
+            )
+          },
+
+          error: (error) => {
+            if( error.status === 500) {
+              this.validPassword = false;
               this.errorAccessMsg = "Por favor, verifique o login e senha informados e tente novamente!";
-            }else if( e.status === 502) {
-              this.access = false;
+            }else if( error.status === 502) {
+              this.validPassword = false;
               this.errorAccessMsg = "O usuário não existe na base de dados";
             }
-            else if( e.status === 403) {
-              this.access = false;
+            else if( error.status === 403) {
+              this.validPassword = false;
               this.errorAccessMsg = "Esta conta está bloqueada! Entre em contato via e-mail: saecases@gmail.com, para solicitar a reativação da conta.";
           }else {
-            this.access = true;
+            this.validPassword = true;
           }
+          this.util.loading.next(false);
         }
       });
     }
@@ -96,7 +96,13 @@ export class LoginComponent implements OnInit {
     this.cdRef.detectChanges();
   }
 
-  ngOnInit(): void {}
+  ngOnInit(): void {
+    this.subscribeLoading = this.util.loadingActivated().subscribe((res: any) => this.loading = res);
+  }
+
+  ngOnDestroy(): void {
+    this.subscribeLoading.unsubscribe();
+  }
 }
 
 

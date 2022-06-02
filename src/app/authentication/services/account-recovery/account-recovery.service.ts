@@ -9,23 +9,13 @@ import { environment } from 'src/environments/environment';
 })
 export class AccountRecoveryService {
 
-  constructor(private http: HttpClient) {
+  constructor(private http: HttpClient) {}
 
-
+  recoveryUser(request: { login: string }) {
+    return this.http.get(`${environment.BASE_URL}Login/recuperarSenha`, {params: request});
   }
 
-  recoveryUser(user: { login: string }) {
-    return this.http.get(`${environment.BASE_URL}recovery/user`, {params: user})
-    .pipe(
-      take(1),
-    )
-  }
-
-  recoveryAccount(data: {cpf: string, oficio: FormData}) {
-    return this.http.post(`${environment.BASE_URL}reset/user`, data)
-    .pipe(
-        tap((res: any) => console.log(res)
-      )
-    )
+  recoveryAccount(request: FormData) {
+    return this.http.post(`${environment.API}reset/user`, request);
   }
 }

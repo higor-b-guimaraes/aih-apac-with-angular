@@ -1,4 +1,8 @@
 
+<div *ngIf="loading" class="loading-data">
+  <mat-spinner></mat-spinner>
+</div>
+
 <section class="main">
   <div class="container-main">
     <mat-card class="login-container-card">
@@ -15,10 +19,10 @@
           <input matInput
           formControlName="cpf"
           mask="000.000.000-00"
-          (focusout)="getErrorMessageCPF()" required>
-          <mat-icon matSuffix *ngIf="invalidCPF">person_2</mat-icon>
-          <mat-icon matSuffix *ngIf="!invalidCPF">how_to_reg</mat-icon>
-          <mat-error class="error-access" *ngIf="invalidCPF">{{ ErrorCPFMsg }}</mat-error>
+          (focusout)="checkCpf()" required>
+          <mat-icon matSuffix *ngIf="!validCpf">person_2</mat-icon>
+          <mat-icon matSuffix *ngIf="validCpf">how_to_reg</mat-icon>
+          <mat-error class="error-access" *ngIf="!validCpf">{{ errorCpfMsg }}</mat-error>
         </mat-form-field>
 
         <mat-form-field
@@ -27,21 +31,24 @@
         appearance="outline">
             <mat-label>Senha</mat-label>
             <input matInput
-            (focusout)="getErrorMessagePassword()"
+            (focusout)="checkPassword()"
             formControlName="password"
-            [type]="hide ? 'password' : 'text'"
+            [type]="hidePassword ? 'password' : 'text'"
             required>
 
             <button mat-icon-button
-            matSuffix (click)="hide = !hide"
+            matSuffix (click)="hidePassword = !hidePassword"
             [attr.aria-label]="'Exibir Password'"
-            [attr.aria-pressed]="hide"><mat-icon>{{hide ? 'visibility_off' : 'visibility'}}</mat-icon>
+            [attr.aria-pressed]="hidePassword"><mat-icon>{{hidePassword ? 'visibility_off' : 'visibility'}}</mat-icon>
           </button>
         </mat-form-field>
-        <mat-error class="error-access" *ngIf="!access">{{ errorAccessMsg }}</mat-error>
+
+        <mat-error class="error-access" *ngIf="!validPassword">{{ errorAccessMsg }}</mat-error>
+
         <div class="container-reset-password">
           <a class="reset-password" routerLink="/authentication/recovery">Recuperar Senha</a>
         </div>
+
         <mat-card-actions class="container-btn-access">
           <button mat-button
           [class]="(formLogin.valid) ? 'btn-login-active':''"
@@ -50,7 +57,6 @@
           (click)="onSubmit()">Entrar</button>
         </mat-card-actions>
       </mat-card-content>
-      <!-- <mat-card-actions></mat-card-actions> -->
     </mat-card>
   </div>
 </section>

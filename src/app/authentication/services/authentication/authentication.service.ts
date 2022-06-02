@@ -14,9 +14,8 @@ export class AuthenticationService {
   login(user: { login: string; password: string }) {
     return this.http.get(`${environment.BASE_URL}Login?user=${user.login}&password=${user.password}`)
     .pipe(
-        take(1),
-        tap((res: any) => this.auth.setToken(res)
-      )
-    )
+      take(1),
+      tap((res: any) => this.auth.setToken(res))
+    );
   }
 }

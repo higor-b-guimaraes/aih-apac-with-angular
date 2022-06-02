@@ -42,6 +42,7 @@
     width: 100%;
     contain: content;
     overflow: inherit;
+    display: flow-root;
   }
 
   th.mat-header-cell, td.mat-cell, td.mat-footer-cell {

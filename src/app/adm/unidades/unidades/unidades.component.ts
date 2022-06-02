@@ -1,9 +1,12 @@
 import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
+import { Subscription } from 'rxjs';
+
 import { MatDialog } from '@angular/material/dialog';
+import { ModalUnidadesComponent } from './../modal-unidades/modal-unidades.component';
+
 import { AuthService } from 'src/app/core/services/auth.service';
-import { ModalCadastroReprovacaoComponent } from '../../motivo-reprovacao/modal-cadastro-reprovacao/modal-cadastro-reprovacao.component';
-import { MotivoReprovacao } from '../../motivo-reprovacao/models/motivoReprovacao.model';
-import { MotivoReprovacaoService } from '../../motivo-reprovacao/services/motivo-reprovacao.service';
+import { UtilService } from './../../../shared/services/utils/util.service';
+import { UnidadesService } from './../services/unidades.service';
 
 @Component({
   selector: 'app-unidades',
@@ -11,53 +14,67 @@ import { MotivoReprovacaoService } from '../../motivo-reprovacao/services/motivo
   styleUrls: ['./unidades.component.css']
 })
 export class UnidadesComponent implements OnInit {
-
-  public content!: MotivoReprovacao;
-  hasData:boolean = false;
-  headerTable: string[] = []
-  bodyTable: MotivoReprovacao[] = []
-  tableLength: number = 0;
-  /* DEPOIS PRECISA READAPTAR O CÓDIGO PARA PASSAR INFORMAÇÕES DESTA PÁGINA PARA A TABELA DIRETO */
+  hasUnit!: number;
+  private subVerifyHasUnit!: Subscription;
+  private subModalResponse!: Subscription;
 
   constructor(public modal: MatDialog,
-    private motivoReprovacaoService: MotivoReprovacaoService,
-    private auth: AuthService,
-    private cdRef: ChangeDetectorRef) {
-
-      let request = {idUser: this.auth.getId()}
-      this.motivoReprovacaoService.getVerificaDadosExistentes(request).subscribe({
-
-        next: (data: any) => {
-
-          if(data.hasData) {
-            this.headerTable = [...data['headerTable']];
-            this.bodyTable = [...data['bodyTable']];
-            this.tableLength = data['tableLength'];
-            this.hasData = true;
-          }else {
-            this.hasData = false;
-          }
-
-        },
-        error: (e) => {console.log(e)}
-      })
+      private unitService: UnidadesService,
+      private auth: AuthService,
+      private util: UtilService,
+      private cdRef: ChangeDetectorRef) {
     }
 
-  openDialog() {
-    const dialogRef = this.modal.open(ModalCadastroReprovacaoComponent, {
+  openModalUnit() {
+    const dialogRef = this.modal.open(ModalUnidadesComponent, {
       width: '100%',
-      panelClass: 'common-modal'});
-
-    dialogRef.afterClosed().subscribe(result => {
-      if(result === true) this.hasData = true;
+      panelClass: 'common-modal',
+      data: {
+        idRequest: false,
+      },
     });
+
+    this.subModalResponse = dialogRef.afterClosed().subscribe({
+      next: async (res) => {
+        console.log(res);
+        (res === 1) ? this.hasUnit = res : "";
+      },
+      error: ()=> {
+        this.subModalResponse.unsubscribe();
+      }
+    })
+  }
+
+  getVerifyHasUser(): Promise<number> {
+    return new Promise((resolve, reject) => {
+      let request = {
+        token: this.auth.getToken()
+      }
+      this.subVerifyHasUnit = this.unitService.checksHasUnit(request).subscribe({
+        next: (res: any) => {
+          this.util.loading.next(false);
+          (res?.hasUnit) ? resolve(1) : resolve(2);
+        },
+        error: (erro) => {
+          this.util.loading.next(false);
+          reject(0);
+        },
+      })
+    })
   }
 
   ngAfterContentChecked() {
     this.cdRef.detectChanges();
   }
 
-  ngOnInit(): void {
+  async ngOnInit(): Promise<void> {
+    this.util.loading.next(true);
+    this.hasUnit = await this.getVerifyHasUser();
+    this.util.loading.next(false);
   }
 
+  ngOnDestroy() {
+    this.subVerifyHasUnit.unsubscribe();
+    if(this.subModalResponse) this.subModalResponse.unsubscribe();
+  }
 }

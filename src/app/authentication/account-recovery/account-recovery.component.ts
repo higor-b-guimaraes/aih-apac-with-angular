@@ -1,12 +1,12 @@
+import { UtilService } from './../../shared/services/utils/util.service';
 import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 import { FileValidator } from 'ngx-material-file-input';
-import { Tools } from 'src/app/shared/tools/tools';
 import { CustomValidators } from 'src/app/shared/validators/custom-validators';
 
 import { AccountRecoveryService } from '../services/account-recovery/account-recovery.service';
-import { ModalAlert } from '../../shared/modals/error-alert/modal-error-alert';
+import { Subscription } from 'rxjs';
 
 
 @Component({
@@ -16,20 +16,19 @@ import { ModalAlert } from '../../shared/modals/error-alert/modal-error-alert';
 })
 export class AccountRecoveryComponent implements OnInit {
 
-
   logoRJ: string = "../../../assets/resources/images/logoTISESRJ.png";
 
   isAdm: boolean = true;
-  invalidOficio: boolean = true;
-  blockBtnSubmit: boolean = true;
-  invalidCPF: boolean = false;
 
-  errorCPFMsg: string = "";
+  validCpf: boolean = false;
+  errorCpfMsg: string = "";
+  validOficio: boolean = true;
   errorMsgOficio: string = "";
+
   readonly maxSize = 10485760;   //Max Filesize 10MB
 
   formRecovery: FormGroup = this.formBuilder.group({
-    cpf: ['', [this.validator.cpfValidator]],
+    cpf: ['', [Validators.required, this.validator.cpfValidator]],
     oficio: [
       null,
       [
@@ -40,105 +39,73 @@ export class AccountRecoveryComponent implements OnInit {
     ]
   });
 
+  private subscribeLoading!: Subscription;
+  loading: boolean = false;
+
   constructor(
     private formBuilder: FormBuilder,
     private account: AccountRecoveryService,
     private validator: CustomValidators,
-    private tools: Tools,
+    private util: UtilService,
     private cdRef: ChangeDetectorRef,
     public dialog: MatDialog
   ) {}
 
-  setErrorCPF(statusCPF: boolean, errorMsg: string) {
-    this.invalidCPF = statusCPF;
-    this.errorCPFMsg = errorMsg;
+  checkCpf() {
+    let statusCpf = this.util.checkCPF(this.formRecovery, 'cpf');
+    this.validCpf =  statusCpf?.isValid;
+    this.errorCpfMsg = statusCpf?.msg;
 
-    (this.formRecovery.valid) ? this.blockBtnSubmit = false : this.blockBtnSubmit = true;
+    if(this.validCpf) this.validateProfileByCpf();
   }
 
-  openDialog(): void {
-    const dialogRef = this.dialog.open(ModalAlert, {
-      width: '320px',
-      panelClass: 'modal-warning',
-      data: {
-        titleErrorMessage: 'Usuário não encontrado!',
-        bodyErrorMessage: `Olá, infelizmente não conseguimos encontrar o usuário de CPF ${this.formRecovery.get('cpf')?.value} em nossa base de dados.
-        Por favor, verifique se o CPF informado está correto e tente novamente.`
-      },
-    });
-
-    dialogRef.afterClosed().subscribe();
-  }
-
-  getErrorMessageCPF() {
-    if (this.formRecovery.get('cpf')?.touched && this.formRecovery.controls['cpf'].hasError('cpfIncompleto')) {
-      this.setErrorCPF(true, 'O CPF não foi inserido ou está incompleto!');
-      return;
-    }else if(this.formRecovery.get('cpf')?.touched && this.formRecovery.controls['cpf'].hasError('cpfInvalido')) {
-      this.setErrorCPF(true, 'Este CPF não é válido!!');
-      return;
-    }
-
+  validateProfileByCpf() {
+    this.util.loading.next(true);
     this.account.recoveryUser({
-      login: this.tools.removeMaskCPF(<FormControl>this.formRecovery.controls['cpf'])
+      login: this.util.removeMaskCPF(<FormControl>this.formRecovery.controls['cpf'])
     })
     .subscribe({
-      next: (dados: any) => {
-        if(dados['profile'] !== 'Administrador') {
-            this.isAdm = false;
-            (this.formRecovery.valid) ? this.blockBtnSubmit = false : this.blockBtnSubmit = true;
-          }else {
-            this.isAdm = true;
-            this.formRecovery.get('oficio')?.patchValue(null, {oficio: null});
-            this.blockBtnSubmit = false;
-          }
+      next: (res: any) => {
+
+        this.isAdm = this.util.validateOficioRequiredByBackend(this.formRecovery, 'oficio', res?.profile, this.maxSize);
+
+        this.util.loading.next(false);
         },
-      error: (e) => {
-        if(e.status === 502) {
-          this.openDialog();
+      error: (error) => {
+        if(error.status === 502) {
+          this.util.openAlertModal('320px', 'warning-modal', 'Usuário não encontrado!', `Olá, infelizmente não conseguimos encontrar o usuário de CPF ${this.formRecovery.get('cpf')?.value} em nossa base de dados.
+          Por favor, verifique se o CPF informado está correto e tente novamente.`);
+          this.util.loading.next(false);
           return;
         }
       }
     });
-    this.setErrorCPF(false, '');
   }
 
-  getErrorMessageOficio() {
-    if (this.formRecovery.get('oficio')?.touched && this.formRecovery.get('oficio')?.value === undefined) {
-      this.invalidOficio = true;
-      this.errorMsgOficio = 'O ofício precisa ser anexado!';
-      return;
-    }else if(this.formRecovery.get('oficio')?.touched && this.formRecovery.controls['oficio'].getError('maxContentSize')) {
-      this.invalidOficio = true;
-      this.errorMsgOficio = 'O arquivo de ofício não pode ultrapassar 10Mb de tamanho!';
-      return;
-    }
-    else if(this.formRecovery.get('oficio')?.touched && this.formRecovery.controls['oficio'].hasError('tipoArquivoInvalido')) {
-      this.invalidOficio = true;
-      this.errorMsgOficio = 'O formato do arquivo inserido não é válido, por favor, insira um arquivo no formato: .pdf, .png ou .jpeg!';
-      return;
-    }
-    this.errorMsgOficio = '';
-    this.invalidOficio = false;
-
-
-    this.blockBtnSubmit = false;
+  checkOficio() {
+    let statusOficio = this.util.checkOficio(this.formRecovery, 'oficio');
+    this.validOficio = statusOficio?.isValid;
+    this.errorMsgOficio = statusOficio?.msg;
   }
 
   onSubmit() {
-
-    let formData: FormData = new FormData();
-    let oficio: any = formData.append('oficio', this.formRecovery?.value?.oficio);
-
     if(this.formRecovery.valid) {
-        this.account.recoveryAccount({
-          cpf: this.tools.removeMaskCPF(<FormControl>this.formRecovery.controls['cpf']),
-          oficio})
-        .subscribe({
-          next: (res: any) => {},
-          error: (e: { status: any; }) => {}
+      this.util.loading.next(true);
+      const dataForm: FormData = new FormData();
+
+      dataForm.append('oficio', this.formRecovery.get('oficio')?.value?._files[0]);
+      dataForm.append('cpf', JSON.stringify(this.formRecovery.get('cpf')?.value));
+
+      this.account.recoveryAccount(dataForm)
+      .subscribe({
+        next: (res) => {
+          this.util.loading.next(false);
+        },
+        error: (error) => {
+          this.util.openAlertModal('320px', 'error-modal', 'Falha ao enviar os dados!', `Olá, infelizmente houve um problema inesperado ao enviarmos os dados para recuperação da conta! Por favor, tente novamente e caso o problema persista, envie um e-mail para: sistemas.supinf@saude.rj.gov.br, relatando o ocorrido.`);
+          this.util.loading.next(false);
         }
-      );
+      })
     }
   }
 
@@ -147,5 +114,10 @@ export class AccountRecoveryComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    this.subscribeLoading = this.util.loadingActivated().subscribe((res: any) => this.loading = res);
+  }
+
+  ngOnDestroy(): void {
+    this.subscribeLoading.unsubscribe();
   }
 }
