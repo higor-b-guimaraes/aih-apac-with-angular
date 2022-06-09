@@ -7,6 +7,8 @@ import { Component, OnInit } from '@angular/core';
 })
 export class AnalisarFaixasComponent implements OnInit {
 
+  temDados: boolean = true;
+
   constructor() { }
 
   ngOnInit(): void {
