@@ -1,0 +1,32 @@
+<div class="container-principal">
+  <div class="container-conteudo">
+    <div class="container container-faixas">
+      <div class="row g-3 container-form">
+        <mat-form-field
+          [formGroup]="formInserirToken"
+          appearance="outline">
+
+          <mat-label>Informe o token</mat-label>
+          <input matInput
+                 [maxlength]="6"
+                 formControlName="token"
+                 placeholder=""
+                 required>
+          <mat-error class="error-access" *ngIf="!tokenInvalido">{{ erroTokenInvalidoMsg }}</mat-error>
+        </mat-form-field>
+
+        <mat-card-actions class="container-btn-access">
+          <button mat-button
+                  [class]="(formInserirToken.valid) ? 'btn-login-active':''"
+                  class="btn-login"
+                  [disabled]="formInserirToken.invalid"
+                  (click)="onSubmit()"
+          >Alterar senha</button>
+        </mat-card-actions>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+

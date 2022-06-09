@@ -15,7 +15,7 @@ export class UnidadesService {
   }
 
   salvarUnidade(request: any) {
-    return this.http.post(`${environment.BASE_URL}Unidade`, request);
+    return this.http.post(`${environment.BASE_URL}Unidades/novaUnidade`, request);
   }
   atualizarUnidade(request: any) {
     return this.http.put(`${environment.BASE_URL}Unidade`, request);
@@ -39,7 +39,7 @@ export class UnidadesService {
 
   getCheckCNES(request: {token: string, cnes: string, idUnidade: string}) {
     return this.http.get(
-      `${environment.BASE_URL}Unidades/VerificaCnesExistentes/${request.token}/${request.cnes}/${request.idUnidade}`
+      `${environment.BASE_URL}Unidades/VerificaCnesExistentes?cnes=${request.cnes}`
     );
   }
 

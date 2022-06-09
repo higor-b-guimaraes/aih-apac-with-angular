@@ -6,7 +6,7 @@ import { GerarFaixasService } from './../services/gerar-faixas.service';
 import { AuthService } from 'src/app/core/services/auth.service';
 
 import { Municipios } from './../models/municipios.model';
-import { FaixasBasicas } from './../../gerar-faixas/models/faixas.model';
+import { FaixasBasicas, Faixas } from './../../gerar-faixas/models/faixas.model';
 import { Profile } from 'src/app/shared/modals/models/profile.model';
 
 @Component({
@@ -23,7 +23,8 @@ export class GerarFaixasComponent implements OnInit {
   }
 
   meses: string[];
-  tipoFaixas: string[] = ['AIH Comum', 'AIH Eleitva', 'APAC Comum', 'APAC Eleitva'];
+  // tipoFaixas: string[] = ['AIH Comum', 'AIH Eleitva', 'APAC Comum', 'APAC Eleitva'];
+  tipoFaixas: any;
 
   date: Date = new Date();
   anos: any[] = [this.date.getFullYear(), this.date.getFullYear()+1]
@@ -101,18 +102,21 @@ export class GerarFaixasComponent implements OnInit {
   }
 
   formSub() {
-
     if(this.validFormSubmit()) {
-
-      let faixas: FaixasBasicas = {
-        userId: this.auth.getId(),
-        municipio: (this.municipiosControl?.value) ? this.municipiosControl.value : '',
-        tipoFaixa: this.tipoFaixaControl.value,
-        competencia: this.competenciaControl.value,
-        mes: this.mesControl.value,
-        qtdCotas: this.qtdCotasControl.value,
+      let faixas: Faixas = {
+        "codigoTipoFaixa": this.tipoFaixaControl.value,
+        "competencia": this.competenciaControl.value.toString(),
+        "mes": this.mesControl.value,
+        "quantidadeFaixas": this.qtdCotasControl.value,
       }
-
+      // let faixas: FaixasBasicas = {
+      //   userId: this.auth.getId(),
+      //   municipio: (this.municipiosControl?.value) ? this.municipiosControl.value : '',
+      //   tipoFaixa: this.tipoFaixaControl.value,
+      //   competencia: this.competenciaControl.value,
+      //   mes: this.mesControl.value,
+      //   qtdCotas: this.qtdCotasControl.value,
+      // }
       this.faixaService.submitTracks(faixas).subscribe();
     }
   }
@@ -123,6 +127,12 @@ export class GerarFaixasComponent implements OnInit {
 
   async ngOnInit(): Promise<any> {
     this.profile = await this.utils.userIsAdm(this.profile);
+    await this.faixaService.listarTipoFaixas().subscribe({
+      next: (data: any) => {
+        this.tipoFaixas = data;
+      }
+      }
+    );
 
     let credentials = {
       id: this.auth.getId(),

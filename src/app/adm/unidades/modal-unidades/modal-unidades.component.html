@@ -8,20 +8,20 @@
     <div class="row">
       <mat-form-field appearance="outline"  class="col-md-6">
         <mat-label>Nome da Unidade</mat-label>
-        <input matInput formControlName="nomeUnidade">
-        <mat-error *ngIf="formUnidade.get('nomeUnidade')?.hasError('required')">É preciso informar o nome da unidade</mat-error>
+        <input matInput formControlName="Nome">
+        <mat-error *ngIf="formUnidade.get('Nome')?.hasError('required')">É preciso informar o nome da unidade</mat-error>
       </mat-form-field>
 
       <mat-form-field appearance="outline"  class="col-md-3">
         <mat-label>CNES da Unidade</mat-label>
-        <input matInput (focusout)="checkCNES()" formControlName="cnes"  mask="0000000">
-        <mat-error *ngIf="formUnidade.get('cnes')?.hasError('required')">É preciso informar o CNES da unidade</mat-error>
+        <input matInput (focusout)="checkCNES()" formControlName="Cnes"  mask="0000000">
+        <mat-error *ngIf="formUnidade.get('Cnes')?.hasError('required')">É preciso informar o CNES da unidade</mat-error>
       </mat-form-field>
 
       <mat-form-field appearance="outline"  class="col-md-3">
         <mat-label>Telefone da Unidade</mat-label>
-        <input matInput formControlName="telefone" mask="(00) 0000-0000">
-        <mat-error *ngIf="formUnidade.get('telefone')?.hasError('required')">É preciso informar telefone de contato da unidade</mat-error>
+        <input matInput formControlName="Telefone" mask="(00) 0000-0000">
+        <mat-error *ngIf="formUnidade.get('Telefone')?.hasError('required')">É preciso informar telefone de contato da unidade</mat-error>
       </mat-form-field>
     </div>
   </fieldset>
@@ -36,26 +36,26 @@
     <div class="row">
      <mat-form-field appearance="outline"  class="col-md-9">
        <mat-label>Logradouro</mat-label>
-       <input matInput formControlName="logradouro">
-       <mat-error *ngIf="formUnidade.get('logradouro')?.hasError('required')">É preciso informar o logradouro da unidade</mat-error>
+       <input matInput formControlName="Logradouro">
+       <mat-error *ngIf="formUnidade.get('Logradouro')?.hasError('required')">É preciso informar o logradouro da unidade</mat-error>
      </mat-form-field>
 
      <mat-form-field appearance="outline"  class="col-md-3">
        <mat-label>Número</mat-label>
-       <input matInput formControlName="numero">
+       <input matInput formControlName="Numero">
      </mat-form-field>
    </div>
 
     <div class="row">
       <mat-form-field appearance="outline"  class="col-md-9">
         <mat-label>Complemento</mat-label>
-        <input matInput formControlName="complemento">
+        <input matInput formControlName="Complemento">
       </mat-form-field>
 
       <mat-form-field appearance="outline"  class="col-md-3">
         <mat-label>Cep</mat-label>
-        <input (focusout)="getCep()" matInput formControlName="cep"mask="00000-000">
-        <mat-error *ngIf="formUnidade.get('cep')?.hasError('required')">É preciso informar o cep da unidade</mat-error>
+        <input (focusout)="getCep()" matInput formControlName="Cep"mask="00000-000">
+        <mat-error *ngIf="formUnidade.get('Cep')?.hasError('required')">É preciso informar o cep da unidade</mat-error>
       </mat-form-field>
     </div>
 
@@ -63,25 +63,25 @@
 
       <mat-form-field appearance="outline"  class="col-md-3">
         <mat-label>Bairro da Unidade</mat-label>
-        <input matInput formControlName="bairro">
-        <mat-error *ngIf="formUnidade.get('bairro')?.hasError('required')">É preciso informar o bairro da unidade</mat-error>
+        <input matInput formControlName="Bairro">
+        <mat-error *ngIf="formUnidade.get('Bairro')?.hasError('required')">É preciso informar o bairro da unidade</mat-error>
       </mat-form-field>
 
       <mat-form-field appearance="outline"  class="col-md-3">
         <mat-label>Município da Unidade</mat-label>
-        <input matInput formControlName="municipio">
-        <mat-error *ngIf="formUnidade.get('municipio')?.hasError('required')">É preciso informar o município da unidade</mat-error>
+        <input matInput formControlName="Municipio">
+        <mat-error *ngIf="formUnidade.get('Municipio')?.hasError('required')">É preciso informar o município da unidade</mat-error>
       </mat-form-field>
 
       <mat-form-field appearance="outline" class="col-md-3">
         <mat-label>Estado</mat-label>
         <mat-select
-        formControlName="estado">
-          <mat-option *ngFor="let estado of opcoesEstados" [value]="estado.sigla" required>
-            {{estado.sigla + " - " + estado.descricao}}
+        formControlName="Estado">
+          <mat-option *ngFor="let estado of opcoesEstados" [value]="estado.sigla.trim()" required>
+            {{estado.sigla.trim() + " - " + estado.descricao}}
           </mat-option>
         </mat-select>
-        <mat-error *ngIf="formUnidade.get('estado')?.hasError('required')">É preciso selecionar a Estado de origem da unidade</mat-error>
+        <mat-error *ngIf="formUnidade.get('Estado')?.hasError('required')">É preciso selecionar a Estado de origem da unidade</mat-error>
       </mat-form-field>
     </div>
   </fieldset>

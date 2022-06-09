@@ -1,0 +1,59 @@
+
+.container-principal {
+  height: 80vh;
+  width: 100%;
+  display: flex;
+  align-items: center;
+}
+
+.container-conteudo {
+  width: 100%;
+  max-height: 80vh;
+  display: grid;
+}
+
+.container-faixas {
+  padding: 10px;
+  border-radius: 10px;
+  max-height: 75vh;
+  box-shadow: 0px 0px 7px 2px #aaaaaa;
+  overflow: auto;
+  max-width: fit-content;
+  min-width: 300px;
+  height: 100%;
+  min-height: 230px;
+}
+
+.container-form {
+  display: grid;
+  height: 100%;
+  align-content: center;
+}
+
+.btn-login,
+.btn-login:disabled,
+.btn-login-active:hover {
+  color: #fff;
+  background-color: #363636;
+  width: 100%;
+  margin-top: 15px;
+}
+
+
+.btn-login:disabled {
+  opacity: 0.5;
+}
+
+.btn-login-active:hover {
+  opacity: 0.8;
+}
+
+.loading-data {
+  position: absolute;
+  display: flex;
+  width: 100%;
+  height: 100%;
+  align-items: center;
+  justify-content: center;
+  background-color: rgb(54, 54, 54, 0.7);
+}

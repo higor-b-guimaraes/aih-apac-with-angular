@@ -66,13 +66,13 @@ export class AccountRecoveryComponent implements OnInit {
     })
     .subscribe({
       next: (res: any) => {
-
-        this.isAdm = this.util.validateOficioRequiredByBackend(this.formRecovery, 'oficio', res?.profile, this.maxSize);
-
+        this.isAdm =
+          this.util.validateOficioRequiredByBackend(this.formRecovery, 'oficio', res?.codigoPerfil, this.maxSize);
+        console.log(res);
         this.util.loading.next(false);
         },
       error: (error) => {
-        if(error.status === 502) {
+        if(error.status === 404) {
           this.util.openAlertModal('320px', 'warning-modal', 'Usuário não encontrado!', `Olá, infelizmente não conseguimos encontrar o usuário de CPF ${this.formRecovery.get('cpf')?.value} em nossa base de dados.
           Por favor, verifique se o CPF informado está correto e tente novamente.`);
           this.util.loading.next(false);
@@ -94,12 +94,15 @@ export class AccountRecoveryComponent implements OnInit {
       const dataForm: FormData = new FormData();
 
       dataForm.append('oficio', this.formRecovery.get('oficio')?.value?._files[0]);
-      dataForm.append('cpf', JSON.stringify(this.formRecovery.get('cpf')?.value));
+      // dataForm.append('cpf', JSON.stringify(this.formRecovery.get('cpf')?.value));
+      dataForm.append('cpf', this.util.removeMaskCPF(<FormControl>this.formRecovery.controls['cpf']));
 
       this.account.recoveryAccount(dataForm)
       .subscribe({
         next: (res) => {
           this.util.loading.next(false);
+          this.util.openAlertModal('320px', 'success-modal', 'Sucesso!', `Solicitação registrada com sucesso!`);
+
         },
         error: (error) => {
           this.util.openAlertModal('320px', 'error-modal', 'Falha ao enviar os dados!', `Olá, infelizmente houve um problema inesperado ao enviarmos os dados para recuperação da conta! Por favor, tente novamente e caso o problema persista, envie um e-mail para: sistemas.supinf@saude.rj.gov.br, relatando o ocorrido.`);

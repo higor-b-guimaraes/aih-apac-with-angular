@@ -5,6 +5,7 @@ import { Subscription, tap } from 'rxjs';
 import { AuthService } from '../../services/auth.service';
 import { MatDialog } from '@angular/material/dialog';
 import { ModalAlert } from '../../../shared/modals/error-alert/modal-error-alert';
+import { environment } from "../../../../environments/environment";
 
 
 @Component({
@@ -14,7 +15,7 @@ import { ModalAlert } from '../../../shared/modals/error-alert/modal-error-alert
 })
 export class MainContainerComponent implements OnInit {
   showFiller = false;
-  logoSESRJ = '../../../assets/resources/images/logo-ses-rj.svg';
+  logoSESRJ = `${environment.BASE_SITE}assets/resources/images/logo-ses-rj.svg`;
   loading: boolean = false;
 
   menu: Array<any> = [
@@ -88,7 +89,11 @@ export class MainContainerComponent implements OnInit {
 
   private subscribeLoading!: Subscription;
 
-  constructor(private cdRef: ChangeDetectorRef, private auth: AuthService, private dialog: MatDialog, private util: UtilService) {
+  constructor(
+    private cdRef: ChangeDetectorRef,
+    private auth: AuthService,
+    private dialog: MatDialog,
+    private util: UtilService) {
 
   }
 

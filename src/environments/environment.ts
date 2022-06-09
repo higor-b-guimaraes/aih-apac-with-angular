@@ -5,6 +5,9 @@
 export const environment = {
   production: false,
   BASE_URL: 'https://localhost:7161/api/',
+  // BASE_URL: 'http://10.42.2.53:8095/api/',
+  // BASE_SITE:'http://10.42.2.53:8086/aih-apac',
+  BASE_SITE:'http://localhost:4200/',
   API: ''
   // API: 'http://localhost:3000/',
   // BASE_URL: '/api'

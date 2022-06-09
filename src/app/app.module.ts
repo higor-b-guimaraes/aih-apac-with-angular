@@ -18,13 +18,15 @@ import { MainContainerComponent } from './core/main/main-container/main-containe
 import { AuthService } from './core/services/auth.service';
 import { AppMaterialModule } from './shared/app-material/app-material.module';
 import { ModalAlert } from './shared/modals/error-alert/modal-error-alert';
+import { InserirTokenComponent } from './adm/inserir-token/inserir-token.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     LoginComponent,
     MainContainerComponent,
-    ModalAlert
+    ModalAlert,
+    InserirTokenComponent
   ],
   imports: [
     BrowserModule,

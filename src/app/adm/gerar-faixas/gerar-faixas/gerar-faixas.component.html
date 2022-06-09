@@ -19,8 +19,8 @@
       <mat-form-field appearance="fill" class="col-md-4">
         <mat-label>Tipo de Faixa</mat-label>
         <mat-select [formControl]="tipoFaixaControl">
-          <mat-option *ngFor="let faixa of tipoFaixas" [value]="faixa" required>
-            {{faixa}}
+          <mat-option *ngFor="let faixa of tipoFaixas" [value]="faixa.codigo" required>
+            {{faixa.descricao}}
           </mat-option>
         </mat-select>
         <mat-error *ngIf="tipoFaixaControl.hasError('required')">É preciso selecionar um tipo de faixa</mat-error>

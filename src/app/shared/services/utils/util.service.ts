@@ -24,7 +24,6 @@ export class UtilService {
   }
 
   checkCPF(cpfField: FormGroup, nameField: string): any {
-
     if (cpfField?.get(`${nameField}`)?.touched && cpfField?.controls[`${nameField}`].hasError('cpfIncompleto')) {
       return {
         isValid: false,
@@ -43,7 +42,6 @@ export class UtilService {
   }
 
   checkOficio(oficioField: FormGroup, nameField: string): any {
-
     if(oficioField?.get(`${nameField}`)?.touched && oficioField?.controls[`${nameField}`].getError('maxContentSize')) {
       return {
         isValid: false,
@@ -72,8 +70,8 @@ export class UtilService {
     }
   }
 
-  validateOficioRequiredByBackend(oficioField: FormGroup, nameFieldOficio: string, profile: string, fileSizeLimit: number): boolean {
-    if(profile === "Administrador") {
+  validateOficioRequiredByBackend(oficioField: FormGroup, nameFieldOficio: string, profile: number, fileSizeLimit: number): boolean {
+    if(profile === 1) {
       oficioField.get(`${nameFieldOficio}`)?.clearValidators();
       oficioField.get(`${nameFieldOficio}`)?.setValue(null);
       return true;
@@ -111,7 +109,6 @@ export class UtilService {
     return new Promise((resolve, reject) => {
       this.auth.requestProfile().subscribe({
         next: (data: any) => {
-          alert(data);
           (data['profile'] === 'Administrador') ? profile.Administrador = true :  profile.Administrador = false;
           resolve(profile);
         },

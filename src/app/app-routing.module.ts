@@ -4,6 +4,7 @@ import { RouterModule, Routes } from '@angular/router';
 import { AuthGuardService } from './core/guards/main/auth-guard.service';
 import { LoginComponent } from './authentication/login/login.component';
 import { MainContainerComponent } from './core/main/main-container/main-container.component';
+import {InserirTokenComponent} from "./adm/inserir-token/inserir-token.component";
 
 
 const routes: Routes = [
@@ -59,6 +60,11 @@ const routes: Routes = [
       {
         path: 'alterar-senha',
         loadChildren: () => import('./adm/alterar-senha/alterar-senha.module').then((m) => m.AlterarSenhaModule),
+      },
+      {
+        path: 'inserir-token',
+        // loadChildren: () => import('./adm/inserir-token/inserir-token.module').then((m) => m.InserirTokenModule),
+        component: InserirTokenComponent
       },
     ]
   }

@@ -7,6 +7,7 @@ import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { FileValidator } from 'ngx-material-file-input';
 import { CustomValidators } from 'src/app/shared/validators/custom-validators';
+import {Route, Router} from "@angular/router";
 
 @Component({
   selector: 'app-alterar-senha',
@@ -35,10 +36,17 @@ export class AlterarSenhaComponent implements OnInit {
     ]
   });
 
+  constructor(
+    private cdRef: ChangeDetectorRef,
+    private formBuilder: FormBuilder,
+    private validator: CustomValidators,
+    private util: UtilService,
+    private alterarSenhaService: AlterarSenhaService,
+    private auth: AuthService,
+    private router: Router,
+  ) { }
 
-  constructor(private cdRef: ChangeDetectorRef, private formBuilder: FormBuilder, private validator: CustomValidators, private util: UtilService, private alterarSenhaService: AlterarSenhaService, private auth: AuthService) { }
-
-
+  // TODO: Refazer a verificação do usuário logado.
   checkCpf() {
     let statusCpf: any = this.util.checkCPF(this.formResetPassword, 'cpf');
     this.validCpf =  statusCpf?.isValid;
@@ -52,12 +60,15 @@ export class AlterarSenhaComponent implements OnInit {
         }).subscribe({
         next:(dados: any) => {
           console.log(dados);
-          if(dados['profile'] !== 'Administrador') {
+          this.isAdm =
+            this.util.validateOficioRequiredByBackend(this.formResetPassword, 'oficio', dados?.codigoPerfil, this.maxSize);
+          /*if(dados['codigoPerfil'] !== 1) {
             this.isAdm = false;
           }else {
             this.isAdm = true;
             this.formResetPassword.get('oficio')?.patchValue(null, {oficio: null});
-          }
+          }*/
+          console.log(this.isAdm);
         },
         error: async () => {await this.util.openAlertModal("320px","warning-modal","Dados inválidos","Por favor, verifique os dados informados e tente novamente!")
         this.isAdm = true;
@@ -73,15 +84,22 @@ export class AlterarSenhaComponent implements OnInit {
   }
 
   onSubmit() {
+    debugger
     const formData = new FormData();
-    formData.append('oficio', this.formResetPassword.get('oficio')?.value._files[0])
+    if ( !this.isAdm )
+      formData.append('oficio', this.formResetPassword.get('oficio')?.value._files[0])
     let data = {
       id: this.auth.getId(),
-      cpf: this.formResetPassword.get('cpf')?.value
+      cpf: this.util.removeMaskCPF(<FormControl>this.formResetPassword.controls['cpf'])
     }
     this.util.loading.next(true);
     this.alterarSenhaService.submitResetPassword(formData, data).subscribe({
-      next: (event: HttpEvent<boolean>) => {if(event.type === 4) this.util.loading.next(false)},
+      next: (event: HttpEvent<boolean>) => {
+        if(event.type === 4) {
+          this.util.loading.next(false)
+          this.router.navigate(["/inserir-token"]);
+        }
+      },
       error: () => this.util.loading.next(false)
     })
   }

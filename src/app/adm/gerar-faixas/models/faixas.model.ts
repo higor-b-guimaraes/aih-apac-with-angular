@@ -19,3 +19,10 @@ export interface FaixasBasicas extends BasicCredential {
   qtdCotas: number,
 }
 
+export  interface Faixas {
+  codigoTipoFaixa: number,
+  competencia: string,
+  mes: string,
+  quantidadeFaixas: number,
+}
+

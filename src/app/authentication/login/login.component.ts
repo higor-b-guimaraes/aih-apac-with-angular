@@ -7,6 +7,7 @@ import { AuthenticationService } from '../services/authentication/authentication
 import { CustomValidators } from '../../shared/validators/custom-validators'
 import { HttpRequest } from '@angular/common/http';
 import { Subscription } from 'rxjs';
+import {environment} from "../../../environments/environment";
 
 @Component({
   selector: 'app-login',
@@ -16,7 +17,7 @@ import { Subscription } from 'rxjs';
 export class LoginComponent implements OnInit {
 
 
-  logoRJ: string = "../../../assets/resources/images/logoTISESRJ.png";
+  logoRJ: string = `${environment.BASE_SITE}assets/resources/images/logoTISESRJ.png`;
 
   validCpf:boolean = false;
   errorCpfMsg: string = "";
@@ -57,9 +58,7 @@ export class LoginComponent implements OnInit {
   }
 
   onSubmit() {
-
     this.util.loading.next(true);
-
     if(this.formLogin.valid) {
         this.auth.login({
           login: this.util.removeMaskCPF(<FormControl>this.formLogin.controls['cpf']),
