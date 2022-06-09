@@ -72,6 +72,7 @@ export class LoginComponent implements OnInit {
           },
 
           error: (error) => {
+            console.log(error)
             if( error.status === 500) {
               this.validPassword = false;
               this.errorAccessMsg = "Por favor, verifique o login e senha informados e tente novamente!";
