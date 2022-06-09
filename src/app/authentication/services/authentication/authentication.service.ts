@@ -11,8 +11,8 @@ export class AuthenticationService {
 
   constructor(private http: HttpClient, private auth: AuthService) {}
 
-  login(user: { login: string; password: string }) {
-    return this.http.get(`${environment.BASE_URL}Login?user=${user.login}&password=${user.password}`)
+  login(user: { Cpf: string; Senha: string }) {
+    return this.http.post(`${environment.BASE_URL}Login/logar`, user)
     .pipe(
       take(1),
       tap((res: any) => this.auth.setToken(res))

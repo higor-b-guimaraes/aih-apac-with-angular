@@ -26,8 +26,8 @@ export class LoginComponent implements OnInit {
   hidePassword: boolean = true;
 
   formLogin: FormGroup = this.formBuilder.group({
-    cpf: ['', [this.validator.cpfValidator]],
-    password: ['', Validators.required]
+    Cpf: ['', [this.validator.cpfValidator]],
+    Senha: ['', Validators.required]
   });
 
   private subscribeLoading!: Subscription;
@@ -43,13 +43,13 @@ export class LoginComponent implements OnInit {
   ) {}
 
   checkCpf() {
-    let statusCpf = this.util.checkCPF(this.formLogin, 'cpf');
+    let statusCpf = this.util.checkCPF(this.formLogin, 'Cpf');
     this.validCpf =  statusCpf?.isValid;
     this.errorCpfMsg = statusCpf?.msg;
   }
 
   checkPassword() {
-    if (this.formLogin.get('password')?.touched && this.formLogin.get('password')?.value === '') {
+    if (this.formLogin.get('Senha')?.touched && this.formLogin.get('Senha')?.value === '') {
       this.validPassword = false;
       this.errorAccessMsg = 'A senha precisa ser informada!';
       return;
@@ -61,8 +61,8 @@ export class LoginComponent implements OnInit {
     this.util.loading.next(true);
     if(this.formLogin.valid) {
         this.auth.login({
-          login: this.util.removeMaskCPF(<FormControl>this.formLogin.controls['cpf']),
-          password: this.formLogin.get('password')?.value,
+          Cpf: this.util.removeMaskCPF(<FormControl>this.formLogin.controls['Cpf']),
+          Senha: this.formLogin.get('Senha')?.value,
         })
         .subscribe({
           next: () => {

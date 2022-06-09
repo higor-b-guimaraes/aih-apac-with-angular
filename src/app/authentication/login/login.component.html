@@ -17,7 +17,7 @@
         appearance="outline">
           <mat-label>CPF</mat-label>
           <input matInput
-          formControlName="cpf"
+          formControlName="Cpf"
           mask="000.000.000-00"
           (focusout)="checkCpf()" required>
           <mat-icon matSuffix *ngIf="!validCpf">person_2</mat-icon>
@@ -32,7 +32,7 @@
             <mat-label>Senha</mat-label>
             <input matInput
             (focusout)="checkPassword()"
-            formControlName="password"
+            formControlName="Senha"
             [type]="hidePassword ? 'password' : 'text'"
             required>
 
