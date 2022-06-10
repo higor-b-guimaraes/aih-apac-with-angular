@@ -21,13 +21,15 @@ export class UsuariosComponent implements OnInit {
   constructor(public modal: MatDialog,
     private UsuariosService: UsuariosService,
     private auth: AuthService,
-    private cdRef: ChangeDetectorRef) {
+    private cdRef: ChangeDetectorRef) { }
 
-      this.subVerifyHasUser = this.UsuariosService.getVerificaUsuariosExistentes(this.auth.getAuth()).subscribe({
-        next: (res: any) => (res?.hasUser) ? this.hasUser = true : this.hasUser = false,
+  ngOnInit(): void {
+    this.subVerifyHasUser = this.UsuariosService.getVerificaUsuariosExistentes(this.auth.getAuth())
+      .subscribe({
+        next: (res: any) => (res.length > 0) ? this.hasUser = true : this.hasUser = false,
         error: () => {},
-      })
-    }
+    })
+  }
 
   openDialog() {
     const dialogRef = this.modal.open(ModalUsuariosComponent, {
@@ -53,9 +55,7 @@ export class UsuariosComponent implements OnInit {
     this.cdRef.detectChanges();
   }
 
-  ngOnInit(): void {
-    console.log(this.hasUser)
-  }
+
 
   ngOnDestroy() {
     this.subVerifyHasUser.unsubscribe();

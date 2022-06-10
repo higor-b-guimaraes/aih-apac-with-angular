@@ -33,41 +33,66 @@ export class TabelaUsuariosComponent implements OnInit {
   @ViewChild(MatSort) sort!: MatSort;
   getUsuarios = new Subject<any>()
 
-  constructor(private usuariosService: UsuariosService,
+  constructor(
+    private usuariosService: UsuariosService,
     private auth: AuthService,
     private util: UtilService,
     public modal: MatDialog,
-    private cdRef: ChangeDetectorRef) {
+    private cdRef: ChangeDetectorRef
+  ) {
+    this.columns = [
+      "tipoUnidade",
+      "perfil",
+      "situacao",
+      "nome",
+      "cpf",
+      "nickname",
+      "email",
+      "telefone",
+      "oficioRequerido",
+      "aihComum",
+      "aihEletiva",
+      "apacComum",
+      "apacEletiva",
+      "editarMotivos",
+      "desativarMotivos"
+    ]
+  }
 
+  ngOnInit(): void {
     this.getUsuarios.subscribe({
-        next: (data) => {
-          this.usuariosService.getUsuarios(data).subscribe({
-            next: (res:any) => {
+      next: (data) => {
+        this.usuariosService.getUsuarios(data).subscribe({
+          next: (res:any) => {
+            this.dataSource = new MatTableDataSource(res);
+            this.dataSource.paginator = this.paginator;
+            this.dataSource.sort = this.sort;
+            this.util.loading.next(false);
 
-              this.columns = [...res.headerTable];
-              this.usuarios = [...res.bodyTable];
-              this.lenght = res.tableLength;
+            /*this.columns = [...res.headerTable];
+            this.usuarios = [...res.bodyTable];
+            this.lenght = res.tableLength;
 
-              this.dataSource = new MatTableDataSource(this.usuarios);
-              this.dataSource.paginator = this.paginator;
-              this.dataSource.sort = this.sort;
-              this.util.loading.next(false);
-            },
-            error: (e) => {this.util.loading.next(false)}
-          })
-        },
-        error: () => {this.util.loading.next(false)}
+            this.dataSource = new MatTableDataSource(this.usuarios);
+            this.dataSource.paginator = this.paginator;
+            this.dataSource.sort = this.sort;
+            this.util.loading.next(false);*/
+          },
+          error: (e) => {this.util.loading.next(false)}
+        })
+      },
+      error: () => {this.util.loading.next(false)}
     })
 
-    let data = {
+    /*let data = {
       id: this.auth.getId(),
     }
 
     this.getUsuarios.next(data);
+    this.util.loading.next(true);*/
   }
 
   abrirModalUsuario(usuario?: number) {
-
     if(usuario) {
 
       const dialogRef = this.modal.open(ModalUsuariosComponent, {
@@ -172,9 +197,5 @@ export class TabelaUsuariosComponent implements OnInit {
 
   ngAfterContentChecked() {
     this.cdRef.detectChanges();
-  }
-
-  ngOnInit(): void {
-    this.util.loading.next(true);
   }
 }

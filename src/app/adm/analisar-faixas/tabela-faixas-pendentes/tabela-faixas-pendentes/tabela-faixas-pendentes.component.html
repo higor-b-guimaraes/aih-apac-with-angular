@@ -44,8 +44,13 @@
       <td mat-cell *matCellDef="let elemento" class="body-table"> {{elemento.competencia}} </td>
     </ng-container>
 
+    <ng-container matColumnDef="Oficio">
+      <th mat-header-cell class="header-table" *matHeaderCellDef mat-sort-header [style.placeContent]="'center'"> Ofício </th>
+      <td mat-cell *matCellDef="let elemento" class="body-table"> {{elemento.oficio}} </td>
+    </ng-container>
+
     <ng-container matColumnDef="autorizarFaixas">
-      <th mat-header-cell class="header-table" *matHeaderCellDef [style]="{justify: 'end', width: '20px'}"> Aprovar Faixas </th>
+      <th mat-header-cell class="header-table" *matHeaderCellDef [style]="{justify: 'end', width: '20px'}"> Aprovar Solicitação </th>
         <td mat-cell *matCellDef="let elemento" class="body-table">
         <button (click)="autorizarFaixa(elemento)" class=" btn btn-success" mat-raised-button>
         <mat-icon> check_circle_outline </mat-icon>
@@ -53,7 +58,7 @@
     </ng-container>
 
     <ng-container matColumnDef="negarFaixa">
-      <th mat-header-cell class="header-table" *matHeaderCellDef [style]="{justify: 'end', width: '20px'}"> Reprovar Faixas </th>
+      <th mat-header-cell class="header-table" *matHeaderCellDef [style]="{justify: 'end', width: '20px'}"> Reprovar SOlicitação </th>
       <td mat-cell *matCellDef="let elemento" class="body-table">
         <button (click)="negarFaixa(elemento)" class="btn btn-danger" mat-raised-button>
         <mat-icon> remove_circle </mat-icon>

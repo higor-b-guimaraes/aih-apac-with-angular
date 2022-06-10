@@ -15,7 +15,17 @@ import { UtilService } from 'src/app/shared/services/utils/util.service';
 export class TabelaFaixasPendentesComponent implements OnInit {
 
   lenght!: number;
-  tableHeader: string[] = ['dtSolicitacao', 'usuario', 'municipioUnidade', 'tipoSolicitacao', 'tipoDeFaixa', 'qtdFaixasSolicitadas', 'competencia', 'autorizarFaixas', 'negarFaixa'];
+  tableHeader: string[] = [
+    'dtSolicitacao',
+    'usuario',
+    'municipioUnidade',
+    'tipoSolicitacao',
+    'tipoDeFaixa',
+    'qtdFaixasSolicitadas',
+    'competencia',
+    "Oficio",
+    'autorizarFaixas',
+    'negarFaixa'];
   faixaPendenteModel!: FaixaPendente[];
   dataSource!: any;
 

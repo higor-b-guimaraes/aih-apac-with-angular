@@ -62,7 +62,7 @@ export class UtilService {
 
   validateOficioRequired(oficioField: FormGroup, nameFieldOficio: string, nameFieldProfile: string, fileSizeLimit: number) {
 
-    if(oficioField.get(`${nameFieldProfile}`)?.value === "Administrador") {
+    if(oficioField.get(`${nameFieldProfile}`)?.value === 1) {
       oficioField.get(`${nameFieldOficio}`)?.clearValidators();
       oficioField.get(`${nameFieldOficio}`)?.setValue(null);
     }else {

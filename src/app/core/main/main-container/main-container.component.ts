@@ -33,17 +33,17 @@ export class MainContainerComponent implements OnInit {
       thirdPermission: 'Operador',
     },
     {
-      nome: 'Analisar solicitações de faixas',
+      nome: 'Analisar solicitações',
       link: '/analisar-faixas',
       permission: 'Administrador',
       secondPermission: 'Autorizador',
     },
-    {
+    /*{
       nome: 'Analisar solicitações de troca de senhas',
       link: '/analisar-senhas',
       profile: 'Administrador',
       permission: 'Administrador',
-    },
+    },*/
     {
       nome: 'Consultar faixas',
       link: '/consultar-faixas',
