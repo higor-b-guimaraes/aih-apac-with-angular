@@ -26,7 +26,7 @@ import { InserirTokenComponent } from './adm/inserir-token/inserir-token.compone
     LoginComponent,
     MainContainerComponent,
     ModalAlert,
-    InserirTokenComponent
+    InserirTokenComponent,
   ],
   imports: [
     BrowserModule,

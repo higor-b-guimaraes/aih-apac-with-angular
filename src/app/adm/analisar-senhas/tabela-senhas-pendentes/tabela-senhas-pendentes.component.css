@@ -1,0 +1,112 @@
+/* .container-table { */
+  /*   display: block;
+    padding: 0px 20px;
+    height: 80vh;
+    overflow-x: auto;
+    box-sizing: border-box; */
+/*     padding: 0px 20px;
+    height: 80vh;
+    overflow-x: auto;
+    box-sizing: border-box;
+  } */
+
+  .container-table {
+    padding: 0px 20px;
+    height: 80vh;
+    overflow-x: auto;
+    box-sizing: border-box;
+    display: flex;
+    align-items: center;
+    flex-flow: column;
+    place-content: center;
+  }
+
+  .container-funcionalidades {
+    display: flex;
+    align-items: center;
+    width: 100%;
+  }
+
+  .table {
+    display: block;
+    width: 100%;
+    contain: content;
+    overflow: inherit;
+  }
+
+  th.mat-header-cell, td.mat-cell, td.mat-footer-cell {
+    border: 1px solid;
+  }
+
+  .mat-sort-header-container {
+    display: flex;
+    cursor: pointer;
+    align-items: center;
+    letter-spacing: normal;
+    place-content: center;
+    outline: 0;
+  }
+
+  .header-table {
+    background-color: #363636;
+    color: #fff;
+    font-size: 14px;
+    vertical-align: middle !important;
+    text-align: center !important;
+  }
+
+  .body-table {
+    vertical-align: middle !important;
+    text-align: center !important;
+  }
+
+  .mat-sort-header-container {
+    display: flex;
+    cursor: pointer;
+    align-items: center;
+    letter-spacing: normal;
+    outline: 0;
+    place-content: center;
+}
+
+  th {
+    padding: 0px 20px;
+    white-space: nowrap;
+  }
+
+  th.mat-header-cell {
+    padding: 10px 20px;
+  }
+
+
+
+  .alert-danger {
+    color: #842029;
+    background-color: #f8d7da;
+    border-color: #f5c2c7;
+    vertical-align: middle;
+    text-align: center;
+  }
+
+  .alert-warning {
+    color: #664d03;
+    background-color: #fff3cd;
+    border-color: #ffecb5;
+    vertical-align: middle;
+    text-align: center;
+  }
+
+  .alert-success {
+    color: #0f5132;
+    background-color: #d1e7dd;
+    border-color: #badbcc;
+    vertical-align: middle;
+    text-align: center;
+  }
+
+  .mat-column-demo-position {
+    width: 32px;
+    border-right: 1px solid currentColor;
+    padding-right: 24px;
+    text-align: center;
+  }

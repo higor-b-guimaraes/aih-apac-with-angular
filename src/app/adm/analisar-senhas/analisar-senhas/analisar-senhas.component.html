@@ -1,1 +1,19 @@
-<p>analisar-senhas works!</p>
+
+
+<div class="section-main">
+
+  <div class="empty-data" *ngIf="!temDados">
+    <mat-card>
+      <mat-card class="container-card">
+        <mat-card-title>Não há solicitações de alteração de senha pendentes!</mat-card-title>
+        <mat-divider inset></mat-divider>
+      </mat-card>
+    </mat-card>
+  </div>
+
+  <div class="has-data" *ngIf="temDados">
+    <div class="main-container-form">
+      <app-tabela-senhas-pendentes></app-tabela-senhas-pendentes>
+    </div>
+  </div>
+</div>
