@@ -83,9 +83,7 @@ export class ModalUnidadesComponent implements OnInit {
   getEstados() {
     this.unidadeService.getEstados().subscribe({
       next: async (data: any) => {
-        //this.opcoesEstados = await [...data.listaEstados];
         this.opcoesEstados = data;
-        console.log(this.opcoesEstados);
         this.util.loading.next(false);
       },
       error: (e) => {
@@ -111,6 +109,8 @@ export class ModalUnidadesComponent implements OnInit {
     return new Promise((resolve, reject) => {
       this.unidadeService.getCheckCNES(request).subscribe({
         next: (res: any) => {
+
+          console.log(res)
           if (res) {
             if ((this.novoCadastro) && res.length > 0) {
               this.util.openAlertModal('320px', 'warning-modal', 'CNES já cadastrado', 'Este CNES já foi cadastrado em nossa base dedados');
