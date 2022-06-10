@@ -22,6 +22,7 @@ export class TabelaUnidadesComponent implements OnInit {
 
   columns: string[] = [];
   unidade: Unidade[] = [];
+  unidades: Unidade[] = [];
   dataSource!: any
   lenght!: number;
 
@@ -29,43 +30,101 @@ export class TabelaUnidadesComponent implements OnInit {
   @ViewChild(MatSort) sort!: MatSort;
   getUnidade = new Subject<any>()
 
-  constructor(private unidadeService: UnidadesService,
+  constructor(
+    private unidadeService: UnidadesService,
     private auth: AuthService,
     private util: UtilService,
     public modal: MatDialog,
-    private cdRef: ChangeDetectorRef) {
+    private cdRef: ChangeDetectorRef
+  ) {
+    this.columns = [
+      "Cnes",
+      "Nome",
+      "Telefone",
+      "Logradouro",
+      "Numero",
+      "Complemento",
+      "Cep",
+      "Bairro",
+      "Municipio",
+      "Estado",
+      "editarUnidade",
+      "desativarUnidade",
+    ];
+  }
 
-    this.getUnidade.subscribe({
-        next: (data) => {
-          this.unidadeService.getUnidades(data).subscribe({
-            next: (res:any) => {
-              this.columns = [...res.headerTable];
-              this.unidade = [...res.bodyTable];
-              this.lenght = res.tableLength;
-
-              this.dataSource = new MatTableDataSource(this.unidade);
-              this.dataSource.paginator = this.paginator;
-              this.dataSource.sort = this.sort;
-              this.util.loading.next(false);
-            },
-            error: (e) => {this.util.loading.next(false)}
-          })
-        },
-        error: () => {this.util.loading.next(false)}
+  ngOnInit(): void {
+    this.util.loading.next(true);
+    this.unidadeService.getUnidades().subscribe({
+      next: (data) => {
+        console.log(data);
+        this.dataSource = new MatTableDataSource<Unidade>(data as any);
+        this.dataSource.paginator = this.paginator;
+        this.dataSource.sort = this.sort;
+        this.util.loading.next(false);
+      },error: (err) => {
+        console.error(err);
+        this.util.loading.next(false);
+      }
     })
+  }
 
-    let data = {
+  /*ngOnInit(): void {
+    this.util.loading.next(true);
+    this.getUnidade.subscribe((data) => {
+
+      this.unidadeService.getUnidades(data).subscribe({
+        next: (data) => {
+          this.dataSource = new MatTableDataSource<Unidade>(this.unidades)
+          this.util.loading.next(false);
+        }, error: err => {
+          this.util.loading.next(false);
+          alert(err);
+        }
+
+      })
+    })
+  }*/
+
+    /*this.getUnidade.subscribe({
+        next: (data) => {
+          this.unidadeService.getUnidades(data).subscribe((unidades) => {
+
+          },*/
+    /*next: (res:any) => {
+      console.log(res)
+      this.unidades = res;
+      console.log(this.unidades)
+      this.dataSource = new MatTableDataSource<Unidade>(this.unidades);
+      //this.dataSource = new MatTableDataSource(this.unidades);
+      // this.dataSource.paginator = this.paginator;
+      // this.dataSource.sort = this.sort;
+      this.util.loading.next(false);
+      /!*!// this.columns = [...res.headerTable];
+      // this.unidade = [...res.bodyTable];
+      // this.lenght = res.tableLength;
+
+      this.dataSource = new MatTableDataSource(this.unidade);
+      this.dataSource.paginator = this.paginator;
+      this.dataSource.sort = this.sort;
+      this.util.loading.next(false);*!/
+    },*/
+    /*error: (e) => {this.util.loading.next(false)}
+  })
+},
+error: () => {this.util.loading.next(false)}*/
+    /*})*/
+
+    /*let data = {
       token: this.auth.getToken()
       // id: this.auth.getId(),
     }
 
     this.getUnidade.next(data);
-  }
+  }*/
 
   abrirModalUnidade(unidade?: number) {
-
     if(unidade) {
-
       const dialogRef = this.modal.open(ModalUnidadesComponent, {
         width: '100%',
         panelClass: 'common-modal',
@@ -74,11 +133,9 @@ export class TabelaUnidadesComponent implements OnInit {
           idRequest: unidade
         }
       });
-
       dialogRef.afterClosed().subscribe(result => {
       });
     }else {
-
       const dialogRef = this.modal.open(ModalUnidadesComponent, {
         width: '100%',
         panelClass: 'common-modal',
@@ -149,27 +206,33 @@ export class TabelaUnidadesComponent implements OnInit {
   }
 
   ativarDesativarUnidade(row: any)  {
-
     let request = {
       idUser: this.auth.getId(),
       idRequest: row?.id,
     }
-
-    this.unidadeService.desativarUnidade(request).subscribe({
-      next: () => {
-        this.util.openAlertModal("320px", "success-modal", "Usuário desativado!", `O usuário ${row.nome}, foi desativado no sistema!`);
-      },
-      error: () => {
-        this.util.openAlertModal("320px", "error-modal", "Erro ao desativar o usuário", `Houve um erro ao tentarmos desativar o usuário ${row.nome}! Por favor, tente novamente! Caso o problema persista, entre em contato via e-mail: sistemas.supinf@saude.rj.gov.br`);
-      },
-    })
+    console.log(row);
+    if ( row?.situacao == 1 ) {
+      this.unidadeService.desativarUnidade(request).subscribe({
+        next: () => {
+          this.util.openAlertModal("320px", "success-modal", "Unidade desativada!", `A unidade ${row.nome}, foi desativada no sistema!`);
+        },
+        error: () => {
+          this.util.openAlertModal("320px", "error-modal", "Erro ao desativar a unidade", `Houve um erro ao tentarmos desativar a unidade ${row.nome}! Por favor, tente novamente! Caso o problema persista, entre em contato via e-mail: sistemas.supinf@saude.rj.gov.br`);
+        },
+      })
+    } else {
+      this.unidadeService.desativarUnidade(request).subscribe({
+        next: () => {
+          this.util.openAlertModal("320px", "success-modal", "Unidade reativada!", `A unidade ${row.nome}, foi reativada no sistema!`);
+        },
+        error: () => {
+          this.util.openAlertModal("320px", "error-modal", "Erro ao reativar a unidade", `Houve um erro ao tentarmos reativar a unidade ${row.nome}! Por favor, tente novamente! Caso o problema persista, entre em contato via e-mail: sistemas.supinf@saude.rj.gov.br`);
+        },
+      })
+    }
   }
 
   ngAfterContentChecked() {
     this.cdRef.detectChanges();
-  }
-
-  ngOnInit(): void {
-    this.util.loading.next(true);
   }
 }

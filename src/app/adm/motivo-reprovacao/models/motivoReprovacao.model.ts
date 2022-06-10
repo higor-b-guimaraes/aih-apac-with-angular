@@ -1,6 +1,5 @@
 export interface MotivoReprovacao {
-
-  id: number;
-  motivoReprovacao: string,
-  status: string;
+  Id: number;
+  Motivo: string,
+  Status: string;
 }

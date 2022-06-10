@@ -3,21 +3,25 @@
 
   <form [formGroup]="formMotivoReprovacao" class="row g-3">
 
+    <mat-form-field>
+      <input matInput style="display: none;" formControlName="Id">
+    </mat-form-field>
+
     <mat-form-field appearance="outline"  class="col-md-9">
       <mat-label>Motivo de Reprovação</mat-label>
-      <input matInput formControlName="motivoReprovacao">
-      <mat-error *ngIf="formMotivoReprovacao.get('motivoReprovacao')?.hasError('required')">É preciso informar o motivo de cancelamento</mat-error>
+      <input matInput formControlName="Motivo">
+      <mat-error *ngIf="formMotivoReprovacao.get('Motivo')?.hasError('required')">É preciso informar o motivo de cancelamento</mat-error>
     </mat-form-field>
 
     <mat-form-field appearance="outline" class="col-md-3">
       <mat-label>Tipo de Faixa</mat-label>
       <mat-select
-      formControlName="status">
-        <mat-option *ngFor="let status of statusMotivo" [value]="status" required>
-          {{status}}
+      formControlName="Status">
+        <mat-option *ngFor="let status of statusMotivo" [value]="status.codigo" required>
+          {{status.descricao}}
         </mat-option>
       </mat-select>
-      <mat-error *ngIf="formMotivoReprovacao.get('status')?.hasError('required')">É preciso selecionar o status do motivo de reprovação</mat-error>
+      <mat-error *ngIf="formMotivoReprovacao.get('Status')?.hasError('required')">É preciso selecionar o status do motivo de reprovação</mat-error>
     </mat-form-field>
   </form>
 

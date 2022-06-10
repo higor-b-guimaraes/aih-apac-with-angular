@@ -27,6 +27,6 @@ export class MotivoReprovacaoService {
   }
 
   getVerificaDadosExistentes(request: {idUser:number}) {
-    return this.http.get(`${environment.BASE_URL}verificaDadosExistentesMotivosReprovacao`, {params: request});
+    return this.http.get(`${environment.BASE_URL}MotivosReprovacao/listaMotivosReprovacao`);
   }
 }

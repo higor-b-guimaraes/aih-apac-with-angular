@@ -1,4 +1,3 @@
-
 export interface FaixaPendente {
   Id?: number;
   dtSolicitacao: string,

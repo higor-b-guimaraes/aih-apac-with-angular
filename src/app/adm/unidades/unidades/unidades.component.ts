@@ -52,8 +52,9 @@ export class UnidadesComponent implements OnInit {
       }
       this.subVerifyHasUnit = this.unitService.checksHasUnit(request).subscribe({
         next: (res: any) => {
+
           this.util.loading.next(false);
-          (res?.hasUnit) ? resolve(1) : resolve(2);
+          (res?.length > 0) ? resolve(1) : resolve(2);
         },
         error: (erro) => {
           this.util.loading.next(false);

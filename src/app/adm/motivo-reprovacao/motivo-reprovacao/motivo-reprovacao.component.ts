@@ -22,26 +22,7 @@ export class MotivoReprovacaoComponent implements OnInit {
   constructor(public modal: MatDialog,
     private motivoReprovacaoService: MotivoReprovacaoService,
     private auth: AuthService,
-    private cdRef: ChangeDetectorRef) {
-
-      let request = {idUser: this.auth.getId()}
-      this.motivoReprovacaoService.getVerificaDadosExistentes(request).subscribe({
-
-        next: (data: any) => {
-
-          if(data.hasData) {
-            this.headerTable = [...data['headerTable']];
-            this.bodyTable = [...data['bodyTable']];
-            this.tableLength = data['tableLength'];
-            this.hasData = true;
-          }else {
-            this.hasData = false;
-          }
-
-        },
-        error: (e) => {console.log(e)}
-      })
-    }
+    private cdRef: ChangeDetectorRef) { }
 
   openDialog() {
     const dialogRef = this.modal.open(ModalCadastroReprovacaoComponent, {
@@ -49,7 +30,8 @@ export class MotivoReprovacaoComponent implements OnInit {
       panelClass: 'common-modal'});
 
     dialogRef.afterClosed().subscribe(result => {
-      if(result === true) this.hasData = true;
+      if(result === true)
+        this.hasData = true;
     });
   }
 
@@ -58,6 +40,24 @@ export class MotivoReprovacaoComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    let request = {
+      idUser: this.auth.getId()
+    }
+    this.motivoReprovacaoService.getVerificaDadosExistentes(request).subscribe({
+      next: (data: any) => {
+
+        if(data.hasData) {
+          this.headerTable = [...data['headerTable']];
+          this.bodyTable = [...data['bodyTable']];
+          this.tableLength = data['tableLength'];
+          this.hasData = true;
+        }else {
+          this.hasData = false;
+        }
+
+      },
+      error: (e) => {console.log(e)}
+    })
   }
 
 }

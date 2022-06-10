@@ -56,23 +56,21 @@ export class ModalUnidadesComponent implements OnInit {
 
     if(dataModal?.idRequest) {
       this.unidadeService.getUnidade(dataModal).subscribe({
-      next: (res: any) => {
-        this.unidadeModel = {...res.data}
-
-        this.formUnidade.patchValue({
-          Nome: res?.data?.Nome,
-          Cnes: res?.data?.Cnes,
-          Telefone: res?.data?.Telefone,
-          Logradouro: res?.data?.Logradouro,
-          Numero: res?.data?.Numero,
-          Complemento: res?.data?.Complemento,
-          Cep: res?.data?.Cep,
-          Bairro: res?.data?.Bairro,
-          Municipio: res?.data?.Municipio,
-          Estado: res?.data?.Estado,
-        });
-
-          this.novoCadastro = false;
+        next: (res: any) => {
+          console.log(res)
+          this.formUnidade.patchValue({
+            Nome: res.nome,
+            Cnes: res.cnes,
+            Telefone: res.telefone,
+            Logradouro: res.logradouro,
+            Numero: res.numero,
+            Complemento: res.complemento,
+            Cep: res.cep,
+            Bairro: res.bairro,
+            Municipio: res.municipio,
+            Estado: res.estado,
+          });
+        this.novoCadastro = false;
         },
 
         error: () => {},
@@ -95,20 +93,6 @@ export class ModalUnidadesComponent implements OnInit {
         this.util.loading.next(false);
       },
     })
-    /*let request = {
-      idUser: this.auth.getId()
-    }
-     */
-    /*this.unidadeService.getEstados(request).subscribe({
-      next: async (data: any) => {
-        // this.opcoesEstados = await [...data.listaEstados];
-        this.util.loading.next(false);
-      },
-      error: (e) => {
-        console.log(e)
-        this.util.loading.next(false);
-      },
-    })*/
   }
 
   checkCNES() {
@@ -175,9 +159,7 @@ export class ModalUnidadesComponent implements OnInit {
             this.util.openAlertModal('320px', 'warning-modal', 'Cep inválido', 'Houve uma falha ao buscar os dados de endereço referente ao cep informado. Por favor, verfique se o cep está correto e tente novamente!');
             return;
           }
-
           if(this.formUnidade.get('preenchimentoAutomatico')?.value) {
-
             this.formUnidade.patchValue({
               Logradouro: res?.logradouro,
               Complemento: res?.complemento,
@@ -186,27 +168,6 @@ export class ModalUnidadesComponent implements OnInit {
               Estado: res?.uf,
             });
           }
-
-          /*this.opcoesEstados.forEach((estado: any) => {
-            if(estado.split(' - ')[1] === res?.uf) {
-
-              if(estado.split(' - ')[1] !== 'RJ') {
-                this.util.openAlertModal('320px', 'warning-modal', 'Estado não habilitado', 'No momento o sistema só está habilitado para aceitar unidades que sejam do Estado do Rio de Janeiro!');
-                return;
-              }
-
-              if(this.formUnidade.get('preenchimentoAutomatico')?.value) {
-
-                this.formUnidade.patchValue({
-                  logradouro: res?.logradouro,
-                  complemento: res?.complemento,
-                  bairro: res?.bairro,
-                  municipio: res?.localidade,
-                  estado: estado,
-                });
-              }
-            }
-          });*/
         },
         error: () => {
           this.util.openAlertModal('320px', 'warning-modal', 'Falha ao buscar dados', 'Houve uma falha ao buscar os dados de endereço referente ao cep informado. Por favor, tente novamente e caso o problema persista entre em contato via e-mail: sistemas.supinf@saude.rj.gov.br!');
@@ -220,7 +181,6 @@ export class ModalUnidadesComponent implements OnInit {
       idUser: this.auth.getToken(),
       data: this.formUnidade.value,
     }
-
     this.util.loading.next(true);
 
     if(await this.validateCNES(request)) {
@@ -232,7 +192,7 @@ export class ModalUnidadesComponent implements OnInit {
           return;
         }else {
           await this.submitAtualizaUnidade(request);
-          this.util.openAlertModal("320px", "success-modal", "Atualização de dados realizada!", `Os dados da unidade ${this.formUnidade.get(`nomeUnidade`)?.value}, foram atualizados no sistema!`);
+          this.util.openAlertModal("320px", "success-modal", "Atualização de dados realizada!", `Os dados da unidade ${this.formUnidade.get(`Nome`)?.value}, foram atualizados no sistema!`);
           this.closeModal(1);
           return;
         }
@@ -261,15 +221,16 @@ export class ModalUnidadesComponent implements OnInit {
   submitAtualizaUnidade(request: any): Promise<any> {
     return new Promise(
       (resolve, reject): void => {
-
-        this.unidadeService.atualizarUnidade(request).subscribe({
+        request.data.Id = this.dataModal?.idRequest;
+        this.unidadeService.atualizarUnidade(request.data).subscribe({
           next: () => {
             this.util.loading.next(false);
+            // TODO: Depois de gravar, precisa recarregar a tela
             resolve(true);
           },
           error: () => {
             this.util.loading.next(false);
-            this.util.openAlertModal("320px", "error-modal", "Erro ao atualizar unidade", `Houve um erro ao tentar atualizar os dados da unidade ${this.formUnidade.get(`nomeUnidade`)?.value} em nossa base de dados! Por favor, tente novamente! Caso o problema persista, entre em contato via e-mail: sistemas.supinf@saude.rj.gov.br`);
+            this.util.openAlertModal("320px", "error-modal", "Erro ao atualizar unidade", `Houve um erro ao tentar atualizar os dados da unidade ${this.formUnidade.get(`Nome`)?.value} em nossa base de dados! Por favor, tente novamente! Caso o problema persista, entre em contato via e-mail: sistemas.supinf@saude.rj.gov.br`);
             reject(false);
           },
         })

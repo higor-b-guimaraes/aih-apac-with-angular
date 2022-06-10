@@ -181,12 +181,9 @@ export class TabelaFaixasPendentesComponent implements OnInit {
   private getFaixasPendentes = new Subject<any>()
 
   constructor(private util: UtilService, private analisarFaixasService: AnalisarFaixasService, private cdRef: ChangeDetectorRef) {
-
     this.faixaPendenteModel = [...this.data]; // Após API implementada, apagar essa linha porque aqui é dado mocado
-
     this.getFaixasPendentes.subscribe({
       next: async (request) => {
-
         //Remover esse bloco quando foi implementar a API
         this.dataSource = new MatTableDataSource(this.faixaPendenteModel);
         this.dataSource.paginator = this.paginator;
@@ -208,26 +205,21 @@ export class TabelaFaixasPendentesComponent implements OnInit {
       },
       error: () => {this.util.loading.next(false)}
     })
-
     let request = {
       pageIndex: (this.dataSource?.paginator?.pageIndex) ? this.dataSource?.paginator?.pageIndex : 0 ,
       pageSize: (this.dataSource?.paginator?.pageSize) ? this.dataSource?.paginator?.pageSize : 5 ,
     }
-
     this.getFaixasPendentes.next(request);
   }
 
   autorizarFaixa(faixa: any) {
-
     let elemento: FaixaPendente = faixa;
     this.util.loading.next(true);
-
     this.analisarFaixasService.postAutorizarFaixa(elemento).subscribe({
       next: (res: any) => {
         /* Implementar Modal de faixa autorizada com sucesso! */
         this.util.loading.next(false);
       },
-
       error: () => {
         /* Implementar Modal de erro de solicitação! */
         this.util.loading.next(false)
@@ -236,16 +228,13 @@ export class TabelaFaixasPendentesComponent implements OnInit {
   }
 
   negarFaixa(faixa: any) {
-
     let elemento: FaixaPendente = faixa;
     this.util.loading.next(true);
-
     this.analisarFaixasService.deleteNegarFaixa(elemento).subscribe({
       next: (res: any) => {
         /* Implementar Modal de faixa negada com sucesso! */
         this.util.loading.next(false);
       },
-
       error: () => {
         /* Implementar Modal de erro de solicitação! */
         this.util.loading.next(false)
@@ -254,14 +243,11 @@ export class TabelaFaixasPendentesComponent implements OnInit {
   }
 
   getDadosPorPagina() {
-
     this.util.loading.next(true);
-
     let request = {
       pageIndex: (this.dataSource?.paginator?.pageIndex) ? this.dataSource?.paginator?.pageIndex : 0 ,
       pageSize: (this.dataSource?.paginator?.pageSize) ? this.dataSource?.paginator?.pageSize : 5 ,
     }
-
     this.getFaixasPendentes.next(request);
   }
 

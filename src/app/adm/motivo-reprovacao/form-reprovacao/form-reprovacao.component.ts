@@ -68,9 +68,9 @@ export class FormReprovacaoComponent implements OnInit {
         data: {
           idUser: this.auth.getId(),
           content: {
-            id: data.id,
-            motivoReprovacao: data.motivoReprovacao,
-            status: data.status,
+            Id: data.Id,
+            Motivo: data.Motivo,
+            Status: data.Status,
           }
         }
       });

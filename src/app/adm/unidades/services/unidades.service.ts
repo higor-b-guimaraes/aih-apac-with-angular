@@ -11,26 +11,26 @@ export class UnidadesService {
   constructor(private http: HttpClient) { }
 
   checksHasUnit(request: {token:string}) {
-    return this.http.get(`${environment.BASE_URL}Unidades?token=${request.token}`);
+    return this.http.get(`${environment.BASE_URL}Unidades/listaUnidades`);
   }
 
   salvarUnidade(request: any) {
     return this.http.post(`${environment.BASE_URL}Unidades/novaUnidade`, request);
   }
   atualizarUnidade(request: any) {
-    return this.http.put(`${environment.BASE_URL}Unidade`, request);
+    return this.http.put(`${environment.BASE_URL}Unidades/gravarUnidade`, request);
   }
 
-  desativarUnidade(request: {idUser: number, idRequest: number}) {
-    return this.http.put(`${environment.API}desativaUnidade`, request);
+  desativarUnidade(request: {idRequest: number}) {
+    return this.http.delete(`${environment.BASE_URL}Unidades/desativarUnidade?id=${request.idRequest}`);
   }
 
-  getUnidades(request: {token: any}) {
-    return this.http.get(`${environment.BASE_URL}Unidades?token=${request.token}`);
+  getUnidades() {
+    return this.http.get(`${environment.BASE_URL}Unidades/listaUnidades`);
   }
 
   getUnidade(request: {idUser:any, idRequest: number}) {
-    return this.http.get(`${environment.API}unidade`, {params: request});
+    return this.http.get(`${environment.BASE_URL}Unidades/unidade/${request.idRequest}`);
   }
 
   getEstados() {

@@ -15,14 +15,18 @@ import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dial
 export class ModalCadastroReprovacaoComponent implements OnInit {
 
   isEdit:boolean = false;
-  statusMotivo: string[] = ['Ativo', 'Inativo'];
+  statusMotivo: any[] = [
+      {"codigo" : 1, "descricao": "Ativo"},
+      {"codigo": 0, "descricao": "Inativo",}
+  ];
   novoMotivo!: boolean;
 
   motivoReprovacaoModel!: MotivoReprovacao;
 
   formMotivoReprovacao: FormGroup = this.formBuilder.group({
-    motivoReprovacao: ['', [Validators.required]],
-    status: ['', Validators.required]
+    Id: [],
+    Motivo: ['', [Validators.required]],
+    Status: ['', Validators.required]
   });
 
   constructor(
@@ -32,22 +36,24 @@ export class ModalCadastroReprovacaoComponent implements OnInit {
     private auth: AuthService,
     private motivoReprovacaoService: MotivoReprovacaoService,
     private cdRef: ChangeDetectorRef) {
-
       if(dataModal) {
         this.motivoReprovacaoModel = {...dataModal.content};
         this.novoMotivo = false;
 
         this.formMotivoReprovacao.setValue({
-          motivoReprovacao: this.motivoReprovacaoModel.motivoReprovacao,
-          status: this.motivoReprovacaoModel.status,
+          Id: this.motivoReprovacaoModel.Id,
+          Motivo: this.motivoReprovacaoModel.Motivo,
+          Status: this.motivoReprovacaoModel.Status,
       });
     }else {
       this.novoMotivo = true;
     }
   }
-
   salvar() {
 
+  }
+
+  /*salvar() {
     if(this.formMotivoReprovacao.valid) {
       if((this.novoMotivo) && (this.novoMotivo === true)) {
 
@@ -70,8 +76,8 @@ export class ModalCadastroReprovacaoComponent implements OnInit {
 
       }else {
 
-        this.motivoReprovacaoModel.motivoReprovacao = this.formMotivoReprovacao.get('motivoReprovacao')?.value;
-        this.motivoReprovacaoModel.status = this.formMotivoReprovacao.get('status')?.value
+        this.motivoReprovacaoModel.motivoReprovacao = this.formMotivoReprovacao.get('Motivo')?.value;
+        this.motivoReprovacaoModel.status = this.formMotivoReprovacao.get('Status')?.value
 
         let request = {
           idUser: this.auth.getId(),
@@ -86,7 +92,7 @@ export class ModalCadastroReprovacaoComponent implements OnInit {
         })
       }
     }
-  }
+  }*/
 
   closeModal(): void {
     this.dialogRef.close(true);

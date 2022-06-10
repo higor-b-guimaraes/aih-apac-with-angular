@@ -9,70 +9,69 @@
   </div>
 
   <table mat-table [dataSource]="dataSource" matSort class="mat-elevation-z8 table">
-
-    <ng-container matColumnDef="nomeUnidade" >
+    <ng-container matColumnDef="Nome" >
       <th mat-header-cell class="header-table" *matHeaderCellDef mat-sort-header [style.placeContent]="'center'"> Nome da Unidade </th>
-      <td mat-cell [class]="getClass(row.Situacao)" *matCellDef="let row"> {{row.Nome}} </td>
+      <td mat-cell *matCellDef="let row" [class]="getClass(row.situacao)" > {{row.nome}} </td>
     </ng-container>
 
-    <ng-container matColumnDef="cnes" >
+    <ng-container matColumnDef="Cnes" >
       <th mat-header-cell class="header-table" *matHeaderCellDef mat-sort-header [style.placeContent]="'center'"> CNES da Unidade </th>
-      <td mat-cell [class]="getClass(row.Situacao)" *matCellDef="let row"> {{row.Cnes}} </td>
+      <td mat-cell [class]="getClass(row.situacao)" *matCellDef="let row"> {{row.cnes}} </td>
     </ng-container>
 
-    <ng-container matColumnDef="telefone" >
+    <ng-container matColumnDef="Telefone" >
       <th mat-header-cell class="header-table" *matHeaderCellDef mat-sort-header [style.placeContent]="'center'"> Telefone </th>
       <td mat-cell [class]="getClass(row.situacao)" *matCellDef="let row"> {{row.telefone}} </td>
     </ng-container>
 
-    <ng-container matColumnDef="logradouro" >
+    <ng-container matColumnDef="Logradouro" >
       <th mat-header-cell class="header-table" *matHeaderCellDef mat-sort-header [style.placeContent]="'center'"> Logradouro </th>
-      <td mat-cell [class]="getClass(row.Situacao)" *matCellDef="let row"> {{row.Logradouro}} </td>
+      <td mat-cell [class]="getClass(row.situacao)" *matCellDef="let row"> {{row.logradouro}} </td>
     </ng-container>
 
-    <ng-container matColumnDef="numero" >
+    <ng-container matColumnDef="Numero" >
       <th mat-header-cell class="header-table" *matHeaderCellDef mat-sort-header [style.placeContent]="'center'"> Número </th>
-      <td mat-cell [class]="getClass(row.Situacao)" *matCellDef="let row"> {{row.Numero}} </td>
+      <td mat-cell [class]="getClass(row.situacao)" *matCellDef="let row"> {{row.numero}} </td>
     </ng-container>
 
-    <ng-container matColumnDef="complemento" >
+    <ng-container matColumnDef="Complemento" >
       <th mat-header-cell class="header-table" *matHeaderCellDef mat-sort-header [style.placeContent]="'center'"> Complemento </th>
-      <td mat-cell [class]="getClass(row.Situacao)" *matCellDef="let row"> {{row.Complemento}} </td>
+      <td mat-cell [class]="getClass(row.situacao)" *matCellDef="let row"> {{row.complemento}} </td>
     </ng-container>
 
-    <ng-container matColumnDef="cep" >
+    <ng-container matColumnDef="Cep" >
       <th mat-header-cell class="header-table" *matHeaderCellDef mat-sort-header [style.placeContent]="'center'"> Cep </th>
-      <td mat-cell [class]="getClass(row.Situacao)" *matCellDef="let row"> {{row.Cep}} </td>
+      <td mat-cell [class]="getClass(row.situacao)" *matCellDef="let row"> {{row.cep}} </td>
     </ng-container>
 
-    <ng-container matColumnDef="bairro" >
+    <ng-container matColumnDef="Bairro" >
       <th mat-header-cell class="header-table" *matHeaderCellDef mat-sort-header [style.placeContent]="'center'"> Bairro </th>
-      <td mat-cell [class]="getClass(row.Situacao)" *matCellDef="let row"> {{row.Bairro}} </td>
+      <td mat-cell [class]="getClass(row.situacao)" *matCellDef="let row"> {{row.bairro}} </td>
     </ng-container>
 
-    <ng-container matColumnDef="municipio" >
+    <ng-container matColumnDef="Municipio" >
       <th mat-header-cell class="header-table" *matHeaderCellDef mat-sort-header [style.placeContent]="'center'"> Município </th>
-      <td mat-cell [class]="getClass(row.Situacao)" *matCellDef="let row"> {{row.Municipio.Nome}} </td>
+      <td mat-cell [class]="getClass(row.situacao)" *matCellDef="let row"> {{row.municipio}} </td>
     </ng-container>
 
-    <ng-container matColumnDef="estado" >
+    <ng-container matColumnDef="Estado" >
       <th mat-header-cell class="header-table" *matHeaderCellDef mat-sort-header [style.placeContent]="'center'"> Estado </th>
-      <td mat-cell [class]="getClass(row.Situacao)" *matCellDef="let row"> {{row.Municipio.Estado}} </td>
+      <td mat-cell [class]="getClass(row.situacao)" *matCellDef="let row"> {{row.estado}} </td>
     </ng-container>
 
     <ng-container matColumnDef="editarUnidade">
-      <th mat-header-cell class="header-table" *matHeaderCellDef [style]="{justify: 'end', width: '20px'}"> Editar Motivo </th>
-      <td mat-cell [class]="getClass(row.Situacao)" *matCellDef="let row">
+      <th mat-header-cell class="header-table" *matHeaderCellDef [style]="{justify: 'end', width: '20px'}"> Editar Unidade </th>
+      <td mat-cell [class]="getClass(row.situacao)" *matCellDef="let row">
         <button (click)=" editarUnidade(row)" class="btn btn-warning" mat-raised-button aria-label="Example icon button with a delete icon">
         <mat-icon> edit_note</mat-icon>
       </button> </td>
     </ng-container>
 
     <ng-container matColumnDef="desativarUnidade">
-      <th mat-header-cell class="header-table" *matHeaderCellDef [style]="{justify: 'end', width: '20px'}"> Ativar / Desativar Motivo </th>
-      <td mat-cell [class]="getClass(row.Situacao)" *matCellDef="let row">
-        <button (click)="ativarDesativarUnidade(row)" [class]="getBtnActiveDesative(row.Situacao)" mat-raised-button aria-label="Example icon button with a delete icon">
-        <mat-icon> {{row.Situacao === 'Ativo' ?  'check_circle': 'unpublished'}}</mat-icon>
+      <th mat-header-cell class="header-table" *matHeaderCellDef [style]="{justify: 'end', width: '20px'}"> Ativar / Desativar Unidade </th>
+      <td mat-cell [class]="getClass(row.situacao)" *matCellDef="let row">
+        <button (click)="ativarDesativarUnidade(row)" [class]="getBtnActiveDesative(row.situacao)" mat-raised-button aria-label="Example icon button with a delete icon">
+        <mat-icon> {{row.situacao === 0 ?  'check_circle': 'unpublished'}}</mat-icon>
       </button> </td>
     </ng-container>
 
