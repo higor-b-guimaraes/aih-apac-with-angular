@@ -109,18 +109,18 @@ export class ModalUnidadesComponent implements OnInit {
     return new Promise((resolve, reject) => {
       this.unidadeService.getCheckCNES(request).subscribe({
         next: (res: any) => {
-          console.log(res)
+/*           console.log(res)
           console.log(this.novoCadastro)
-          console.log(res.length)
+          console.log(res.length) */
           if (res) {
             if ((this.novoCadastro) && Object.keys(res).length > 0) {
               this.util.openAlertModal('320px', 'warning-modal', 'CNES já cadastrado', 'Este CNES já foi cadastrado em nossa base dedados');
-              this.formUnidade.patchValue({cnes: ''});
+              this.formUnidade.patchValue({Cnes: ''});
               this.util.loading.next(false);
               resolve(false);
             } else if (res.length > 0 && (this.unidadeModel.id !== res?.id)) {
               this.util.openAlertModal('320px', 'warning-modal', 'CNES ao verificar CNES', 'Este CNES não pertence a unidade que está sendo atualizada!')
-              this.formUnidade.patchValue({cnes: ''});
+              this.formUnidade.patchValue({Cnes: ''});
               this.util.loading.next(false);
               resolve(false);
             };
