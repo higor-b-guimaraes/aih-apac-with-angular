@@ -40,6 +40,7 @@ export class ModalUnidadesComponent implements OnInit {
     Bairro: ['', Validators.required],
     Municipio: ['', Validators.required],
     Estado: ['', Validators.required],
+    Situacao: ['']
   });
 
   constructor(
@@ -69,6 +70,7 @@ export class ModalUnidadesComponent implements OnInit {
             Bairro: res.bairro,
             Municipio: res.municipio,
             Estado: res.estado,
+            Situacao: res.situacao
           });
         this.novoCadastro = false;
         },
@@ -220,6 +222,7 @@ export class ModalUnidadesComponent implements OnInit {
     return new Promise(
       (resolve, reject): void => {
         request.data.Id = this.dataModal?.idRequest;
+        console.log(request.data);
         this.unidadeService.atualizarUnidade(request.data).subscribe({
           next: () => {
             this.util.loading.next(false);

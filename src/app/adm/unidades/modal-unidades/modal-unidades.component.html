@@ -57,6 +57,10 @@
         <input (focusout)="getCep()" matInput formControlName="Cep"mask="00000-000">
         <mat-error *ngIf="formUnidade.get('Cep')?.hasError('required')">É preciso informar o cep da unidade</mat-error>
       </mat-form-field>
+
+      <mat-form-field appearance="outline"  class="col-md-3 hidden" style="display: none">
+        <input matInput formControlName="Situacao">
+      </mat-form-field>
     </div>
 
     <div class="row">
