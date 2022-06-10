@@ -134,6 +134,7 @@ error: () => {this.util.loading.next(false)}*/
         }
       });
       dialogRef.afterClosed().subscribe(result => {
+        /* location.reload(); */
       });
     }else {
       const dialogRef = this.modal.open(ModalUnidadesComponent, {
@@ -142,7 +143,6 @@ error: () => {this.util.loading.next(false)}*/
       });
 
       dialogRef.afterClosed().subscribe(result => {
-        console.log(result)
       });
     }
   }
@@ -215,7 +215,7 @@ error: () => {this.util.loading.next(false)}*/
     if ( row?.situacao == 1 ) {
       this.unidadeService.desativarUnidade(request).subscribe({
         next: () => {
-          this.util.openAlertModal("320px", "success-modal", "Unidade desativada!", `A unidade ${row.nome}, foi desativada no sistema!`);
+          this.util.openAlertModal("320px", "success-modal", "Unidade desativada!", `A unidade ${row.nome}, foi desativada no sistema!`).then((update) => {if(update) location.reload()});
         },
         error: () => {
           this.util.openAlertModal("320px", "error-modal", "Erro ao desativar a unidade", `Houve um erro ao tentarmos desativar a unidade ${row.nome}! Por favor, tente novamente! Caso o problema persista, entre em contato via e-mail: sistemas.supinf@saude.rj.gov.br`);
@@ -224,7 +224,7 @@ error: () => {this.util.loading.next(false)}*/
     } else {
       this.unidadeService.desativarUnidade(request).subscribe({
         next: () => {
-          this.util.openAlertModal("320px", "success-modal", "Unidade reativada!", `A unidade ${row.nome}, foi reativada no sistema!`);
+          this.util.openAlertModal("320px", "success-modal", "Unidade reativada!", `A unidade ${row.nome}, foi reativada no sistema!`).then((update) => {if(update) location.reload()});
         },
         error: () => {
           this.util.openAlertModal("320px", "error-modal", "Erro ao reativar a unidade", `Houve um erro ao tentarmos reativar a unidade ${row.nome}! Por favor, tente novamente! Caso o problema persista, entre em contato via e-mail: sistemas.supinf@saude.rj.gov.br`);

@@ -187,12 +187,12 @@ export class ModalUnidadesComponent implements OnInit {
       if(this.formUnidade.valid) {
         if(this.novoCadastro === true) {
           await this.submitNovaUnidade(this.formUnidade.value);
-          this.util.openAlertModal("320px", "success-modal", "Unidade cadastrada!", `A unidade ${this.formUnidade.get(`Nome`)?.value}, foi cadastrado com sucesso no sistema!`);
+          this.util.openAlertModal("320px", "success-modal", "Unidade cadastrada!", `A unidade ${this.formUnidade.get(`Nome`)?.value}, foi cadastrado com sucesso no sistema!`).then((update) => {if(update) location.reload()});
           this.closeModal(1);
           return;
         }else {
           await this.submitAtualizaUnidade(request);
-          this.util.openAlertModal("320px", "success-modal", "Atualização de dados realizada!", `Os dados da unidade ${this.formUnidade.get(`Nome`)?.value}, foram atualizados no sistema!`);
+          this.util.openAlertModal("320px", "success-modal", "Atualização de dados realizada!", `Os dados da unidade ${this.formUnidade.get(`Nome`)?.value}, foram atualizados no sistema!`).then((update) => {if(update) location.reload()});
           this.closeModal(1);
           return;
         }
