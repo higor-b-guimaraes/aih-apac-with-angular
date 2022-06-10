@@ -162,7 +162,7 @@ export class ModalUsuariosComponent implements OnInit {
   }
 
   checkCPF() {
-    let cpf: any = this.util.checkOficio(this.formUsuario, 'Cpf');
+    let cpf: any = this.util.checkCPF(this.formUsuario, 'Cpf');
     this.cpfValido =  cpf?.isValid;
     this.msgErroCPF = cpf?.msg;
   }

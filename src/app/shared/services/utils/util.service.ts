@@ -42,6 +42,8 @@ export class UtilService {
   }
 
   checkOficio(oficioField: FormGroup, nameField: string): any {
+
+    console.log(oficioField?.get(`${nameField}`))
     if(oficioField?.get(`${nameField}`)?.touched && oficioField?.controls[`${nameField}`].getError('maxContentSize')) {
       return {
         isValid: false,
