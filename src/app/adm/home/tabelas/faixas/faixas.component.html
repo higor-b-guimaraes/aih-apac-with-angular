@@ -54,7 +54,7 @@
 
   <ng-container matColumnDef="oficioAutorizacao">
     <th mat-header-cell class="header-table" *matHeaderCellDef mat-sort-header> Ofício de Autorização </th>
-    <td mat-cell [class]="getClass(row.status)" *matCellDef="let row"><a [href]="row.oficioAutorizacao" target="_blank">{{row.oficioAutorizacao? 'Ofício de Autorização' : ''}}</a></td>
+    <td mat-cell [class]="getClass(row.status)" *matCellDef="let row"><a href="javascript:void(0)">{{row.oficioAutorizacao? 'Ofício de Autorização' : ''}}</a></td>
   </ng-container>
 
   <tr mat-header-row *matHeaderRowDef="colunas"></tr>

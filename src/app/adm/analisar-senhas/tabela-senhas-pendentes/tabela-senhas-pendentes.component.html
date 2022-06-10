@@ -1,0 +1,61 @@
+<div class="container-table">
+
+  <div class="container-funcionalidades">
+    <mat-form-field appearance="standard">
+      <mat-label>Pesquisar</mat-label>
+      <input matInput (keyup)="applyFilter($event)" placeholder="Informe um filtro" #input>
+    </mat-form-field>
+  </div>
+
+  <table mat-table [dataSource]="dataSource" matSort class="mat-elevation-z8 table">
+
+    <ng-container matColumnDef="dtSolicitacao">
+      <th mat-header-cell class="header-table" *matHeaderCellDef mat-sort-header [style.placeContent]="'center'"> Data da Solicitação </th>
+      <td mat-cell *matCellDef="let elemento" class="body-table"> {{elemento.dtSolicitacao}} </td>
+    </ng-container>
+
+    <ng-container matColumnDef="usuario">
+      <th mat-header-cell class="header-table" *matHeaderCellDef mat-sort-header [style.placeContent]="'center'"> Usuário Solicitante</th>
+      <td mat-cell *matCellDef="let elemento" class="body-table"> {{elemento.usuario}} </td>
+    </ng-container>
+
+    <ng-container matColumnDef="municipioUnidade">
+      <th mat-header-cell class="header-table" *matHeaderCellDef mat-sort-header [style.placeContent]="'center'"> Município / Unidade </th>
+      <td mat-cell *matCellDef="let elemento" class="body-table"> {{elemento.municipioUnidade}} </td>
+    </ng-container>
+
+    <ng-container matColumnDef="tipoSolicitacao">
+      <th mat-header-cell class="header-table" *matHeaderCellDef mat-sort-header [style.placeContent]="'center'"> Tipo de Solicitação </th>
+      <td mat-cell *matCellDef="let elemento" class="body-table"> {{elemento.tipoSolicitacao}} </td>
+    </ng-container>
+
+    <ng-container matColumnDef="oficio">
+      <th mat-header-cell class="header-table" *matHeaderCellDef mat-sort-header [style.placeContent]="'center'"> Competência </th>
+      <td mat-cell *matCellDef="let elemento" class="body-table"> <a href="javascript:void(0)">{{elemento.oficio}}</a></td>
+    </ng-container>
+
+    <ng-container matColumnDef="autorizarAlterarSenha">
+      <th mat-header-cell class="header-table" *matHeaderCellDef [style]="{justify: 'end', width: '20px'}"> Aprovar Alteraçã de Senha </th>
+        <td mat-cell *matCellDef="let elemento" class="body-table">
+        <button (click)="autorizarAlterarSenha(elemento)" class=" btn btn-success" mat-raised-button>
+        <mat-icon> check_circle_outline </mat-icon>
+      </button> </td>
+    </ng-container>
+
+    <ng-container matColumnDef="negarAlterarSenha">
+      <th mat-header-cell class="header-table" *matHeaderCellDef [style]="{justify: 'end', width: '20px'}"> Reprovar Alteraçã de Senha </th>
+      <td mat-cell *matCellDef="let elemento" class="body-table">
+        <button (click)="negarAlterarSenha(elemento)" class="btn btn-danger" mat-raised-button>
+        <mat-icon> remove_circle </mat-icon>
+      </button> </td>
+    </ng-container>
+
+    <tr mat-header-row *matHeaderRowDef="tableHeader"></tr>
+    <tr mat-row *matRowDef="let elemento; columns: tableHeader;"></tr>
+    <tr class="mat-row" *matNoDataRow>
+      <td class="mat-cell" colspan="9" class="body-table">Nenhum valor encontrado para o filtro: "{{input.value}}"</td>
+    </tr>
+  </table>
+
+  <mat-paginator (page)="getDadosPorPagina()" [pageSizeOptions]="[5, 10, 100]" aria-label="Select page of users"></mat-paginator>
+</div>

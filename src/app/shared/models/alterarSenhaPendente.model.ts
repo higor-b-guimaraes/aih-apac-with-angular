@@ -1,12 +1,10 @@
 
-export interface FaixaPendente {
-  Id?: number;
+export interface AlterarSenhaPendente {
+  id?: number;
   dtSolicitacao: string,
   usuario: string,
   municipioUnidade: string,
   tipoSolicitacao: string,
-  tipoDeFaixa: string,
-  qtdFaixasSolicitadas: string,
-  competencia: string,
+  oficio: string,
 }
 /* javascript:void(0) */

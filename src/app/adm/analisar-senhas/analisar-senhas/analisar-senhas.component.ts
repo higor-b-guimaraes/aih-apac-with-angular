@@ -7,6 +7,8 @@ import { Component, OnInit } from '@angular/core';
 })
 export class AnalisarSenhasComponent implements OnInit {
 
+  temDados: boolean = true;
+
   constructor() { }
 
   ngOnInit(): void {
