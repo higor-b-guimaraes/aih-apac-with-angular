@@ -142,6 +142,7 @@ error: () => {this.util.loading.next(false)}*/
       });
 
       dialogRef.afterClosed().subscribe(result => {
+        console.log(result)
       });
     }
   }
