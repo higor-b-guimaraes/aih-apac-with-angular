@@ -109,9 +109,12 @@ export class ModalUnidadesComponent implements OnInit {
     return new Promise((resolve, reject) => {
       this.unidadeService.getCheckCNES(request).subscribe({
         next: (res: any) => {
+<<<<<<< HEAD
 /*           console.log(res)
           console.log(this.novoCadastro)
           console.log(res.length) */
+=======
+>>>>>>> fa908a70f4d368a99ddd2a4388c0ce6192659039
           if (res) {
             if ((this.novoCadastro) && Object.keys(res).length > 0) {
               this.util.openAlertModal('320px', 'warning-modal', 'CNES já cadastrado', 'Este CNES já foi cadastrado em nossa base dedados');
