@@ -203,9 +203,7 @@ export class TabelaFaixasPendentesComponent implements OnInit {
         // Desbloquear essa parte quando o backend estiver implementado
          this.analisarFaixasService.getFaixasPendentes(request).subscribe({
           next: (res:any) => {
-            this.faixaPendenteModel = [...res.bodyTable];
-            this.lenght = res.tableLength;
-            this.dataSource = new MatTableDataSource(this.faixaPendenteModel);
+            this.dataSource = new MatTableDataSource(res);
             this.dataSource.paginator = this.paginator;
             this.dataSource.sort = this.sort;
             this.util.loading.next(false);
