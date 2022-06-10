@@ -57,13 +57,13 @@ export class TabelaUnidadesComponent implements OnInit {
     this.util.loading.next(true);
     this.unidadeService.getUnidades().subscribe({
       next: (data) => {
-        console.log(data);
+        /* console.log(data); */
         this.dataSource = new MatTableDataSource<Unidade>(data as any);
         this.dataSource.paginator = this.paginator;
         this.dataSource.sort = this.sort;
         this.util.loading.next(false);
       },error: (err) => {
-        console.error(err);
+        /* console.error(err); */
         this.util.loading.next(false);
       }
     })

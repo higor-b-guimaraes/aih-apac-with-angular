@@ -47,18 +47,19 @@ export class UnidadesComponent implements OnInit {
 
   getVerifyHasUser(): Promise<number> {
     return new Promise((resolve, reject) => {
+
       let request = {
         token: this.auth.getToken()
       }
+
       this.subVerifyHasUnit = this.unitService.checksHasUnit(request).subscribe({
         next: (res: any) => {
-
-          this.util.loading.next(false);
           (res?.length > 0) ? resolve(1) : resolve(2);
+          this.util.loading.next(false);
         },
         error: (erro) => {
-          this.util.loading.next(false);
           reject(0);
+          this.util.loading.next(false);
         },
       })
     })
