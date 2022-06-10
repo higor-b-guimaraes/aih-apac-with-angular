@@ -195,13 +195,13 @@ export class TabelaFaixasPendentesComponent implements OnInit {
     this.getFaixasPendentes.subscribe({
       next: async (request) => {
         //Remover esse bloco quando foi implementar a API
-        this.dataSource = new MatTableDataSource(this.faixaPendenteModel);
+        /*this.dataSource = new MatTableDataSource(this.faixaPendenteModel);
         this.dataSource.paginator = this.paginator;
         this.dataSource.sort = this.sort;
-        this.util.loading.next(false);
+        this.util.loading.next(false);*/
 
         // Desbloquear essa parte quando o backend estiver implementado
-        /* this.analisarFaixasService.getFaixasPendentes(request).subscribe({
+         this.analisarFaixasService.getFaixasPendentes(request).subscribe({
           next: (res:any) => {
             this.faixaPendenteModel = [...res.bodyTable];
             this.lenght = res.tableLength;
@@ -211,7 +211,7 @@ export class TabelaFaixasPendentesComponent implements OnInit {
             this.util.loading.next(false);
           },
           error: (e) => {this.util.loading.next(false)}
-        }) */
+        })
       },
       error: () => {this.util.loading.next(false)}
     })

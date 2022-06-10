@@ -11,7 +11,7 @@ export class AnalisarFaixasService {
   constructor(private http: HttpClient) { }
 
   getFaixasPendentes(request: {pageIndex: number, pageSize: number}) {
-    return this.http.get(`${environment.BASE_URL}faixaPendentes`, {params: request});
+    return this.http.get(`${environment.BASE_URL}Solicitacao/listarSolicitacoes`, {params: request});
     /* Envio o índice atual da página e qual o tamanho da lista que espero receber */
     /* Primeira requisição ao servidor envia por padrão o índice 0 e o tamanho minimo de 5 elementos na lista. */
   }
