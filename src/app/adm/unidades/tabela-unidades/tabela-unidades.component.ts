@@ -57,6 +57,8 @@ export class TabelaUnidadesComponent implements OnInit {
     this.util.loading.next(true);
     this.unidadeService.getUnidades().subscribe({
       next: (data) => {
+        console.log(this.paginator);
+        console.log(this.sort);
         /* console.log(data); */
         this.dataSource = new MatTableDataSource<Unidade>(data as any);
         this.dataSource.paginator = this.paginator;
@@ -141,7 +143,6 @@ error: () => {this.util.loading.next(false)}*/
         width: '100%',
         panelClass: 'common-modal',
       });
-
       dialogRef.afterClosed().subscribe(result => {
       });
     }
@@ -159,28 +160,23 @@ error: () => {this.util.loading.next(false)}*/
     switch(situacao) {
       case 1:
         return 'alert-success'
-      break
-
+        break
       case 0:
         return 'alert-danger';
-      break;
-
+        break;
       default:
         return ''
     }
   }
 
   getBtnActiveDesative(status: string) {
-
     switch(status) {
       case 'Ativo':
         return 'btn btn-success'
       break
-
       case 'Inativo':
         return 'btn btn-danger';
       break;
-
       default:
         return ''
     }
@@ -188,7 +184,6 @@ error: () => {this.util.loading.next(false)}*/
 
   getNewElements() {
     this.util.loading.next(true);
-
     let data = {
       id: this.auth.getId(),
       pageIndex: (this.dataSource?.paginator?.pageIndex) ? this.dataSource?.paginator?.pageIndex : 0 ,
