@@ -27,7 +27,7 @@ export class TabelaUsuariosComponent implements OnInit {
   columns: string[] = [];
   usuarios: Usuario[] = [];
   dataSource!: any
-  lenght!: number;
+  tamanhoPagina!: number;
 
   @ViewChild(MatPaginator) paginator!: MatPaginator;
   @ViewChild(MatSort) sort!: MatSort;
@@ -38,22 +38,17 @@ export class TabelaUsuariosComponent implements OnInit {
     private auth: AuthService,
     private util: UtilService,
     public modal: MatDialog,
-    private cdRef: ChangeDetectorRef
-  ) {
+    private cdRef: ChangeDetectorRef) {
+
     this.columns = [
-      "tipoUnidade",
-      "perfil",
-      "situacao",
-      "nome",
+      "codigoPerfil",
+      "codigoSituacao",
+      "nomeUsuario",
       "cpf",
-      "nickname",
+      "nomeSocial",
       "email",
       "telefone",
-      "oficioRequerido",
-      "aihComum",
-      "aihEletiva",
-      "apacComum",
-      "apacEletiva",
+      "oficio",
       "editarMotivos",
       "desativarMotivos"
     ]
@@ -61,35 +56,31 @@ export class TabelaUsuariosComponent implements OnInit {
 
   ngOnInit(): void {
     this.getUsuarios.subscribe({
-      next: (data) => {
-        this.usuariosService.getUsuarios(data).subscribe({
-          next: (res:any) => {
-            this.dataSource = new MatTableDataSource(res);
-            this.dataSource.paginator = this.paginator;
-            this.dataSource.sort = this.sort;
-            this.util.loading.next(false);
+      next: (pagina: any) => {
 
-            /*this.columns = [...res.headerTable];
-            this.usuarios = [...res.bodyTable];
-            this.lenght = res.tableLength;
-
+        this.usuariosService.getUsuarios(pagina).subscribe({
+          next: (res: any) => {
+            this.usuarios = [...res];
+            console.log(pagina);
             this.dataSource = new MatTableDataSource(this.usuarios);
             this.dataSource.paginator = this.paginator;
             this.dataSource.sort = this.sort;
-            this.util.loading.next(false);*/
+            this.util.loading.next(false);
           },
+
           error: (e) => {this.util.loading.next(false)}
         })
       },
       error: () => {this.util.loading.next(false)}
     })
 
-    /*let data = {
-      id: this.auth.getId(),
+    let pagina = {
+      paginaIndex: 10,
+      qtdItensPagina: 0,
     }
 
-    this.getUsuarios.next(data);
-    this.util.loading.next(true);*/
+    this.getUsuarios.next(pagina);
+    this.util.loading.next(true);
   }
 
   abrirModalUsuario(usuario?: number) {
@@ -126,14 +117,14 @@ export class TabelaUsuariosComponent implements OnInit {
     this.abrirModalUsuario(usuario.id)
   }
 
-  getClass(situacao: string) {
+  classUsuarioAtivadoDesativado(situacao: number) {
 
     switch(situacao) {
-      case 'Ativo':
+      case 1:
         return 'alert-success'
       break
 
-      case 'Inativo':
+      case 2:
         return 'alert-danger';
       break;
 
@@ -142,15 +133,45 @@ export class TabelaUsuariosComponent implements OnInit {
     }
   }
 
-  getBtnActiveDesative(status: string) {
+  btnUsuarioAtivadoDesativado(status: number) {
 
     switch(status) {
-      case 'Ativo':
-        return 'btn btn-success'
+      case 1:
+        return 'btn btn-danger'
       break
 
-      case 'Inativo':
-        return 'btn btn-danger';
+      case 2:
+        return 'btn btn-success';
+      break;
+
+      default:
+        return ''
+    }
+  }
+
+  tipoPerfil(codigo: number) {
+    switch(codigo) {
+      case 1:
+        return 'Administrador'
+      break
+
+      case 2:
+        return 'Autorizador';
+      break;
+
+      default:
+        return 'Operador'
+    }
+  }
+
+  tipoSituacao(codigo: number) {
+    switch(codigo) {
+      case 1:
+        return 'Ativo'
+      break
+
+      case 2:
+        return 'Inativo';
       break;
 
       default:
@@ -159,15 +180,14 @@ export class TabelaUsuariosComponent implements OnInit {
   }
 
   getNewElements() {
-    this.util.loading.next(true);
 
-    let data = {
-      id: this.auth.getId(),
-      pageIndex: (this.dataSource?.paginator?.pageIndex) ? this.dataSource?.paginator?.pageIndex : 0 ,
-      pageSize: (this.dataSource?.paginator?.pageSize) ? this.dataSource?.paginator?.pageSize : 0 ,
+    let pagina = {
+      pageIndex: this.dataSource?.paginator?.pageIndex,
+      pageSize: this.dataSource?.paginator?.pageSize,
     }
 
-    this.getUsuarios.next(data);
+    this.getUsuarios.next(pagina);
+    this.util.loading.next(true);
   }
 
   applyFilter(event: Event) {

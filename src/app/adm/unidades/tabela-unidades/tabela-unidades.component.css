@@ -1,14 +1,3 @@
-/* .container-table { */
-  /*   display: block;
-    padding: 0px 20px;
-    height: 80vh;
-    overflow-x: auto;
-    box-sizing: border-box; */
-/*     padding: 0px 20px;
-    height: 80vh;
-    overflow-x: auto;
-    box-sizing: border-box;
-  } */
 
   .container-table {
     padding: 0px 20px;
@@ -34,15 +23,10 @@
   }
 
   .table {
-    /* width: 100%;
-    height: 60vh;
-    display: block !important;
-    contain: content;
-    overflow: inherit; */
     width: 100%;
     contain: content;
     overflow: inherit;
-    display: flow-root;
+    display: inline;
   }
 
   th.mat-header-cell, td.mat-cell, td.mat-footer-cell {

@@ -6,60 +6,27 @@
     <legend>Informações de Controle</legend>
 
     <div class="row">
-        <mat-form-field appearance="outline" class="col-md-3">
-          <mat-label>Tipo de Unidade</mat-label>
-          <mat-select
-          formControlName="CodigoTipoSolicitante">
-            <mat-option *ngFor="let tipoUnidade of opcoesTipoUnidade" [value]="tipoUnidade.id" required (focusout)="getMunicipioOuUnidade()">
-              {{tipoUnidade.descricao}}
-            </mat-option>
-          </mat-select>
-          <mat-error *ngIf="formUsuario.get('CodigoTipoSolicitante')?.hasError('required')">É preciso selecionar o tipo de unidade do usuário</mat-error>
-        </mat-form-field>
+      <mat-form-field appearance="outline" class="col-md-2">
+        <mat-label>Perfil</mat-label>
+        <mat-select
+        formControlName="codigoPerfil">
+          <mat-option *ngFor="let perfil of opcoesPerfil" [value]="perfil?.codigo" required>
+            {{perfil?.descricao}}
+          </mat-option>
+        </mat-select>
+        <mat-error *ngIf="formUsuario.get('codigoPerfil')?.hasError('required')">É preciso selecionar o perfil do usuário</mat-error>
+      </mat-form-field>
 
-        <mat-form-field appearance="outline" class="col-md-5" *ngIf="formUsuario.get('CodigoTipoSolicitante')?.value === 2">
-          <mat-label>Município</mat-label>
-          <mat-select
-          formControlName="CodigoMunicipio">
-            <mat-option *ngFor="let municipio of opcoesMunicipio" [value]="municipio['id']" required >
-              {{municipio['descricao'] + " - " + municipio['codigoIbge']}}
-            </mat-option>
-          </mat-select>
-          <mat-error *ngIf="formUsuario.get('CodigoMunicipio')?.hasError('required')">É preciso selecionar o município do usuário</mat-error>
-        </mat-form-field>
-
-        <mat-form-field appearance="outline" class="col-md-5" *ngIf="formUsuario.get('CodigoTipoSolicitante')?.value === 1">
-          <mat-label>Unidade</mat-label>
-          <mat-select
-          formControlName="CodigoUnidade">
-            <mat-option *ngFor="let unidades of opcoesUnidades" [value]="unidades.id" required >
-              {{unidades.nome}}
-            </mat-option>
-          </mat-select>
-          <mat-error *ngIf="formUsuario.get('CodigoUnidade')?.hasError('required')">É preciso selecionar a unidade do usuário</mat-error>
-        </mat-form-field>
-
-        <mat-form-field appearance="outline" class="col-md-2">
-          <mat-label>Perfil</mat-label>
-          <mat-select
-          formControlName="CodigoPerfil">
-            <mat-option *ngFor="let perfil of opcoesPerfil" [value]="perfil.id" required (focusout)="validaNecessidadeOficio()">
-              {{perfil.descricaoPerfil}}
-            </mat-option>
-          </mat-select>
-          <mat-error *ngIf="formUsuario.get('CodigoPerfil')?.hasError('required')">É preciso selecionar o perfil do usuário</mat-error>
-        </mat-form-field>
-
-        <mat-form-field appearance="outline" class="col-md-2">
-          <mat-label>Situação</mat-label>
-          <mat-select
-          formControlName="CodigoSituacao">
-            <mat-option *ngFor="let situacao of opcoesSituacao" [value]="situacao.codigo" required>
-              {{situacao.descricao}}
-            </mat-option>
-          </mat-select>
-          <mat-error *ngIf="formUsuario.get('CodigoSituacao')?.hasError('required')">É preciso selecionar a situação do usuário</mat-error>
-        </mat-form-field>
+      <mat-form-field appearance="outline" class="col-md-2">
+        <mat-label>Situação</mat-label>
+        <mat-select
+        formControlName="codigoSituacao">
+          <mat-option *ngFor="let situacao of opcoesSituacao" [value]="situacao.codigo" required>
+            {{situacao.descricao}}
+          </mat-option>
+        </mat-select>
+        <mat-error *ngIf="formUsuario.get('codigoSituacao')?.hasError('required')">É preciso selecionar a situação do usuário</mat-error>
+      </mat-form-field>
     </div>
   </fieldset>
 
@@ -69,49 +36,43 @@
     <div class="row">
       <mat-form-field appearance="outline"  class="col-md-6">
         <mat-label>Nome</mat-label>
-        <input matInput formControlName="Nome">
-        <mat-error *ngIf="formUsuario.get('Nome')?.hasError('required')">É preciso informar o nome do usuário</mat-error>
+        <input matInput formControlName="nomeUsuario">
+        <mat-error *ngIf="formUsuario.get('nomeUsuario')?.hasError('required')">É preciso informar o nome do usuário</mat-error>
       </mat-form-field>
 
-      <mat-form-field
-      appearance="outline"
-      class="col-md-3">
+      <mat-form-field appearance="outline" class="col-md-3">
         <mat-label>CPF</mat-label>
-        <input (focusout)="checkCPF()" matInput formControlName="Cpf" mask="000.000.000-00">
+        <input (focusout)="checkCPF()" matInput formControlName="cpf" mask="000.000.000-00">
         <mat-error class="error-access" *ngIf="!cpfValido">{{ msgErroCPF }}</mat-error>
       </mat-form-field>
     </div>
 
     <div class="row">
-      <mat-form-field appearance="outline"  class="col-md-6">
-          <mat-label>Nome de Social Usuário</mat-label>
-          <input matInput formControlName="Apelido">
-          <mat-error *ngIf="formUsuario.get('Apelido')?.hasError('required')">É preciso informar nome social</mat-error>
+      <mat-form-field appearance="outline" class="col-md-6">
+        <mat-label>Nome de Social Usuário</mat-label>
+        <input matInput formControlName="nomeSocial">
+        <mat-error *ngIf="formUsuario.get('nomeSocial')?.hasError('required')">É preciso informar nome social</mat-error>
       </mat-form-field>
 
-      <mat-form-field appearance="outline"  class="col-md-3">
-          <mat-label>E-mail</mat-label>
-          <input matInput formControlName="Email" >
-          <mat-error *ngIf="formUsuario.get('Email')?.hasError('required')">É preciso informar o e-mail do usuário</mat-error>
+      <mat-form-field appearance="outline" class="col-md-3">
+        <mat-label>E-mail</mat-label>
+        <input matInput formControlName="email" >
+        <mat-error *ngIf="formUsuario.get('email')?.hasError('required')">É preciso informar o e-mail do usuário</mat-error>
       </mat-form-field>
 
-      <mat-form-field appearance="outline"  class="col-md-3">
-          <mat-label>Telefone</mat-label>
-          <input matInput formControlName="Telefone" mask="(00) 0000-0000">
-          <mat-error *ngIf="formUsuario.get('Telefone')?.hasError('required')">É preciso informar o telefone do usuário</mat-error>
+      <mat-form-field appearance="outline" class="col-md-3">
+        <mat-label>Telefone</mat-label>
+        <input matInput formControlName="telefone" mask="(00) 0000-0000">
+        <mat-error *ngIf="formUsuario.get('telefone')?.hasError('required')">É preciso informar o telefone do usuário</mat-error>
       </mat-form-field>
     </div>
 
     <div class="row">
-        <mat-form-field appearance="outline" class="col-md-12" *ngIf="formUsuario.get('CodigoPerfil')?.value !== 1">
-          <ngx-mat-file-input
-          formControlName="Oficio"
-          placeholder="Ofício"
-          valuePlaceholder="Insira o ofício"
-          (change)="checkOficio()"></ngx-mat-file-input>
-          <mat-icon matSuffix>folder</mat-icon>
-          <mat-error class="error-access" *ngIf="!oficioValido">{{ msgErroOficio }}</mat-error>
-        </mat-form-field>
+      <mat-form-field appearance="outline" class="col-md-12" *ngIf="formUsuario.get('CodigoPerfil')?.value !== 1">
+        <ngx-mat-file-input formControlName="Oficio" placeholder="Ofício" valuePlaceholder="Insira o ofício" (change)="checkOficio()"></ngx-mat-file-input>
+        <mat-icon matSuffix>folder</mat-icon>
+        <mat-error class="error-access" *ngIf="!oficioValido">{{ msgErroOficio }}</mat-error>
+      </mat-form-field>
     </div>
   </fieldset>
 
@@ -119,32 +80,31 @@
     <legend>Faixas Pré-definidas</legend>
 
     <div class="row">
-        <mat-form-field appearance="outline"  class="col-md-3">
-          <mat-label>Qtd de Faixas AIH Comum</mat-label>
-          <input matInput formControlName="QtdAihComum" mask="999999">
-          <mat-error *ngIf="formUsuario.get('QtdAihComum')?.hasError('required')">É preciso informar a quantidade de faixas que deseja estabelecer para este usuário</mat-error>
-        </mat-form-field>
+      <mat-form-field appearance="outline"  class="col-md-3">
+        <mat-label>Qtd de Faixas AIH Comum</mat-label>
+        <input matInput formControlName="QtdAihComum" mask="999999">
+        <mat-error *ngIf="formUsuario.get('QtdAihComum')?.hasError('required')">É preciso informar a quantidade de faixas que deseja estabelecer para este usuário</mat-error>
+      </mat-form-field>
 
-        <mat-form-field appearance="outline"  class="col-md-3">
-          <mat-label>Qtd de Faixas AIH Eletiva</mat-label>
-          <input matInput formControlName="QtdAihEletiva" mask="999999">
-          <mat-error *ngIf="formUsuario.get('QtdAihEletiva')?.hasError('required')">É preciso informar a quantidade de faixas que deseja estabelecer para este usuário</mat-error>
-        </mat-form-field>
+      <mat-form-field appearance="outline"  class="col-md-3">
+        <mat-label>Qtd de Faixas AIH Eletiva</mat-label>
+        <input matInput formControlName="QtdAihEletiva" mask="999999">
+        <mat-error *ngIf="formUsuario.get('QtdAihEletiva')?.hasError('required')">É preciso informar a quantidade de faixas que deseja estabelecer para este usuário</mat-error>
+      </mat-form-field>
 
-        <mat-form-field appearance="outline"  class="col-md-3">
-          <mat-label>Qtd de Faixas APAC Comum</mat-label>
-          <input matInput formControlName="QtdApacComum" mask="999999">
-          <mat-error *ngIf="formUsuario.get('QtdApacComum')?.hasError('required')">É preciso informar a quantidade de faixas que deseja estabelecer para este usuário</mat-error>
-        </mat-form-field>
+      <mat-form-field appearance="outline"  class="col-md-3">
+        <mat-label>Qtd de Faixas APAC Comum</mat-label>
+        <input matInput formControlName="QtdApacComum" mask="999999">
+        <mat-error *ngIf="formUsuario.get('QtdApacComum')?.hasError('required')">É preciso informar a quantidade de faixas que deseja estabelecer para este usuário</mat-error>
+      </mat-form-field>
 
-        <mat-form-field appearance="outline"  class="col-md-3">
-          <mat-label>Qtd de Faixas AIH Eletiva</mat-label>
-          <input matInput formControlName="QtdApacEletiva" mask="999999">
-          <mat-error *ngIf="formUsuario.get('QtdApacEletiva')?.hasError('required')">É preciso informar a quantidade de faixas que deseja estabelecer para este usuário</mat-error>
-        </mat-form-field>
+      <mat-form-field appearance="outline"  class="col-md-3">
+        <mat-label>Qtd de Faixas AIH Eletiva</mat-label>
+        <input matInput formControlName="QtdApacEletiva" mask="999999">
+        <mat-error *ngIf="formUsuario.get('QtdApacEletiva')?.hasError('required')">É preciso informar a quantidade de faixas que deseja estabelecer para este usuário</mat-error>
+      </mat-form-field>
     </div>
   </fieldset>
-
 </form>
 
 <mat-dialog-actions align="end">

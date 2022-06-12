@@ -37,7 +37,7 @@ export class UsuariosComponent implements OnInit {
       panelClass: 'common-modal'});
 
     this.subModalResponse = dialogRef.afterClosed().subscribe(result => {
-      console.log(result)
+
       if(result === true) {
         this.hasUser = true;
       }else {

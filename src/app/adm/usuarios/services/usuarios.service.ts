@@ -1,3 +1,4 @@
+import { tap } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { environment } from 'src/environments/environment';
@@ -11,6 +12,24 @@ export class UsuariosService {
 
   constructor(private http: HttpClient) { }
 
+  getCountUsuarios() {
+    return this.http.get(`${environment.BASE_URL}Usuario/contarUsuarios`);
+  }
+
+  getUsuarios(pagina: {paginaIndex: number, qtdItensPagina: number}) {
+    return this.http.get(`${environment.BASE_URL}Usuario/listarUsuarios`, {params: pagina})
+  }
+
+  getFiltroUsuarios(filtro: any) {
+    return this.http.get(`${environment.BASE_URL}Usuario/filtroUsuarios`, {params: filtro})
+  }
+
+
+  getUsuarioTeste(id: number) {
+    return this.http.get(`${environment.BASE_URL}Usuario/usuario/${id}`)
+  }
+
+
   salvarUsuario(request: FormData) {
     return this.http.post(`${environment.BASE_URL}Usuario/gravarUsuario`, request);
   }
@@ -20,10 +39,6 @@ export class UsuariosService {
 
   desativarUsuario(request: {idUser: number, idRequest: number}) {
     return this.http.put(`${environment.API}desativaUsuario`, request);
-  }
-
-  getUsuarios(request: {idUser:any}) {
-    return this.http.get(`${environment.BASE_URL}Usuarios/listarUsuarios`);
   }
 
   getUsuario(request: {idUser:any, idRequest: number}) {

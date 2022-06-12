@@ -1,3 +1,4 @@
+import { AdmResponsavel } from './../../../shared/models/admResponsavel.model';
 
 import { UtilService } from './../../../shared/services/utils/util.service';
 import { ChangeDetectorRef, Component, Inject, OnInit } from '@angular/core';
@@ -29,36 +30,43 @@ export class ModalUsuariosComponent implements OnInit {
   msgErroOficio: string = "";
   readonly maxSize = 10485760;   //Max Filesize 10MB
 
-  usuarioModel!: Usuario;
-  municipioModel!: Municipio;
-  unidadePartialDataModel!: UnidadePartialData;
-  municipiosModel!: Municipio[];
+  opcoesPerfil: any[] = [
+    {
+      codigo: 1,
+      descricao: "Administrador"
+    },
+    {
+      codigo: 2,
+      descricao: "Autorizador"
+    },
+    {
+      codigo: 3,
+      descricao: "Operador"
+    }
+  ];
 
-  opcoesTipoUnidade: any;
-  opcoesPerfil: any;
-  opcoesMunicipio: any;
-  opcoesUnidades: any;
   opcoesSituacao: any[] = [
-    { "codigo": 1, "descricao": "Ativo"},
-    { "codigo": 0, "descricao": "Inativo"},
-  ]
+    {
+      codigo: 1,
+      descricao: "Ativo"
+    },
+    {
+      codigo: 0,
+      descricao: "Inativo"
+    }
+  ];
+
+  usuarioModel!: Usuario;
 
   formUsuario: FormGroup = this.formBuilder.group({
-    CodigoTipoSolicitante: ['', [Validators.required]],
-    CodigoMunicipio: ['', Validators.required],
-    CodigoUnidade: ['', Validators.required],
-    Cpf: ['', [this.validator.cpfValidator, Validators.required]],
-    Nome: ['', Validators.required],
-    Telefone: ['', Validators.required],
-    Email: ['', Validators.required],
-    CodigoPerfil: ['', Validators.required],
-    Apelido: ['', Validators.required],
-    CodigoSituacao: ['', Validators.required],
-    Oficio: [null, [Validators.required, FileValidator.maxContentSize(this.maxSize), this.validator.acceptTypeFileInput]],
-    QtdAihComum: ['', Validators.required],
-    QtdAihEletiva: ['', Validators.required],
-    QtdApacComum: ['', Validators.required],
-    QtdApacEletiva: ['', Validators.required],
+    codigoPerfil: ['', Validators.required],
+    codigoSituacao: ['', Validators.required],
+    nomeUsuario: ['', Validators.required],
+    cpf: ['', [this.validator.cpfValidator, Validators.required]],
+    nomeSocial: ['', Validators.required],
+    telefone: ['', Validators.required],
+    email: ['', Validators.required],
+    oficio: [null, [Validators.required, FileValidator.maxContentSize(this.maxSize), this.validator.acceptTypeFileInput]]
   });
 
   constructor(
@@ -75,35 +83,19 @@ export class ModalUsuariosComponent implements OnInit {
     if(this.dataModal?.idRequest) {
       this.usuariosService.getUsuario(this.dataModal).subscribe({
         next: (res: any) => {
-          var tipoUnidade;
-          if ( res?.codigoMunicipio ) {
-            tipoUnidade = 2;
-          } else {
-            tipoUnidade = 1;
-          }
-          this.formUsuario.setValue({
-            // tipoUnidade: (res?.unidade?.id) ? 'Unidade': 'Municipio',
-            // CodigoMunicipio: (res?.municipio?.id) ? res?.municipio?.nome : "",
-            // CodigoUnidade: (res?.unidade?.id) ? res?.unidade?.nome : "",
-            CodigoTipoSolicitante: tipoUnidade,
-            CodigoMunicipio: res?.codigoMunicipio,
-            CodigoUnidade: res?.codigoUnidade,
-            Cpf: res?.cpf,
-            Nome: res?.nome,
-            Telefone: res?.telefone,
-            Email: res?.email,
-            CodigoPerfil: res?.codigoPerfil,
-            Apelido: res?.apelido,
-            CodigoSituacao: res?.codigoSituacao,
-            Oficio: null,
-            QtdAihComum: res?.qtdAihComum,
-            QtdAihEletiva: res?.qtdAihEletiva,
-            QtdApacComum: res?.qtdApacComum,
-            QtdApacEletiva: res?.qtdApacEletiva,
+
+          this.usuarioModel = {...res}
+          this.formUsuario.patchValue({
+            codigoPerfil: res?.codigoPerfil,
+            codigoSituacao: res?.codigoSituacao,
+            nomeUsuario: res?.nome,
+            cpf: res?.cpf,
+            nomeSocial: res?.apelido,
+            telefone: res?.telefone,
+            email: res?.email,
+            oficio: null,
           });
 
-          this.getMunicipioOuUnidade();
-          this.validaNecessidadeOficio();
           this.novoCadastro = false;
         },
         error: () => {},
@@ -111,64 +103,16 @@ export class ModalUsuariosComponent implements OnInit {
     }else {
       this.novoCadastro = true;
     }
-
-    this.usuariosService.getTipoUnidade().subscribe( (data) => {
-      console.log(data);
-      this.opcoesTipoUnidade = data
-    });
-
-    this.usuariosService.getTipoPerfil().subscribe( (data) => {
-      console.log(data);
-      this.opcoesPerfil = data;
-    })
-
-    this.usuariosService.getMunicipios().subscribe( (data) => {
-      console.log(data);
-      this.opcoesMunicipio = data;
-    })
-
-    this.usuariosService.getUnidades().subscribe( (data) => {
-      console.log(data);
-      this.opcoesUnidades = data;
-    })
-  }
-
-  getMunicipioOuUnidade() {
-    /*let request = {
-      idUser: this.auth.getId(),
-      tipoSolicitacao: this.formUsuario.get('tipoUnidade')?.value,
-    }
-
-    this.usuariosService.getMunicipiosOuMunicipios(request).subscribe({
-      next: async (data: any) => {
-          this.municipiosModel = await [...data];
-      },
-      error: (e) => console.log(e),
-    })*/
-
-    if(this.formUsuario.get('CodigoTipoSolicitante')?.value === 2) {
-      this.formUsuario.get('CodigoUnidade')?.clearValidators();
-      this.formUsuario.get('CodigoUnidade')?.setValue('');
-      this.formUsuario.get('CodigoMunicipio')?.setValidators(Validators.required);
-    }else {
-      this.formUsuario.get('CodigoMunicipio')?.clearValidators();
-      this.formUsuario.get('CodigoMunicipio')?.setValue('');
-      this.formUsuario.get('CodigoUnidade')?.setValidators(Validators.required);
-    }
-  }
-
-  validaNecessidadeOficio() {
-    this.util.validateOficioRequired(this.formUsuario, 'Oficio', 'CodigoPerfil', this.maxSize);
   }
 
   checkCPF() {
-    let cpf: any = this.util.checkCPF(this.formUsuario, 'Cpf');
+    let cpf: any = this.util.checkCPF(this.formUsuario, 'cpf');
     this.cpfValido =  cpf?.isValid;
     this.msgErroCPF = cpf?.msg;
   }
 
   checkOficio() {
-    let statusOficio: any = this.util.checkOficio(this.formUsuario, 'Oficio');
+    let statusOficio: any = this.util.checkOficio(this.formUsuario, 'oficio');
     this.oficioValido =  statusOficio?.isValid;
     this.msgErroOficio = statusOficio?.msg;
   }
@@ -183,20 +127,20 @@ export class ModalUsuariosComponent implements OnInit {
         data: this.formUsuario.value,
       }
 
-      if((this.formUsuario.get('Oficio')?.value) && (this.formUsuario.get('Oficio')?.value !== null)) {
-        request.append('Oficio', this.formUsuario.get('Oficio')?.value._files[0]);
+      if((this.formUsuario.get('oficio')?.value) && (this.formUsuario.get('oficio')?.value !== null)) {
+        request.append('oficio', this.formUsuario.get('oficio')?.value._files[0]);
       }
 
       request.append('userDataRequest', JSON.stringify( data ))
 
       if(this.novoCadastro === true) {
         await this.submitNovoUsuario(data.data);
-        this.util.openAlertModal("320px", "success-modal", "Usuário cadastrado!", `Usuário ${this.formUsuario.get(`Nome`)?.value}, foi cadastrado com sucesso no sistema!`);
+        this.util.openAlertModal("320px", "success-modal", "Usuário cadastrado!", `Usuário ${this.formUsuario.get(`nomeUsuario`)?.value}, foi cadastrado com sucesso no sistema!`);
         this.dialogRef.close(true);
         return;
       }else {
         await this.submitAtualizaUsuario(request);
-        this.util.openAlertModal("320px", "success-modal", "Atualização de dados realizada!", `Os dados do usuário ${this.formUsuario.get(`Nome`)?.value}, foram atualizados no sistema!`);
+        this.util.openAlertModal("320px", "success-modal", "Atualização de dados realizada!", `Os dados do usuário ${this.formUsuario.get(`nomeUsuario`)?.value}, foram atualizados no sistema!`);
         this.dialogRef.close(true);
         return;
       }
@@ -213,7 +157,7 @@ export class ModalUsuariosComponent implements OnInit {
           },
           error: () => {
             this.util.loading.next(false);
-            this.util.openAlertModal("320px", "error-modal", "Erro ao salvar usuário", `Houve um erro ao tentar salvar o usuário ${this.formUsuario.get(`Nome`)?.value} em nossa base de dados! Por favor, tente novamente! Caso o problema persista, entre em contato via e-mail: sistemas.supinf@saude.rj.gov.br`);
+            this.util.openAlertModal("320px", "error-modal", "Erro ao salvar usuário", `Houve um erro ao tentar salvar o usuário ${this.formUsuario.get(`nomeUsuario`)?.value} em nossa base de dados! Por favor, tente novamente! Caso o problema persista, entre em contato via e-mail: sistemas.supinf@saude.rj.gov.br`);
             reject(false);
           },
         })
@@ -232,7 +176,7 @@ export class ModalUsuariosComponent implements OnInit {
           },
           error: () => {
             this.util.loading.next(false);
-            this.util.openAlertModal("320px", "error-modal", "Erro ao salvar usuário", `Houve um erro ao tentar atualizar o usuário ${this.formUsuario.get(`Nome`)?.value} em nossa base de dados! Por favor, tente novamente! Caso o problema persista, entre em contato via e-mail: sistemas.supinf@saude.rj.gov.br`);
+            this.util.openAlertModal("320px", "error-modal", "Erro ao salvar usuário", `Houve um erro ao tentar atualizar o usuário ${this.formUsuario.get(`nomeUsuario`)?.value} em nossa base de dados! Por favor, tente novamente! Caso o problema persista, entre em contato via e-mail: sistemas.supinf@saude.rj.gov.br`);
             reject(false);
           },
         })
