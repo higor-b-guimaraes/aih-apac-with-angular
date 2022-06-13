@@ -24,7 +24,13 @@ export class UsuariosComponent implements OnInit {
     private cdRef: ChangeDetectorRef) { }
 
   ngOnInit(): void {
-    this.subVerifyHasUser = this.UsuariosService.getVerificaUsuariosExistentes(this.auth.getAuth())
+
+    let pagina = {
+      paginaIndex: 0,
+      qtdItensPagina: 10,
+    }
+
+    this.subVerifyHasUser = this.UsuariosService.getUsuarios(pagina)
       .subscribe({
         next: (res: any) => (res.length > 0) ? this.hasUser = true : this.hasUser = false,
         error: () => {},

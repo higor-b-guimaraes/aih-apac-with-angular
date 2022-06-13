@@ -67,9 +67,6 @@ export class ModalUsuariosComponent implements OnInit {
     oficio: [null, [Validators.required, FileValidator.maxContentSize(this.maxSize), this.validator.acceptTypeFileInput]]
   });
 
-
-  public customPatterns = { '0': { pattern: new RegExp("(^\d{3}\x2E\d{3}\x2E\d{3}\x2D\d{2}$)")} };
-
   constructor(
     @Inject(MAT_DIALOG_DATA) public dataModal: any,
     public dialogRef: MatDialogRef<UsuariosComponent>,
@@ -88,17 +85,25 @@ export class ModalUsuariosComponent implements OnInit {
           this.usuarioModel = {...res};
           console.log(this.usuarioModel)
 
-          let nvcpf = this.usuarioModel.cpf.replace(/(\d{3})(\d{3})(\d{3})(\d{2})/,
-          function( regex, argumento1, argumento2, argumento3, argumento4 ) {
-            return argumento1 + '.' + argumento2 + '.' + argumento3 + '-' + argumento4;;
+          this.usuarioModel.cpf = this.usuarioModel.cpf.replace(/(\d{3})(\d{3})(\d{3})(\d{2})/,
+          function( regex, parteUm, parteDois, parteTres, parteQuatro ) {
+            return parteUm + '.' + parteDois + '.' + parteTres + '-' + parteQuatro;
           })
-          console.log(nvcpf)
+/*
+          this.usuarioModel.telefone = this.usuarioModel.telefone.replace(/(\d{2})(\d{1})(\d{4})(\d{4})/,
+          function( regex, parteUm, parteDois, parteTres, parteQuatro ) {
+            console.log(regex)
+
+            return  '(' + parteUm + ')' + parteDois + ' ' + parteTres + '-' + parteQuatro;
+          }) */
+
+          console.log(this.usuarioModel.telefone)
 
           this.formUsuario.setValue({
             codigoPerfil: this.usuarioModel.codigoPerfil,
             codigoSituacao: this.usuarioModel.codigoSituacao,
             nome: this.usuarioModel.nome,
-            cpf: nvcpf,
+            cpf: this.usuarioModel.cpf,
             nomeSocial: this.usuarioModel.nomeSocial,
             telefone: this.usuarioModel.telefone,
             email: this.usuarioModel.email,
