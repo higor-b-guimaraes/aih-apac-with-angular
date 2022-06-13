@@ -27,7 +27,7 @@ export class TabelaUsuariosComponent implements OnInit {
   columns: string[] = [];
   usuarios: Usuario[] = [];
   dataSource!: any
-  tamanhoPagina!: number;
+  protected countUsuarios!: number;
 
   @ViewChild(MatPaginator) paginator!: MatPaginator;
   @ViewChild(MatSort) sort!: MatSort;
@@ -39,6 +39,8 @@ export class TabelaUsuariosComponent implements OnInit {
     private util: UtilService,
     public modal: MatDialog,
     private cdRef: ChangeDetectorRef) {
+
+      this.dataSource = new MatTableDataSource();
 
     this.columns = [
       "codigoPerfil",
@@ -54,16 +56,26 @@ export class TabelaUsuariosComponent implements OnInit {
     ]
   }
 
+
+
+
   ngOnInit(): void {
     this.getUsuarios.subscribe({
       next: (pagina: any) => {
 
         this.usuariosService.getUsuarios(pagina).subscribe({
           next: (res: any) => {
+            console.log(pagina)
             this.usuarios = [...res];
-            this.dataSource = new MatTableDataSource(this.usuarios);
-            this.dataSource.paginator = this.paginator;
+            this.dataSource = this.usuarios;
             this.dataSource.sort = this.sort;
+            this.dataSource.paginator = this.paginator;
+            this.dataSource.paginator._intl.itemsPerPageLabel = "Itens por página";
+            this.dataSource.paginator._intl.lastPageLabel = "Última página";
+            this.dataSource.paginator._intl.nextPageLabel = "Próxima";
+            this.dataSource.paginator._pageIndex = pagina.paginaIndex;
+            this.dataSource.paginator._pageSize = pagina.qtdItensPagina;
+            this.dataSource.paginator.length = this.countUsuarios;
             this.util.loading.next(false);
           },
 
@@ -78,8 +90,16 @@ export class TabelaUsuariosComponent implements OnInit {
       qtdItensPagina: 10,
     }
 
-    this.getUsuarios.next(pagina);
-    this.util.loading.next(true);
+    this.usuariosService.getCountUsuarios().subscribe({
+      next: (res: any) => {
+        this.countUsuarios = res;
+
+        this.getUsuarios.next(pagina);
+        this.util.loading.next(true);
+      },
+
+      error: () => {}
+    });
   }
 
   abrirModalUsuario(id?: number) {
