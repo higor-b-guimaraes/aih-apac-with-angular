@@ -11,8 +11,6 @@ import { AuthService } from 'src/app/core/services/auth.service';
 import { UsuariosService } from './../services/usuarios.service';
 
 import { Usuario } from './../../../shared/models/usuario.model';
-import { Municipio } from './../../../shared/models/municipio.model';
-import { UnidadePartialData } from 'src/app/shared/models/unidade.model';
 import { CustomValidators } from 'src/app/shared/validators/custom-validators';
 import { FileValidator } from 'ngx-material-file-input';
 
@@ -61,13 +59,16 @@ export class ModalUsuariosComponent implements OnInit {
   formUsuario: FormGroup = this.formBuilder.group({
     codigoPerfil: ['', Validators.required],
     codigoSituacao: ['', Validators.required],
-    nomeUsuario: ['', Validators.required],
+    nome: ['', Validators.required],
     cpf: ['', [this.validator.cpfValidator, Validators.required]],
     nomeSocial: ['', Validators.required],
     telefone: ['', Validators.required],
     email: ['', Validators.required],
     oficio: [null, [Validators.required, FileValidator.maxContentSize(this.maxSize), this.validator.acceptTypeFileInput]]
   });
+
+
+  public customPatterns = { '0': { pattern: new RegExp("(^\d{3}\x2E\d{3}\x2E\d{3}\x2D\d{2}$)")} };
 
   constructor(
     @Inject(MAT_DIALOG_DATA) public dataModal: any,
@@ -80,19 +81,27 @@ export class ModalUsuariosComponent implements OnInit {
     private cdRef: ChangeDetectorRef) {  }
 
   ngOnInit(): void {
-    if(this.dataModal?.idRequest) {
-      this.usuariosService.getUsuario(this.dataModal).subscribe({
-        next: (res: any) => {
 
-          this.usuarioModel = {...res}
-          this.formUsuario.patchValue({
-            codigoPerfil: res?.codigoPerfil,
-            codigoSituacao: res?.codigoSituacao,
-            nomeUsuario: res?.nome,
-            cpf: res?.cpf,
-            nomeSocial: res?.apelido,
-            telefone: res?.telefone,
-            email: res?.email,
+    if(this.dataModal?.idUsuario) {
+      this.usuariosService.getUsuario(this.dataModal?.idUsuario).subscribe({
+        next: (res: any) => {
+          this.usuarioModel = {...res};
+          console.log(this.usuarioModel)
+
+          let nvcpf = this.usuarioModel.cpf.replace(/(\d{3})(\d{3})(\d{3})(\d{2})/,
+          function( regex, argumento1, argumento2, argumento3, argumento4 ) {
+            return argumento1 + '.' + argumento2 + '.' + argumento3 + '-' + argumento4;;
+          })
+          console.log(nvcpf)
+
+          this.formUsuario.setValue({
+            codigoPerfil: this.usuarioModel.codigoPerfil,
+            codigoSituacao: this.usuarioModel.codigoSituacao,
+            nome: this.usuarioModel.nome,
+            cpf: nvcpf,
+            nomeSocial: this.usuarioModel.nomeSocial,
+            telefone: this.usuarioModel.telefone,
+            email: this.usuarioModel.email,
             oficio: null,
           });
 
@@ -118,32 +127,36 @@ export class ModalUsuariosComponent implements OnInit {
   }
 
   async salvar() {
+
+    console.log(this.formUsuario)
+    console.log(this.formUsuario.valid)
     if(this.formUsuario.valid) {
       this.util.loading.next(true);
 
-      const request = new FormData();
-      let data = {
+      const usuario = new FormData();
+      /* let usuario = {
         idUser: this.auth.getId(),
         data: this.formUsuario.value,
-      }
+      } */
 
       if((this.formUsuario.get('oficio')?.value) && (this.formUsuario.get('oficio')?.value !== null)) {
-        request.append('oficio', this.formUsuario.get('oficio')?.value._files[0]);
+        usuario.append('oficio', this.formUsuario.get('oficio')?.value._files[0]);
       }
 
-      request.append('userDataRequest', JSON.stringify( data ))
+      usuario.append('usuario', JSON.stringify(this.formUsuario.value))
 
-      if(this.novoCadastro === true) {
-        await this.submitNovoUsuario(data.data);
-        this.util.openAlertModal("320px", "success-modal", "Usuário cadastrado!", `Usuário ${this.formUsuario.get(`nomeUsuario`)?.value}, foi cadastrado com sucesso no sistema!`);
+      console.log(usuario);
+      /* if(this.novoCadastro === true) {
+        await this.submitNovoUsuario(usuario.data);
+        this.util.openAlertModal("320px", "success-modal", "Usuário cadastrado!", `Usuário ${this.formUsuario.get(`nome`)?.value}, foi cadastrado com sucesso no sistema!`);
         this.dialogRef.close(true);
         return;
       }else {
-        await this.submitAtualizaUsuario(request);
-        this.util.openAlertModal("320px", "success-modal", "Atualização de dados realizada!", `Os dados do usuário ${this.formUsuario.get(`nomeUsuario`)?.value}, foram atualizados no sistema!`);
+        await this.submitAtualizaUsuario(usuario);
+        this.util.openAlertModal("320px", "success-modal", "Atualização de dados realizada!", `Os dados do usuário ${this.formUsuario.get(`nome`)?.value}, foram atualizados no sistema!`);
         this.dialogRef.close(true);
         return;
-      }
+      } */
     }
   }
 
@@ -157,7 +170,7 @@ export class ModalUsuariosComponent implements OnInit {
           },
           error: () => {
             this.util.loading.next(false);
-            this.util.openAlertModal("320px", "error-modal", "Erro ao salvar usuário", `Houve um erro ao tentar salvar o usuário ${this.formUsuario.get(`nomeUsuario`)?.value} em nossa base de dados! Por favor, tente novamente! Caso o problema persista, entre em contato via e-mail: sistemas.supinf@saude.rj.gov.br`);
+            this.util.openAlertModal("320px", "error-modal", "Erro ao salvar usuário", `Houve um erro ao tentar salvar o usuário ${this.formUsuario.get(`nome`)?.value} em nossa base de dados! Por favor, tente novamente! Caso o problema persista, entre em contato via e-mail: sistemas.supinf@saude.rj.gov.br`);
             reject(false);
           },
         })
@@ -176,7 +189,7 @@ export class ModalUsuariosComponent implements OnInit {
           },
           error: () => {
             this.util.loading.next(false);
-            this.util.openAlertModal("320px", "error-modal", "Erro ao salvar usuário", `Houve um erro ao tentar atualizar o usuário ${this.formUsuario.get(`nomeUsuario`)?.value} em nossa base de dados! Por favor, tente novamente! Caso o problema persista, entre em contato via e-mail: sistemas.supinf@saude.rj.gov.br`);
+            this.util.openAlertModal("320px", "error-modal", "Erro ao salvar usuário", `Houve um erro ao tentar atualizar o usuário ${this.formUsuario.get(`nome`)?.value} em nossa base de dados! Por favor, tente novamente! Caso o problema persista, entre em contato via e-mail: sistemas.supinf@saude.rj.gov.br`);
             reject(false);
           },
         })

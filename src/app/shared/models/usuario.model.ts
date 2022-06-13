@@ -3,12 +3,13 @@ export interface Usuario {
   id?: number;
   codigoPerfil: number;
   codigoSituacao: number;
-  nomeUsuario: string;
+  nome: string;
   cpf: string;
   nomeSocial: string;
   telefone: string;
   email: string;
-  oficio: any;
-  dataCriacao?: Date,
-  dataAtualizacao?: Date
+  codigoOficio?: any;
+  oficio?: any;
+  createdDate?: Date,
+  updatedDate?: Date
 }

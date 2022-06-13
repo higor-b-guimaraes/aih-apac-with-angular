@@ -43,12 +43,12 @@ export class TabelaUsuariosComponent implements OnInit {
     this.columns = [
       "codigoPerfil",
       "codigoSituacao",
-      "nomeUsuario",
+      "nome",
       "cpf",
       "nomeSocial",
       "email",
       "telefone",
-      "oficio",
+      "codigoOficio",
       "editarMotivos",
       "desativarMotivos"
     ]
@@ -61,7 +61,6 @@ export class TabelaUsuariosComponent implements OnInit {
         this.usuariosService.getUsuarios(pagina).subscribe({
           next: (res: any) => {
             this.usuarios = [...res];
-            console.log(pagina);
             this.dataSource = new MatTableDataSource(this.usuarios);
             this.dataSource.paginator = this.paginator;
             this.dataSource.sort = this.sort;
@@ -75,30 +74,26 @@ export class TabelaUsuariosComponent implements OnInit {
     })
 
     let pagina = {
-      paginaIndex: 10,
-      qtdItensPagina: 0,
+      paginaIndex: 0,
+      qtdItensPagina: 10,
     }
 
     this.getUsuarios.next(pagina);
     this.util.loading.next(true);
   }
 
-  abrirModalUsuario(usuario?: number) {
-    if(usuario) {
+  abrirModalUsuario(id?: number) {
 
+    if(id) {
       const dialogRef = this.modal.open(ModalUsuariosComponent, {
         width: '100%',
         panelClass: 'common-modal',
-        data: {
-          idUser: this.auth.getId(),
-          idRequest: usuario
-        }
+        data: {idUsuario: id}
       });
 
       dialogRef.afterClosed().subscribe(result => {
       });
     }else {
-
       const dialogRef = this.modal.open(ModalUsuariosComponent, {
         width: '100%',
         panelClass: 'common-modal',
@@ -115,6 +110,14 @@ export class TabelaUsuariosComponent implements OnInit {
 
   editarUsuario(usuario: Usuario) {
     this.abrirModalUsuario(usuario.id)
+  }
+
+  baixarOficio(usuario: Usuario) {
+    this.usuariosService.getOficio(usuario.codigoOficio).subscribe({
+      next: (res: any) => {},
+
+      error: () => {}
+    })
   }
 
   classUsuarioAtivadoDesativado(situacao: number) {
@@ -179,7 +182,7 @@ export class TabelaUsuariosComponent implements OnInit {
     }
   }
 
-  getNewElements() {
+  getAlterarPagina() {
 
     let pagina = {
       pageIndex: this.dataSource?.paginator?.pageIndex,

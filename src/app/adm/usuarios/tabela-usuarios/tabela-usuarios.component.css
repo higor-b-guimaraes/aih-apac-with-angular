@@ -16,10 +16,14 @@
   width: 100%;
 }
 
-.btn-novo-cadastro {
+.btn-novo-cadastro, .btn-pesquisa-avancada {
   margin: 0px 15px;
   color: #fff;
   background-color: #005C94;
+}
+
+.btn-pesquisa-avancada {
+  margin-left: auto;
 }
 
 tbody, td, tfoot, th, thead, tr {

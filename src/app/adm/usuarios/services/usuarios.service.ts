@@ -16,17 +16,16 @@ export class UsuariosService {
     return this.http.get(`${environment.BASE_URL}Usuario/contarUsuarios`);
   }
 
-  getUsuarios(pagina: {paginaIndex: number, qtdItensPagina: number}) {
+  getUsuarios(pagina: {paginaIndex: number, qtdItensPagina: number, filtro?: any}) {
     return this.http.get(`${environment.BASE_URL}Usuario/listarUsuarios`, {params: pagina})
   }
 
-  getFiltroUsuarios(filtro: any) {
-    return this.http.get(`${environment.BASE_URL}Usuario/filtroUsuarios`, {params: filtro})
+  getUsuario(id: number) {
+    return this.http.get(`${environment.BASE_URL}Usuario/usuario/${id}`)
   }
 
-
-  getUsuarioTeste(id: number) {
-    return this.http.get(`${environment.BASE_URL}Usuario/usuario/${id}`)
+  getOficio(id: number) {
+    return this.http.get(`${environment.BASE_URL}Usuario/oficio/${id}`)
   }
 
 
@@ -41,9 +40,9 @@ export class UsuariosService {
     return this.http.put(`${environment.API}desativaUsuario`, request);
   }
 
-  getUsuario(request: {idUser:any, idRequest: number}) {
+  /* getUsuario(request: {idUser:any, idRequest: number}) {
     return this.http.get(`${environment.API}pegaUsuario`, {params: request});
-  }
+  } */
 
   getVerificaUsuariosExistentes(request: {token: string}) {
     return this.http.get(`${environment.BASE_URL}Usuario/listarUsuarios`);

@@ -3,9 +3,10 @@
   <div class="container-funcionalidades">
     <button mat-mini-fab class="btn-novo-cadastro" (click)="novoUsuario()"><mat-icon>add_circle</mat-icon></button>
     <mat-form-field appearance="standard">
-      <mat-label>Pesquisar</mat-label>
+      <mat-label>Filtro</mat-label>
       <input matInput (keyup)="applyFilter($event)" placeholder="Ex.AIH-Comum" #input>
     </mat-form-field>
+    <button mat-mini-fab class="btn-pesquisa-avancada" (click)="novoUsuario()"><mat-icon>search</mat-icon></button>
   </div>
 
   <table mat-table [dataSource]="dataSource" matSort class="mat-elevation-z8 table">
@@ -20,9 +21,9 @@
       <td mat-cell [class]="classUsuarioAtivadoDesativado(row.codigoSituacao)" *matCellDef="let row"> {{tipoSituacao(row.codigoSituacao)}} </td>
     </ng-container>
 
-    <ng-container matColumnDef="nomeUsuario">
+    <ng-container matColumnDef="nome">
       <th mat-header-cell class="header-table" *matHeaderCellDef mat-sort-header> Nome </th>
-      <td mat-cell [class]="classUsuarioAtivadoDesativado(row.codigoSituacao)" *matCellDef="let row"> {{row.nomeUsuario}} </td>
+      <td mat-cell [class]="classUsuarioAtivadoDesativado(row.codigoSituacao)" *matCellDef="let row"> {{row.nome}} </td>
     </ng-container>
 
     <ng-container matColumnDef="cpf" >
@@ -45,9 +46,10 @@
       <td mat-cell [class]="classUsuarioAtivadoDesativado(row.codigoSituacao)" *matCellDef="let row"> {{row.telefone}} </td>
     </ng-container>
 
-    <ng-container matColumnDef="oficio" >
+    <ng-container matColumnDef="codigoOficio" >
       <th mat-header-cell class="header-table" *matHeaderCellDef mat-sort-header> Oficio Requerido </th>
-      <td mat-cell [class]="classUsuarioAtivadoDesativado(row.codigoSituacao)" *matCellDef="let row"> {{row.nomeOficioAutorizador}} </td>
+      <td mat-cell [class]="classUsuarioAtivadoDesativado(row.codigoSituacao)" *matCellDef="let row">
+        <button mat-raised-button class="btn btn-primary" (click)="baixarOficio(row)"><mat-icon>cloud_download</mat-icon></button></td>
     </ng-container>
 
     <ng-container matColumnDef="editarMotivos" class="testando">
@@ -73,5 +75,5 @@
     </tr>
   </table>
 
-  <mat-paginator (page)="getNewElements()" [pageSizeOptions]="[10, 50, 100]"></mat-paginator>
+  <mat-paginator (page)="getAlterarPagina()" [pageSizeOptions]="[10, 50, 100]"></mat-paginator>
 </div>
