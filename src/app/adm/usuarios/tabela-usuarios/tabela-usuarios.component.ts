@@ -65,7 +65,7 @@ export class TabelaUsuariosComponent implements OnInit {
 
         this.usuariosService.getUsuarios(pagina).subscribe({
           next: (res: any) => {
-            console.log(pagina)
+
             this.usuarios = [...res];
             this.dataSource = this.usuarios;
             this.dataSource.sort = this.sort;

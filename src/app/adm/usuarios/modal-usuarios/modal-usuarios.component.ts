@@ -2,7 +2,7 @@ import { AdmResponsavel } from './../../../shared/models/admResponsavel.model';
 
 import { UtilService } from './../../../shared/services/utils/util.service';
 import { ChangeDetectorRef, Component, Inject, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { FormBuilder, FormGroup, Validators, FormControl } from '@angular/forms';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 
 import { UsuariosComponent } from './../usuarios/usuarios.component';
@@ -67,6 +67,8 @@ export class ModalUsuariosComponent implements OnInit {
     oficio: [null, [Validators.required, FileValidator.maxContentSize(this.maxSize), this.validator.acceptTypeFileInput]]
   });
 
+  /* public customPatterns = { 'casa': { pattern: new RegExp('^\(?(?:[14689][1-9]|2[12478]|3[1234578]|5[1345]|7[134579])\)? ?(?:[2-8]|9[1-9])[0-9]{3}\-?[0-9]{4}$')} }; */
+
   constructor(
     @Inject(MAT_DIALOG_DATA) public dataModal: any,
     public dialogRef: MatDialogRef<UsuariosComponent>,
@@ -83,33 +85,19 @@ export class ModalUsuariosComponent implements OnInit {
       this.usuariosService.getUsuario(this.dataModal?.idUsuario).subscribe({
         next: (res: any) => {
           this.usuarioModel = {...res};
-          console.log(this.usuarioModel)
-
-          this.usuarioModel.cpf = this.usuarioModel.cpf.replace(/(\d{3})(\d{3})(\d{3})(\d{2})/,
-          function( regex, parteUm, parteDois, parteTres, parteQuatro ) {
-            return parteUm + '.' + parteDois + '.' + parteTres + '-' + parteQuatro;
-          })
-/*
-          this.usuarioModel.telefone = this.usuarioModel.telefone.replace(/(\d{2})(\d{1})(\d{4})(\d{4})/,
-          function( regex, parteUm, parteDois, parteTres, parteQuatro ) {
-            console.log(regex)
-
-            return  '(' + parteUm + ')' + parteDois + ' ' + parteTres + '-' + parteQuatro;
-          }) */
-
-          console.log(this.usuarioModel.telefone)
 
           this.formUsuario.setValue({
             codigoPerfil: this.usuarioModel.codigoPerfil,
             codigoSituacao: this.usuarioModel.codigoSituacao,
             nome: this.usuarioModel.nome,
-            cpf: this.usuarioModel.cpf,
+            cpf: this.adicionarMascaraCPF(this.usuarioModel.cpf),
             nomeSocial: this.usuarioModel.nomeSocial,
-            telefone: this.usuarioModel.telefone,
+            telefone: this.adicionarMascaraTel(this.usuarioModel.telefone),
             email: this.usuarioModel.email,
             oficio: null,
           });
 
+          this.validarTipoTelefone();
           this.novoCadastro = false;
         },
         error: () => {},
@@ -131,8 +119,30 @@ export class ModalUsuariosComponent implements OnInit {
     this.msgErroOficio = statusOficio?.msg;
   }
 
-  async salvar() {
+  validarTipoTelefone(): string {
+    return this.util.validatePhoneType(this.formUsuario.get('telefone')?.value);
+  }
 
+  adicionarMascaraCPF(cpf?: string): string {
+    if(cpf) {
+      return this.util.addMaskCPF(cpf);
+    }else {
+      return this.util.addMaskCPF(this.formUsuario.get('cpf')?.value);
+    }
+  }
+
+  adicionarMascaraTel(telefone?: string): string {
+    if(telefone) {
+      console.log(this.util.addMaskTel(telefone));
+      return this.util.addMaskTel(telefone);
+    }else {
+      console.log();
+      return this.util.addMaskTel(this.formUsuario.get('telefone')?.value);
+    }
+  }
+
+
+  async salvar() {
     console.log(this.formUsuario)
     console.log(this.formUsuario.valid)
     if(this.formUsuario.valid) {

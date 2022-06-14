@@ -81,6 +81,40 @@ export class UtilService {
     }
   }
 
+  addMaskCPF(cpf: any): string {
+    if (cpf) {
+      return cpf.replace(/(\d{3})(\d{3})(\d{3})(\d{2})/,
+      function( regex: any, parteUm: string, parteDois: string, parteTres: string, parteQuatro: string ) {
+        return parteUm + '.' + parteDois + '.' + parteTres + '-' + parteQuatro;
+      })
+    }else {
+      return "CPF não é válido";
+    }
+  }
+
+  validatePhoneType(phone: string) {
+    phone = phone.replace(/[^0-9]/g,'');
+    return (phone[2] !== '9') ? "(00) 0000-0000" : "(00) 0 0000-0000";;
+  }
+
+  addMaskTel(phone: string): string {
+
+    let typeOfPhone = this.validatePhoneType(phone)
+
+    if (typeOfPhone.length === 16) {
+        return phone.replace(/(\d{2})(\d{1})(\d{4})(\d{4})/,
+        function( regex: any, parteUm: string, parteDois: string, parteTres: string, parteQuatro: string ) {
+          return '(' + parteUm + ')' + ' ' + parteDois + ' ' + parteTres + '-' + parteQuatro;
+        });
+      }else if (typeOfPhone.length === 14) {
+        return phone.replace(/(\d{2})(\d{4})(\d{4})/,
+        function( regex: any, parteUm: string, parteDois: string, parteTres: string) {
+          return '(' + parteUm + ')' + ' ' + parteDois + '-' + parteTres;
+        });
+      }else {
+      return "Telefone não é válido";
+    }
+  }
 
   getMonths(): string[] {
     return ['Janeiro', 'Fevereiro', 'Março', 'Abril', 'Maio', 'Junho', 'Julho', 'Agosto', 'Setembro', 'Outubro', 'Novembro', 'Dezembro'];

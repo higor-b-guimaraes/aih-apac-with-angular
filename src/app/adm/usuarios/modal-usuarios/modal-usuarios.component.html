@@ -62,7 +62,7 @@
 
       <mat-form-field appearance="outline" class="col-md-3">
         <mat-label>Telefone</mat-label>
-        <input matInput formControlName="telefone" mask="(00) 90000-0000">
+        <input matInput formControlName="telefone" [mask]="validarTipoTelefone()" (keyup)="validarTipoTelefone()">
         <mat-error *ngIf="formUsuario.get('telefone')?.hasError('required')">É preciso informar o telefone do usuário</mat-error>
       </mat-form-field>
     </div>
