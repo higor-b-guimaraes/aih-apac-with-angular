@@ -2,6 +2,7 @@ import { environment } from 'src/environments/environment';
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { MotivoReprovacao } from '../models/motivoReprovacao.model';
+import {FormGroup} from "@angular/forms";
 
 @Injectable({
   providedIn: 'root'
@@ -10,23 +11,45 @@ export class MotivoReprovacaoService {
 
   constructor(private http: HttpClient) { }
 
-  salvarMotivoReprovacao(request: {idUser: number, data: MotivoReprovacao}) {
-    return this.http.post(`${environment.BASE_URL}cadastrarMotivo`, request);
+  salvarMotivoReprovacao(formMotivoReprovacao: FormGroup) {
+    return this.http.post(`${environment.BASE_URL}MotivosReprovacao/cadastrarMotivo`, formMotivoReprovacao);
   }
 
-  atualizarMotivoReprovacao(request: {idUser: number, data: MotivoReprovacao}) {
-    return this.http.put(`${environment.BASE_URL}atualizarMotivo`, request);
+  desativarMotivoReprovacao(id: number) {
+    return this.http.delete(`${environment.BASE_URL}MotivosReprovacao/desativarMotivoReprovacao/${id}`);
   }
 
-  desativarMotivoReprovacao(request: {idUser: number, data: MotivoReprovacao}) {
-    return this.http.put(`${environment.BASE_URL}desativarMotivo`, request);
+  ativarMotivoReprovacao(id: number) {
+    return this.http.post(`${environment.BASE_URL}MotivosReprovacao/ativarMotivoReprovacao/${id}`, {});
+  }
+  /*
+  listarMunicipios(data:any, filtro: any ) {
+    console.log("Data: ", data);
+    // data.append(filtro);
+    data.filtro = filtro;
+    return this.http.get(`${environment.BASE_URL}Municipio/listarMunicipios`, {params: data});
+  }
+   */
+
+  /**
+   *
+   * @param data
+   * @param filtro
+   */
+  getMotivosReprovacao(data:any, filtro: any) {
+    data.filtro = filtro;
+    return this.http.get(`${environment.BASE_URL}MotivosReprovacao/listarMotivosReprovacao`, {params: data});
   }
 
-  getMotivosReprovacao(request: {idUser:any, pageIndex: number, pageSize: number}) {
-    return this.http.get(`${environment.BASE_URL}pegarMotivosReprovacao`, {params: request});
+  countMotivosReprovacao() {
+    return this.http.get(`${environment.BASE_URL}MotivosReprovacao/contarMotivosReprovacao`);
   }
 
   getVerificaDadosExistentes(request: {idUser:number}) {
-    return this.http.get(`${environment.BASE_URL}MotivosReprovacao/listaMotivosReprovacao`);
+    return this.http.get(`${environment.BASE_URL}MotivosReprovacao/listarMotivosReprovacao`);
+  }
+
+  getTipoSolicitacao() {
+    return this.http.get(`${environment.BASE_URL}TipoSolicitacao/listarTipoSolicitacao`);
   }
 }

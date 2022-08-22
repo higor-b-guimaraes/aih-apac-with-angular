@@ -1,0 +1,23 @@
+
+.container-modal {
+  font-size: 20px;
+  font-weight: 600;
+  place-content: center;
+  display: grid;
+  justify-items: center;
+}
+
+.body-modal {
+  font-size: 15px;
+  font-weight: 500;
+}
+
+.btn-close-modal {
+  background-color: #363636;
+  color: #fff;
+}
+
+.btn-confirm-modal {
+  color: #fff;
+  background-color: #005C94;
+}

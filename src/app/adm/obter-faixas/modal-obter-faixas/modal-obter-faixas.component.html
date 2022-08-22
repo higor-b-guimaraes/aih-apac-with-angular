@@ -1,0 +1,50 @@
+<form [formGroup]="formObterFaixa" class="row g-3">
+  <fieldset>
+    <div class="row">
+      <mat-form-field appearance="outline"  class="col-md-6">
+        <mat-label>Nome</mat-label>
+        <input matInput formControlName="TipoSolicitante">
+        <mat-error *ngIf="formObterFaixa.get('TipoSolicitante')?.hasError('required')">É preciso informar o nome do usuário</mat-error>
+      </mat-form-field>
+
+      <mat-form-field appearance="outline"  class="col-md-3">
+        <mat-label>Usuário</mat-label>
+        <input matInput formControlName="Unidade">
+        <mat-error *ngIf="formObterFaixa.get('Unidade')?.hasError('required')">É preciso informar um nome de acesso válido!</mat-error>
+      </mat-form-field>
+    </div>
+
+    <div class="row">
+      <mat-form-field appearance="outline"  class="col-md-6">
+        <mat-label>Nome Social do Usuário</mat-label>
+        <input matInput formControlName="TipoFaixa">
+      </mat-form-field>
+    </div>
+
+    <div class="row">
+      <mat-form-field appearance="outline"  class="col-md-6">
+        <mat-label>Nome Social do Usuário</mat-label>
+        <input matInput formControlName="Competencia">
+      </mat-form-field>
+    </div>
+
+    <div class="row">
+      <mat-form-field appearance="outline"  class="col-md-6">
+        <mat-label>Nome Social do Usuário</mat-label>
+        <input matInput formControlName="Mes">
+      </mat-form-field>
+    </div>
+
+    <div class="row">
+      <mat-form-field appearance="outline"  class="col-md-6">
+        <mat-label>Nome Social do Usuário</mat-label>
+        <input matInput formControlName="CotaPadrao">
+      </mat-form-field>
+    </div>
+  </fieldset>
+</form>
+
+<mat-dialog-actions align="end">
+  <button mat-button mat-dialog-close (click)="closeModal()">Fechar</button>
+  <button mat-button cdkFocusInitial [disabled]="!formObterFaixa.valid" (click)="salvar()">Salvar</button>
+</mat-dialog-actions>

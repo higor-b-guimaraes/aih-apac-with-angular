@@ -11,35 +11,50 @@ export class UnidadesService {
   constructor(private http: HttpClient) { }
 
   checksHasUnit(request: {token:string}) {
-    return this.http.get(`${environment.BASE_URL}Unidades/listaUnidades`);
+    return this.http.get(`${environment.BASE_URL}Unidade/listarUnidades`);
   }
 
   salvarUnidade(request: any) {
-    return this.http.post(`${environment.BASE_URL}Unidades/novaUnidade`, request);
+    return this.http.post(`${environment.BASE_URL}Unidade/novaUnidade`, request);
   }
   atualizarUnidade(request: any) {
-    return this.http.put(`${environment.BASE_URL}Unidades/gravarUnidade`, request);
+    return this.http.put(`${environment.BASE_URL}Unidade/atualizarUnidade/${request.Id}`, request);
   }
 
-  desativarUnidade(request: {idRequest: number}) {
-    return this.http.delete(`${environment.BASE_URL}Unidades/desativarUnidade?id=${request.idRequest}`);
+  contarUnidadesAtivas(id: number) {
+    return this.http.get(`${environment.BASE_URL}Unidade/contarUnidadesUsuarios/${id}`);
   }
 
-  getUnidades() {
-    return this.http.get(`${environment.BASE_URL}Unidades/listaUnidades`);
+  ativarUnidade(id: number) {
+    return this.http.post(`${environment.BASE_URL}Unidade/ativarUnidade/${id}`,{});
+  }
+
+  desativarUnidade(id:number ) {
+    return this.http.delete(`${environment.BASE_URL}Unidade/desativarUnidade/${id}`);
+  }
+
+  getUnidades(filtro: string) {
+    var options = {
+      filtro: filtro
+    }
+    return this.http.get(`${environment.BASE_URL}Unidade/listarUnidades`,{params:options});
   }
 
   getUnidade(request: {idUser:any, idRequest: number}) {
-    return this.http.get(`${environment.BASE_URL}Unidades/unidade/${request.idRequest}`);
+    return this.http.get(`${environment.BASE_URL}Unidade/unidade/${request.idRequest}`);
   }
 
   getEstados() {
-    return this.http.get(`${environment.BASE_URL}Estado`);
+    return this.http.get(`${environment.BASE_URL}Estado/listarEstados`);
+  }
+
+  getMunicipios() {
+    return this.http.get(`${environment.BASE_URL}Municipio/listarMunicipios`);
   }
 
   getCheckCNES(request: {token: string, cnes: string, idUnidade: string}) {
     return this.http.get(
-      `${environment.BASE_URL}Unidades/VerificaCnesExistentes?cnes=${request.cnes}`
+      `${environment.BASE_URL}Unidade/unidadeCnes?cnes=${request.cnes}`
     );
   }
 

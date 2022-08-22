@@ -26,6 +26,8 @@ export class FormReprovacaoComponent implements OnInit {
   @ViewChild(MatPaginator) paginator!: MatPaginator;
   @ViewChild(MatSort) sort!: MatSort;
 
+  filtro: any[] = [];
+
   constructor(private motivosReprovacaoService: MotivoReprovacaoService,
     private auth: AuthService,
     private util: UtilService,
@@ -34,7 +36,7 @@ export class FormReprovacaoComponent implements OnInit {
 
     this.getFaixas.subscribe({
       next: (data) => {
-        this.motivosReprovacaoService.getMotivosReprovacao(data).subscribe({
+        this.motivosReprovacaoService.getMotivosReprovacao(data,this.filtro).subscribe({
           next: (res:any) => {
             this.columns = [...res?.headerTable];
             let data: ConsultarFaixas[] = [...res?.bodyTable];

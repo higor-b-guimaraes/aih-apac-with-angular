@@ -1,0 +1,122 @@
+<form [formGroup]="formSolicitacaoFaixa" class="row g-3">
+  <fieldset >
+    <legend>Informações de Controle</legend>
+
+    <div class="row">
+      <!-- Tipo de Solicitante -->
+      <mat-form-field appearance="outline"  class="col-md-3">
+        <mat-label>Tipo de Solicitante</mat-label>
+        <mat-select  (selectionChange)="buscarListaTiposFaixas()"
+          formControlName="IdTipoSolicitante">
+          <mat-option *ngFor="let tsolicitante of opcoesTipoSolicitante" [value]="tsolicitante.Id" required>
+            {{tsolicitante.Descricao}}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+
+    <mat-form-field appearance="outline"  class="col-md-6" *ngIf="formSolicitacaoFaixa.get('IdTipoSolicitante')?.value === 1">
+      <mat-label>Unidade</mat-label>
+      <mat-select  (selectionChange)="buscarListaTiposFaixas()"
+        formControlName="IdUnidade">
+        <mat-option *ngFor="let unidades of opcoesUnidade" [value]="unidades.Id" required >
+          {{unidades.UnidadeDescricao}}
+        </mat-option>
+      </mat-select>
+      <mat-error *ngIf="formSolicitacaoFaixa.get('IdUnidade')?.hasError('required')">É preciso selecionar a unidade do usuário</mat-error>
+    </mat-form-field>
+
+    <mat-form-field appearance="outline"  class="col-md-6" *ngIf="formSolicitacaoFaixa.get('IdTipoSolicitante')?.value === 2">
+      <mat-label>Município</mat-label>
+      <mat-select (selectionChange)="buscarListaTiposFaixas()"
+        formControlName="CodigoIbgeMunicipio">
+        <mat-option *ngFor="let municipio of opcoesMunicipio" [value]="municipio['CodigoIbge']" required >
+          {{municipio['NomeMunicipio'] + " - " + municipio['CodigoIbge']}}
+        </mat-option>
+      </mat-select>
+      <mat-error *ngIf="formSolicitacaoFaixa.get('CodigoIbgeMunicipio')?.hasError('required')">É preciso selecionar o município do usuário</mat-error>
+    </mat-form-field>
+
+    <!-- Tipo de Faixas -->
+    <mat-form-field appearance="outline"  class="col-md-3">
+      <mat-label>Tipo de Faixa</mat-label>
+        <mat-select (selectionChange)="buscarCotaPadrao(); buscarTotalCotaExtraAprovada()"
+          formControlName="IdTipoFaixa">
+          <mat-option *ngFor="let tipoFaixa of opcoesTipoFaixa" [value]="tipoFaixa.Id" required>
+            {{tipoFaixa.Descricao}}
+          </mat-option>
+        </mat-select>
+        <mat-error *ngIf="formSolicitacaoFaixa.get('IdTipoFaixa')?.hasError('required')">É preciso informar o tipo de faixa</mat-error>
+      </mat-form-field>
+    </div>
+
+    <div class="row">
+      <!-- Competência -->
+      <mat-form-field appearance="outline"  class="col-md-3">
+        <mat-label>Competência (ano)</mat-label>
+        <mat-select (selectionChange)="buscarTotalCotaExtraAprovada()"
+           formControlName="Competencia">
+          <mat-option *ngFor="let competencia of opcoesCompetencia" [value]="competencia" required>
+            {{competencia}}
+          </mat-option>
+        </mat-select>
+        <mat-error *ngIf="formSolicitacaoFaixa.get('Competencia')?.hasError('required')">É preciso informar uma competência</mat-error>
+      </mat-form-field>
+
+      <!-- Mês -->
+      <mat-form-field appearance="outline"  class="col-md-3">
+        <mat-label>Mês</mat-label>
+        <mat-select (selectionChange)="buscarTotalCotaExtraAprovada()" formControlName="Mes">
+          <mat-option *ngFor="let mes of opcoesMes" [value]="mes.mes" required>
+            {{mes.descricao}}
+          </mat-option>
+        </mat-select>
+        <mat-error *ngIf="formSolicitacaoFaixa.get('Competencia')?.hasError('required')">É preciso informar um mês</mat-error>
+      </mat-form-field>
+
+      <!-- Quantidade de faixas -->
+      <mat-form-field appearance="outline"  class="col-md-3">
+        <mat-label>Quantidade de faixas</mat-label>
+        <input  matInput formControlName="QuantidadeFaixas" type="number" min="0" max="999999" maxlength="6">
+        <mat-error *ngIf="formSolicitacaoFaixa.get('QuantidadeFaixas')?.hasError('required')">É preciso informar uma quantidade de faixas</mat-error>
+      </mat-form-field>
+    </div>
+  </fieldset>
+
+  <fieldset>
+    <div class="row">
+
+      <!-- Cota padrão -->
+      <mat-form-field appearance="outline"  class="col-md-3">
+        <mat-label>Cota padrão</mat-label>
+        <input matInput formControlName="CotaPadrao" type="number">
+      </mat-form-field>
+
+      <!-- Total Cota Extra aprovada -->
+      <mat-form-field appearance="outline"  class="col-md-3">
+        <mat-label>Total cota extra aprovada</mat-label>
+        <input [disabled]="true" matInput formControlName="TotalCotaExtraAprovada" type="number">
+      </mat-form-field>
+    </div>
+  </fieldset>
+
+  <fieldset>
+    <div class="row">
+      <mat-form-field appearance="outline" class="col-md-12">
+        <ngx-mat-file-input
+          formControlName="Oficio"
+          placeholder="oficio"
+          valuePlaceholder="Insira o ofício"
+          (change)="checkOficio($event)" type="file"></ngx-mat-file-input>
+        <mat-icon matSuffix>folder</mat-icon>
+        <mat-error class="error-access" *ngIf="!oficioValido">{{ msgErroOficio }}</mat-error>
+      </mat-form-field>
+    </div>
+  </fieldset>
+
+</form>
+
+<!--[mat-dialog-close]="usuarioModel"-->
+<mat-dialog-actions align="end">
+  <button mat-button mat-dialog-close (click)="closeModal()">Fechar</button>
+  <button mat-button  cdkFocusInitial [disabled]="!formSolicitacaoFaixa.valid" (click)="salvar()">Salvar</button>
+</mat-dialog-actions>

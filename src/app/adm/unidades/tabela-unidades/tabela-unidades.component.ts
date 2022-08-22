@@ -13,6 +13,11 @@ import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
 import { Unidade } from 'src/app/shared/models/unidade.model';
 
+import { DialogUnidadesComponent } from "../dialog-unidades/dialog-unidades.component";
+import { DialogModel } from "../dialog-unidades/dialog-model/dialog-model";
+
+import { faPen,faBan, faCheck, faPlus, faSearch } from '@fortawesome/free-solid-svg-icons';
+
 @Component({
   selector: 'app-tabela-unidades',
   templateUrl: './tabela-unidades.component.html',
@@ -20,11 +25,20 @@ import { Unidade } from 'src/app/shared/models/unidade.model';
 })
 export class TabelaUnidadesComponent implements OnInit {
 
+  // Ícones
+  faPen = faPen;
+  faBan = faBan;
+  faCheck = faCheck;
+  faPlus = faPlus;
+  faSearch = faSearch;
+
   columns: string[] = [];
   unidade: Unidade[] = [];
   unidades: Unidade[] = [];
   dataSource!: any
   lenght!: number;
+
+  filtro: string = "";
 
   @ViewChild(MatPaginator) paginator!: MatPaginator;
   @ViewChild(MatSort) sort!: MatSort;
@@ -39,36 +53,43 @@ export class TabelaUnidadesComponent implements OnInit {
   ) {
     this.columns = [
       "Cnes",
-      "Nome",
-      "Telefone",
-      "Logradouro",
-      "Numero",
-      "Complemento",
-      "Cep",
-      "Bairro",
+      "Descricao",
       "Municipio",
-      "Estado",
+      "CotaAihComumMensal",
+      "CotaApacComumMensal",
+      "CotaAihEletivaMensal",
+      "CotaApacEletivaMensal",
+      "UsuarioResponsavel",
+      "Situacao",
       "editarUnidade",
       "desativarUnidade",
     ];
   }
 
   ngOnInit(): void {
+    this.buscarUnidades();
+  }
+
+  buscarUnidades() {
     this.util.loading.next(true);
-    this.unidadeService.getUnidades().subscribe({
+    this.unidadeService.getUnidades(this.filtro).subscribe({
       next: (data) => {
         console.log(this.paginator);
         console.log(this.sort);
-        /* console.log(data); */
         this.dataSource = new MatTableDataSource<Unidade>(data as any);
         this.dataSource.paginator = this.paginator;
         this.dataSource.sort = this.sort;
         this.util.loading.next(false);
       },error: (err) => {
-        /* console.error(err); */
         this.util.loading.next(false);
       }
     })
+  }
+
+  submeterFiltro(event: any) {
+    if ( event.keyCode == 13 ) {
+      this.filtrar();
+    }
   }
 
   /*ngOnInit(): void {
@@ -136,7 +157,7 @@ error: () => {this.util.loading.next(false)}*/
         }
       });
       dialogRef.afterClosed().subscribe(result => {
-        /* location.reload(); */
+        location.reload();
       });
     }else {
       const dialogRef = this.modal.open(ModalUnidadesComponent, {
@@ -152,11 +173,12 @@ error: () => {this.util.loading.next(false)}*/
     this.abrirModalUnidade()
   }
 
-  editarUnidade(unidade: Unidade) {
-    this.abrirModalUnidade(unidade.id)
+  editarUnidade(id: number) {
+    this.abrirModalUnidade(id);
   }
 
-  getClass(situacao: number) {
+  getClass(situacao: any) {
+    situacao = parseInt(situacao);
     switch(situacao) {
       case 1:
         return 'alert-success'
@@ -201,31 +223,93 @@ error: () => {this.util.loading.next(false)}*/
     }
   }
 
-  ativarDesativarUnidade(row: any)  {
-    let request = {
-      idUser: this.auth.getId(),
-      idRequest: row?.id,
-    }
-    console.log(row);
-    if ( row?.situacao == 1 ) {
-      this.unidadeService.desativarUnidade(request).subscribe({
-        next: () => {
-          this.util.openAlertModal("320px", "success-modal", "Unidade desativada!", `A unidade ${row.nome}, foi desativada no sistema!`).then((update) => {if(update) location.reload()});
-        },
-        error: () => {
-          this.util.openAlertModal("320px", "error-modal", "Erro ao desativar a unidade", `Houve um erro ao tentarmos desativar a unidade ${row.nome}! Por favor, tente novamente! Caso o problema persista, entre em contato via e-mail: sistemas.supinf@saude.rj.gov.br`);
-        },
-      })
-    } else {
-      this.unidadeService.desativarUnidade(request).subscribe({
-        next: () => {
-          this.util.openAlertModal("320px", "success-modal", "Unidade reativada!", `A unidade ${row.nome}, foi reativada no sistema!`).then((update) => {if(update) location.reload()});
-        },
-        error: () => {
-          this.util.openAlertModal("320px", "error-modal", "Erro ao reativar a unidade", `Houve um erro ao tentarmos reativar a unidade ${row.nome}! Por favor, tente novamente! Caso o problema persista, entre em contato via e-mail: sistemas.supinf@saude.rj.gov.br`);
-        },
-      })
-    }
+  desativarUnidade(id: number) {
+    this.util.loading.next(true);
+    this.unidadeService.contarUnidadesAtivas(id).subscribe({
+      next: (data) => {
+        if ( data > 0 ) {
+          this.util.openAlertModal("320px", "error-modal", "Erro ao desativar esta unidade",
+            `Existe usuário vinculado à esta unidade. Para desativá-la é necessário desativar o usuário associado`);
+          this.util.loading.next(false);
+        } else {
+          this.dialogConfirmarDesativarUnidade(id);
+          this.util.loading.next(false);
+
+        }
+      }
+    })
+  }
+
+  async dialogConfirmarDesativarUnidade(id: number) {
+    const info = {} as DialogModel;
+    info.title = "Desativar a unidade.";
+    info.msgCloseButton = "Fechar";
+    info.msgConfirmButton = "Desativar unidade";
+    info.msg = "Tem certeza que deseja desativar esta unidade?";
+    info.showCloseButton = true;
+    info.isHtmlString = true;
+    const dialog = this.modal.open(DialogUnidadesComponent, {
+      maxWidth: "320px",
+      height: "210px",
+      panelClass: "warning-modal",
+      autoFocus: true,
+      role: "alertdialog",
+      data: info
+    })
+    dialog.afterClosed().subscribe({
+      next: (data) => {
+        if ( data ){
+          this.util.loading.next(true);
+          this.unidadeService.desativarUnidade(id).subscribe({
+            next: (x) => {
+              this.util.openAlertModal("320px", "success-modal", "Unidade desativada!", `A unidade foi desativada no sistema com sucesso!`).then((update) => {if(update) location.reload()});
+              this.util.loading.next(false);
+            },
+            error: () => {
+              this.util.openAlertModal("320px", "error-modal", "Erro ao desativar a unidade", `Houve um erro ao tentarmos desativar esta unidade! Por favor, tente novamente! Caso o problema persista, entre em contato via e-mail: sistemas.supinf@saude.rj.gov.br`);
+            }
+          })
+        }
+      }
+    })
+  }
+
+  async dialogConfirmarAtivarUnidade(id: number) {
+    const info = {} as DialogModel;
+    info.title = "Ativar a unidade.";
+    info.msgCloseButton = "Fechar";
+    info.msgConfirmButton = "Ativar unidade";
+    info.msg = "Tem certeza que deseja ativar esta unidade?";
+    info.showCloseButton = true;
+    info.isHtmlString = true;
+    const dialog = this.modal.open(DialogUnidadesComponent, {
+      maxWidth: "320px",
+      height: "210px",
+      panelClass: "warning-modal",
+      autoFocus: true,
+      role: "alertdialog",
+      data: info
+    })
+    dialog.afterClosed().subscribe({
+      next: (data) => {
+        if ( data ){
+          this.util.loading.next(true);
+          this.unidadeService.ativarUnidade(id).subscribe({
+            next: (x) => {
+              this.util.openAlertModal("320px", "success-modal", "Unidade ativada!", `A unidade foi ativada no sistema com sucesso!`).then((update) => {if(update) location.reload()});
+              this.util.loading.next(false);
+            },
+            error: () => {
+              this.util.openAlertModal("320px", "error-modal", "Erro ao ativar a unidade", `Houve um erro ao tentarmos ativar esta unidade! Por favor, tente novamente! Caso o problema persista, entre em contato via e-mail: sistemas.supinf@saude.rj.gov.br`);
+            }
+          })
+        }
+      }
+    })
+  }
+
+  filtrar() {
+    this.buscarUnidades();
   }
 
   ngAfterContentChecked() {

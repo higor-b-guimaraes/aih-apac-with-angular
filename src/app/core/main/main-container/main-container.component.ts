@@ -20,74 +20,76 @@ export class MainContainerComponent implements OnInit {
 
   menu: Array<any> = [
     {
-      nome: 'Home',
-      link: '/',
-      permission: 'Administrador',
-      secondPermission: 'Autorizador',
-      thirdPermission: 'Operador',
-    },
-    {
-      nome: 'Gerar Faixas',
-      link: '/gerar-faixas',
-      permission: 'Administrador',
-      thirdPermission: 'Operador',
-    },
-    {
-      nome: 'Analisar solicitações',
-      link: '/analisar-faixas',
-      permission: 'Administrador',
-      secondPermission: 'Autorizador',
-    },
-    /*{
-      nome: 'Analisar solicitações de troca de senhas',
-      link: '/analisar-senhas',
-      profile: 'Administrador',
-      permission: 'Administrador',
-    },*/
-    {
-      nome: 'Consultar faixas',
-      link: '/consultar-faixas',
-      permission: 'Administrador',
-      secondPermission: 'Autorizador',
-      thirdPermission: 'Operador',
-    },
-    {
-      nome: 'Motivos de reprovação de solicitação',
-      link: '/motivo-reprovacao',
-      permission: 'Administrador',
-    },
-    {
-      nome: 'Unidades',
-      link: '/unidades',
-      permission: 'Administrador',
+      nome: 'Página Inicial',
+      link: '/pagina-inicial',
+      permission: 1,
+      secondPermission: 2,
+      thirdPermission: 3
     },
     {
       nome: 'Usuários',
       link: '/usuarios',
-      permission: 'Administrador',
+      permission: 1,
+    },
+    {
+      nome: 'Unidades',
+      link: '/unidades',
+      permission: 1,
+    },
+    {
+      nome: 'Municípios',
+      link: '/municipios',
+      permission: 1,
+    },
+    {
+      nome: 'Alterar Senha',
+      link: '/alterar-senha',
+      permission: 1,
+      secondPermission: 2,
+      thirdPermission: 3
+    },
+    {
+      nome: 'Solicitar Faixas Extras',
+      link: '/solicitar-faixas-extras',
+      permission: 1,
+      secondPermission: 2,
+      thirdPermission: 3
+    },
+    {
+      nome: 'Analisar Solicitações de Alteração de Senha',
+      link: '/analise-solicitacao-alteracao-senha',
+      permission: 1
+    },
+    {
+      nome: 'Analisar Solicitações de Faixa Extra',
+      link: '/analise-solicitacao-faixa-extra',
+      permission: 1
+    },
+    {
+      nome: 'Obter Faixas',
+      link: '/obter-faixas',
+      permission: 1
+    },
+    {
+      nome: 'Motivos de Reprovação de Solicitações',
+      link: '/motivo-reprovacao',
+      permission: 1,
     },
     {
       nome: 'Auditoria',
       link: '/auditoria',
-      permission: 'Administrador',
-
+      permission: 1,
     },
     {
-      nome: 'Alterar senha',
-      link: '/alterar-senha',
-      permission: 'Administrador',
-      secondPermission: 'Autorizador',
-      thirdPermission: 'Operador',
-    },
-    {
-      nome: 'sair',
-      permission: 'Administrador',
-      secondPermission: 'Autorizador',
-      thirdPermission: 'Operador',
+      nome: 'Sair',
+      permission: 1,
+      secondPermission: 2,
+      thirdPermission: 3,
     },
   ];
 
   private subscribeLoading!: Subscription;
+  titulo: string = "Página Inicial";
 
   constructor(
     private cdRef: ChangeDetectorRef,
@@ -115,21 +117,18 @@ export class MainContainerComponent implements OnInit {
 
   /* Controller Menu Access */
   controlAccessMenu(typeOfProfile: any) {
-    switch(typeOfProfile['profile']) {
-      case 'Operador':
+    var idPerfilUsuario = parseInt(typeOfProfile.IdPerfilUsuario);
+    switch(idPerfilUsuario) {
+      case 3:
         for(let i = this.menu.length; i >= 0; i--) {
-
           if(this.menu[i]?.thirdPermission === undefined) this.menu.splice(i, 1);
-
         }
-      break;
-
-      case 'Autorizador':
+        break;
+      case 2:
         for(let i = this.menu.length; i >= 0; i--) {
           if(this.menu[i]?.secondPermission === undefined) this.menu.splice(i, 1);
         }
-      break;
-
+        break;
       default:
     }
   }

@@ -11,7 +11,10 @@ export class AuthenticationService {
 
   constructor(private http: HttpClient, private auth: AuthService) {}
 
-  login(user: { Cpf: string; Senha: string }) {
+  login(user: { Usuario: string; Senha: string }) {
+    const httpOptions = {
+      headers: new HttpHeaders({'Content-Type': 'application/json'})
+    }
     return this.http.post(`${environment.BASE_URL}Login/logar`, user)
     .pipe(
       take(1),

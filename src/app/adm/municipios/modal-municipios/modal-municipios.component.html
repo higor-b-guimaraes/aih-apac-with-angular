@@ -1,0 +1,52 @@
+<form [formGroup]="formMunicipio" class="row g-3">
+  <fieldset>
+    <legend>Informações de Controle</legend>
+
+    <div class="row">
+      <!-- Código IBGE -->
+      <mat-form-field appearance="outline"  class="col-md-3">
+        <mat-label>Código IBGE</mat-label>
+        <input matInput formControlName="CodigoIbge">
+      </mat-form-field>
+
+      <!-- Nome do município -->
+      <mat-form-field appearance="outline"  class="col-md-9">
+        <mat-label>Município</mat-label>
+        <input matInput formControlName="NomeMunicipio">
+      </mat-form-field>
+    </div>
+  </fieldset>
+
+  <fieldset>
+    <div class="row">
+      <mat-form-field appearance="outline"  class="col-md-3">
+        <mat-label>Cota AIH Comum Mensal</mat-label>
+        <input matInput formControlName="CotaAihComumMensal" type="number">
+        <mat-error *ngIf="formMunicipio.get('CotaAihComumMensal')?.hasError('required')">É preciso informar uma cota AIH Comum Mensal para este município</mat-error>
+      </mat-form-field>
+
+      <mat-form-field appearance="outline"  class="col-md-3">
+        <mat-label>Cota APAC Comum Mensal</mat-label>
+        <input matInput formControlName="CotaApacComumMensal" type="number" >
+        <mat-error *ngIf="formMunicipio.get('CotaApacComumMensal')?.hasError('required')">É preciso informar uma cota APAC Comum Mensal para este município</mat-error>
+      </mat-form-field>
+
+      <mat-form-field appearance="outline"  class="col-md-3">
+        <mat-label>Cota AIH Eletiva Mensal</mat-label>
+        <input matInput formControlName="CotaAihEletivaMensal" type="number">
+        <mat-error *ngIf="formMunicipio.get('CotaAihEletivaMensal')?.hasError('required')">É preciso informar uma cota AIH Eletiva Mensal para este município</mat-error>
+      </mat-form-field>
+
+      <mat-form-field appearance="outline"  class="col-md-3">
+        <mat-label>Cota APAC Eletiva Mensal</mat-label>
+        <input matInput formControlName="CotaApacEletivaMensal" type="number">
+        <mat-error *ngIf="formMunicipio.get('CotaApacEletivaMensal')?.hasError('required')">É preciso informar uma cota APAC Eletiva Mensal para este município</mat-error>
+      </mat-form-field>
+    </div>
+  </fieldset>
+</form>
+
+<mat-dialog-actions align="end">
+  <button mat-button mat-dialog-close (click)="closeModal(2)">Fechar</button>
+  <button mat-button cdkFocusInitial [disabled]="!formMunicipio.valid" (click)="salvar()">Salvar</button>
+</mat-dialog-actions>

@@ -5,8 +5,16 @@ import { Injectable } from "@angular/core";
 export class CustomValidators {
 
 
-  cpfValidator(input: FormControl) {
+  loginValidator(input: FormControl) {
+    input.hasError('campoVazio');
 
+    if ( input.value.trim() === "" ) {
+      return { campoVazio: true };
+    }
+    return null;
+  }
+
+  cpfValidator(input: FormControl) {
     input.hasError('cpfInvalido');
     input.hasError('cpfIncompleto');
 

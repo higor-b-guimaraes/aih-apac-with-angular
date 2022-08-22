@@ -1,4 +1,3 @@
-
 <div *ngIf="loading" class="loading-data">
   <mat-spinner></mat-spinner>
 </div>
@@ -12,24 +11,27 @@
       </mat-card-header>
 
       <mat-card-content class="body-container-card">
-        <mat-form-field
-        [formGroup]="formRecovery"
-        appearance="outline">
+        <mat-form-field [formGroup]="formRecovery" appearance="outline">
 
-          <mat-label>CPF</mat-label>
+          <!-- Login -->
+          <mat-label>Usuário</mat-label>
+          <input matInput formControlName="Usuario" (blur)="testarUsuario()" required>
+          <mat-icon matSuffix *ngIf="!validLogin">person_2</mat-icon>
+          <mat-icon matSuffix *ngIf="validLogin">how_to_reg</mat-icon>
+          <mat-error class="error-access" *ngIf="!validLogin">{{ errorLoginMsg }}</mat-error>
+
+          <!--<mat-label>CPF</mat-label>
           <input matInput
           formControlName="cpf"
           mask="000.000.000-00"
           (focusout)="checkCpf()" required>
           <mat-error class="error-access" *ngIf="!validCpf">{{ errorCpfMsg }}</mat-error>
+        </mat-form-field>-->
         </mat-form-field>
-
-        <mat-form-field
-        [formGroup]="formRecovery"
-        appearance="outline"
-        *ngIf="!isAdm">
+          <!-- Ofício -->
+        <mat-form-field [formGroup]="formRecovery" appearance="outline" *ngIf="!isAdm">
           <ngx-mat-file-input
-          formControlName="oficio"
+          formControlName="Oficio"
           placeholder="Ofício"
           valuePlaceholder="Insira o ofício"
           (change)="checkOficio()" [required]="false"></ngx-mat-file-input>
@@ -43,10 +45,9 @@
           class="btn-login"
           [disabled]="!this.formRecovery.valid"
           (click)="onSubmit()"
-          >Entrar</button>
+          >Solicitar Recuperação de Senha</button>
         </mat-card-actions>
       </mat-card-content>
-
     </mat-card>
   </div>
 </section>

@@ -15,14 +15,13 @@
         <mat-form-field
         [formGroup]="formLogin"
         appearance="outline">
-          <mat-label>CPF</mat-label>
+          <mat-label>Usuário</mat-label>
           <input matInput
-          formControlName="Cpf"
-          mask="000.000.000-00"
-          (focusout)="checkCpf()" required>
-          <mat-icon matSuffix *ngIf="!validCpf">person_2</mat-icon>
-          <mat-icon matSuffix *ngIf="validCpf">how_to_reg</mat-icon>
-          <mat-error class="error-access" *ngIf="!validCpf">{{ errorCpfMsg }}</mat-error>
+          formControlName="Usuario"
+          (focusout)="checkLogin()" required>
+          <mat-icon matSuffix *ngIf="!validLogin">person_2</mat-icon>
+          <mat-icon matSuffix *ngIf="validLogin">how_to_reg</mat-icon>
+          <mat-error class="error-access" *ngIf="!validLogin">{{ errorLoginMsg }}</mat-error>
         </mat-form-field>
 
         <mat-form-field

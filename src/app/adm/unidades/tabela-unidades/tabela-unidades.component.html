@@ -1,86 +1,109 @@
 <div class="container-table">
-
-  <div class="container-funcionalidades">
-    <button mat-mini-fab class="btn-novo-cadastro" (click)="novaUnidade()"><mat-icon>add_circle</mat-icon></button>
-    <mat-form-field appearance="standard">
-      <mat-label>Pesquisar</mat-label>
-      <input matInput (keyup)="applyFilter($event)" placeholder="Ex.AIH-Comum" #input>
+  <div class="row" style="width: 100%">
+    <mat-form-field class="col-sm-9 col-md-6 col-lg-4 align-self-start">
+      <mat-label>Filtrar:</mat-label>
+      <input (keypress)="submeterFiltro($event)" id="inputFiltro" type="text" matInput [(ngModel)]="filtro">
+      <button *ngIf="filtro" matSuffix mat-icon-button aria-label="Clear" (click)="filtro='';filtrar();">
+        <mat-icon>close</mat-icon>
+      </button>
     </mat-form-field>
+    <div class="col-3">
+      <button mat-raised-button color="primary" (click)="filtrar()">
+        <fa-icon [icon]="faSearch"></fa-icon>&nbsp;Filtrar</button>
+    </div>
   </div>
 
   <table mat-table [dataSource]="dataSource" matSort class="mat-elevation-z8 table">
-    <ng-container matColumnDef="Nome" >
-      <th mat-header-cell class="header-table" *matHeaderCellDef mat-sort-header [style.placeContent]="'center'"> Nome da Unidade </th>
-      <td mat-cell *matCellDef="let row" [class]="getClass(row.situacao)" > {{row.nome}} </td>
-    </ng-container>
-
+    <!-- Cnes -->
     <ng-container matColumnDef="Cnes" >
-      <th mat-header-cell class="header-table" *matHeaderCellDef mat-sort-header [style.placeContent]="'center'"> CNES da Unidade </th>
-      <td mat-cell [class]="getClass(row.situacao)" *matCellDef="let row"> {{row.cnes}} </td>
+      <th mat-header-cell class="header-table" *matHeaderCellDef mat-sort-header [style.placeContent]="'center'">CNES</th>
+      <td mat-cell [class]="getClass(row.Situacao)" *matCellDef="let row"> {{row.Cnes}} </td>
     </ng-container>
 
-    <ng-container matColumnDef="Telefone" >
-      <th mat-header-cell class="header-table" *matHeaderCellDef mat-sort-header [style.placeContent]="'center'"> Telefone </th>
-      <td mat-cell [class]="getClass(row.situacao)" *matCellDef="let row"> {{row.telefone}} </td>
+    <!-- Descrição -->
+    <ng-container matColumnDef="Descricao" >
+      <th mat-header-cell class="header-table" *matHeaderCellDef mat-sort-header [style.placeContent]="'center'">Nome da Unidade</th>
+      <td style="white-space: nowrap" mat-cell *matCellDef="let row" [class]="getClass(row.Situacao)" > {{row.UnidadeDescricao}} </td>
     </ng-container>
 
-    <ng-container matColumnDef="Logradouro" >
-      <th mat-header-cell class="header-table" *matHeaderCellDef mat-sort-header [style.placeContent]="'center'"> Logradouro </th>
-      <td mat-cell [class]="getClass(row.situacao)" *matCellDef="let row"> {{row.logradouro}} </td>
-    </ng-container>
-
-    <ng-container matColumnDef="Numero" >
-      <th mat-header-cell class="header-table" *matHeaderCellDef mat-sort-header [style.placeContent]="'center'"> Número </th>
-      <td mat-cell [class]="getClass(row.situacao)" *matCellDef="let row"> {{row.numero}} </td>
-    </ng-container>
-
-    <ng-container matColumnDef="Complemento" >
-      <th mat-header-cell class="header-table" *matHeaderCellDef mat-sort-header [style.placeContent]="'center'"> Complemento </th>
-      <td mat-cell [class]="getClass(row.situacao)" *matCellDef="let row"> {{row.complemento}} </td>
-    </ng-container>
-
-    <ng-container matColumnDef="Cep" >
-      <th mat-header-cell class="header-table" *matHeaderCellDef mat-sort-header [style.placeContent]="'center'"> Cep </th>
-      <td mat-cell [class]="getClass(row.situacao)" *matCellDef="let row"> {{row.cep}} </td>
-    </ng-container>
-
-    <ng-container matColumnDef="Bairro" >
-      <th mat-header-cell class="header-table" *matHeaderCellDef mat-sort-header [style.placeContent]="'center'"> Bairro </th>
-      <td mat-cell [class]="getClass(row.situacao)" *matCellDef="let row"> {{row.bairro}} </td>
-    </ng-container>
-
+    <!-- Município -->
     <ng-container matColumnDef="Municipio" >
-      <th mat-header-cell class="header-table" *matHeaderCellDef mat-sort-header [style.placeContent]="'center'"> Município </th>
-      <td mat-cell [class]="getClass(row.situacao)" *matCellDef="let row"> {{row.municipio}} </td>
+      <th mat-header-cell class="header-table" *matHeaderCellDef mat-sort-header [style.placeContent]="'center'">Município</th>
+      <td mat-cell [class]="getClass(row.Situacao)" *matCellDef="let row"> {{row.NomeMunicipio}} </td>
     </ng-container>
 
-    <ng-container matColumnDef="Estado" >
-      <th mat-header-cell class="header-table" *matHeaderCellDef mat-sort-header [style.placeContent]="'center'"> Estado </th>
-      <td mat-cell [class]="getClass(row.situacao)" *matCellDef="let row"> {{row.estado}} </td>
+    <ng-container matColumnDef="CotaAihComumMensal">
+      <th mat-header-cell class="header-table" *matHeaderCellDef mat-sort-header [style.placeContent]="'center'">Cota AIH Comum Mensal</th>
+      <td mat-cell [class]="getClass(row.Situacao)" *matCellDef="let row"> {{row.CotaAihComumMensal}} </td>
+    </ng-container>
+
+    <ng-container matColumnDef="CotaApacComumMensal">
+      <th mat-header-cell class="header-table" *matHeaderCellDef mat-sort-header [style.placeContent]="'center'">Cota APAC Comum Mensal</th>
+      <td mat-cell [class]="getClass(row.Situacao)" *matCellDef="let row"> {{row.CotaApacComumMensal}} </td>
+    </ng-container>
+
+    <ng-container matColumnDef="CotaAihEletivaMensal">
+      <th mat-header-cell class="header-table" *matHeaderCellDef mat-sort-header [style.placeContent]="'center'">Cota AIH Eletiva Mensal</th>
+      <td mat-cell [class]="getClass(row.Situacao)" *matCellDef="let row"> {{row.CotaAihEletivaMensal}} </td>
+    </ng-container>
+
+    <ng-container matColumnDef="CotaApacEletivaMensal">
+      <th mat-header-cell class="header-table" *matHeaderCellDef mat-sort-header [style.placeContent]="'center'">Cota APAC Eletiva Mensal</th>
+      <td mat-cell [class]="getClass(row.Situacao)" *matCellDef="let row"> {{row.CotaApacEletivaMensal}} </td>
+    </ng-container>
+
+    <ng-container matColumnDef="UsuarioResponsavel">
+      <th mat-header-cell class="header-table" *matHeaderCellDef mat-sort-header [style.placeContent]="'center'">Usuário Responsável</th>
+      <td mat-cell [class]="getClass(row.Situacao)" *matCellDef="let row"></td>
+    </ng-container>
+
+    <ng-container matColumnDef="Situacao">
+      <th mat-header-cell class="header-table" *matHeaderCellDef mat-sort-header [style.placeContent]="'center'">Situação</th>
+      <td mat-cell [class]="getClass(row.Situacao)" *matCellDef="let row">{{ row.Descricao }}</td>
     </ng-container>
 
     <ng-container matColumnDef="editarUnidade">
       <th mat-header-cell class="header-table" *matHeaderCellDef [style]="{justify: 'end', width: '20px'}"> Editar Unidade </th>
-      <td mat-cell [class]="getClass(row.situacao)" *matCellDef="let row">
-        <button (click)=" editarUnidade(row)" class="btn btn-warning" mat-raised-button aria-label="Example icon button with a delete icon">
-        <mat-icon> edit_note</mat-icon>
-      </button> </td>
+      <td mat-cell [class]="getClass(row.Situacao)" *matCellDef="let row">
+        <!--<button (click)=" editarUnidade(row)" class="btn btn-warning" mat-raised-button aria-label="Example icon button with a delete icon">
+          <mat-icon> edit_note</mat-icon>
+        </button> </td>-->
+        <button mat-icon-button class="btn-outline-dark"  (click)="editarUnidade(row.Id)" >
+          <fa-icon [icon]="faPen"></fa-icon>
+        </button>
     </ng-container>
 
     <ng-container matColumnDef="desativarUnidade">
-      <th mat-header-cell class="header-table" *matHeaderCellDef [style]="{justify: 'end', width: '20px'}"> Ativar / Desativar Unidade </th>
-      <td mat-cell [class]="getClass(row.situacao)" *matCellDef="let row">
-        <button (click)="ativarDesativarUnidade(row)" [class]="getBtnActiveDesative(row.situacao)" mat-raised-button aria-label="Example icon button with a delete icon">
-        <mat-icon> {{row.situacao === 0 ?  'check_circle': 'unpublished'}}</mat-icon>
-      </button> </td>
+      <th mat-header-cell class="header-table" *matHeaderCellDef [style]="{justify: 'end', width: '20px'}"> Ativar/Desativar Unidade </th>
+      <td mat-cell [class]="getClass(row.Situacao)" *matCellDef="let row">
+        <button *ngIf="row.Situacao == 1" mat-icon-button class="btn-outline-danger" (click)="desativarUnidade(row.Id)" >
+          <fa-icon [icon]="faBan"></fa-icon>
+        </button>
+        <button *ngIf="row.Situacao == 0" mat-icon-button class="btn-outline-success" (click)="dialogConfirmarAtivarUnidade(row.Id)" >
+          <fa-icon [icon]="faCheck"></fa-icon>
+        </button>
+        <!--<button (click)="ativarDesativarUnidade(row)" [class]="getBtnActiveDesative(row.Situacao)" mat-raised-button aria-label="Example icon button with a delete icon">
+          <mat-icon> {{row.Situacao === 0 ?  'check_circle': 'unpublished'}}</mat-icon>
+        </button>-->
+      </td>
     </ng-container>
 
     <tr mat-header-row *matHeaderRowDef="columns"></tr>
     <tr mat-row *matRowDef="let row; columns: columns;"></tr>
     <tr class="mat-row" *matNoDataRow>
-      <td class="mat-cell" colspan="4">Nenhum valor encontrado para o filtro: "{{input.value}}"</td>
+      <td class="mat-cell" colspan="4">Nenhum resultado encontrado!</td>
     </tr>
   </table>
 
   <mat-paginator (page)="getNewElements()" [pageSizeOptions]="[5, 10, lenght]" aria-label="Select page of users"></mat-paginator>
+
+  <div class="row" style="width: 100%;">
+    <div class="col-12 pull-right">
+      <button (click)="novaUnidade()" class="float-end" mat-raised-button color="primary">
+        <fa-icon [icon]="faPlus"></fa-icon>&nbsp;Incluir unidade</button>
+    </div>
+  </div>
 </div>
+
+<!-- <button mat-mini-fab class="btn-novo-cadastro" (click)="novaUnidade()">
+<mat-icon>add_circle</mat-icon></button>-->

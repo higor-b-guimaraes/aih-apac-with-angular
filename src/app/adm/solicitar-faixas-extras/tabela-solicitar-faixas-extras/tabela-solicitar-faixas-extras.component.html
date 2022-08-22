@@ -1,0 +1,83 @@
+<div class="container-table">
+  <div class="row" style="width: 100%; margin-top: 18px;">
+    <mat-form-field class="col-sm-9 col-md-6 col-lg-4 align-self-start">
+      <mat-label>Filtrar:</mat-label>
+      <input (keypress)="submeterFiltro($event)" id="inputFiltro" type="text" matInput [(ngModel)]="filtro">
+      <button *ngIf="filtro" matSuffix mat-icon-button aria-label="Clear" (click)="filtro='';filtrar();">
+        <mat-icon>close</mat-icon>
+      </button>
+    </mat-form-field>
+    <div class="col-3">
+      <button mat-raised-button color="primary" (click)="filtrar()">
+        <fa-icon [icon]="faSearch"></fa-icon>&nbsp;Filtrar</button>
+    </div>
+  </div>
+
+  <table mat-table [dataSource]="dataSource" matSort class="mat-elevation-z8 table">
+
+    <!-- Data da solicitação -->
+    <ng-container matColumnDef="DataSolicitacao" >
+      <th mat-header-cell class="header-table" *matHeaderCellDef mat-sort-header [style.placeContent]="'center'">Data da Solicitação</th>
+      <td mat-cell [class]="getClass(row.IdSituacaoSolicitacao)" *matCellDef="let row"> {{row.DataSolicitacao | date: 'dd/MM/yyyy'}} </td>
+    </ng-container>
+
+    <!-- Solicitante -->
+    <ng-container matColumnDef="Solicitante" >
+      <th mat-header-cell class="header-table" *matHeaderCellDef mat-sort-header [style.placeContent]="'center'">Solicitante</th>
+      <td  style="white-space: nowrap" mat-cell *matCellDef="let row" [class]="getClass(row.IdSituacaoSolicitacao)" >
+        {{ row.IdTipoSolicitante == 1 ? row.DescricaoUnidade : row.DescricaoMunicipio }}
+      </td>
+    </ng-container>
+
+    <!-- Tipo de faixa -->
+    <ng-container matColumnDef="DescricaoTipoFaixa" >
+      <th mat-header-cell class="header-table" *matHeaderCellDef mat-sort-header [style.placeContent]="'center'">Tipo de Faixa</th>
+      <td mat-cell [class]="getClass(row.IdSituacaoSolicitacao)" *matCellDef="let row"> {{row.DescricaoTipoFaixa}} </td>
+    </ng-container>
+
+    <!-- Quantidade -->
+    <ng-container matColumnDef="QuantidadeFaixas">
+      <th mat-header-cell class="header-table" *matHeaderCellDef mat-sort-header [style.placeContent]="'center'">Quantidade</th>
+      <td mat-cell [class]="getClass(row.IdSituacaoSolicitacao)" *matCellDef="let row"> {{row.QuantidadeFaixas}} </td>
+    </ng-container>
+
+    <!-- Competência -->
+    <ng-container matColumnDef="Competencia">
+      <th mat-header-cell class="header-table" *matHeaderCellDef mat-sort-header [style.placeContent]="'center'">Competência</th>
+      <td mat-cell [class]="getClass(row.IdSituacaoSolicitacao)" *matCellDef="let row"> {{row.Competencia}} </td>
+    </ng-container>
+
+    <!-- Mês -->
+    <ng-container matColumnDef="Mes">
+      <th mat-header-cell class="header-table" *matHeaderCellDef mat-sort-header [style.placeContent]="'center'">Mês</th>
+      <td mat-cell [class]="getClass(row.IdSituacaoSolicitacao)" *matCellDef="let row"> {{row.Mes}} </td>
+    </ng-container>
+
+    <!-- Ofício de autorização -->
+    <ng-container matColumnDef="OficioAutorizacao">
+      <th mat-header-cell class="header-table" *matHeaderCellDef mat-sort-header [style.placeContent]="'center'">Ofício de autorizacao</th>
+      <td mat-cell [class]="getClass(row.IdSituacaoSolicitacao)" *matCellDef="let row"> {{row.OficioAutorizacao}} </td>
+    </ng-container>
+
+    <!-- Situacao -->
+    <ng-container matColumnDef="SituacaoDescricao">
+      <th mat-header-cell class="header-table" *matHeaderCellDef mat-sort-header [style.placeContent]="'center'">Situação</th>
+      <td mat-cell [class]="getClass(row.IdSituacaoSolicitacao)" *matCellDef="let row"></td>
+    </ng-container>
+
+    <tr mat-header-row *matHeaderRowDef="columns"></tr>
+    <tr mat-row *matRowDef="let row; columns: columns;"></tr>
+    <tr class="mat-row" *matNoDataRow>
+      <td class="mat-cell" colspan="4">Nenhum resultado encontrado!</td>
+    </tr>
+  </table>
+
+  <mat-paginator (page)="getNewElements()" [pageSizeOptions]="[5, 10,30,50]" aria-label="Select page of users"></mat-paginator>
+
+  <div class="row" style="width: 100%; margin-bottom: 18px;">
+    <div class="col-12 pull-right">
+      <button (click)="solicitarFaixaExtra()" class="float-end" mat-raised-button color="primary">
+        <fa-icon [icon]="faPlus"></fa-icon>&nbsp;Solicitar Faixa Extra</button>
+    </div>
+  </div>
+</div>

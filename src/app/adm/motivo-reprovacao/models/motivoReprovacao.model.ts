@@ -1,5 +1,13 @@
 export interface MotivoReprovacao {
   Id: number;
-  Motivo: string,
-  Status: string;
+  Descricao: string;
+  Situacao: number;
+  IdTipoSolicitacao: number;
+}
+
+export interface ListaMotivoReprovacao {
+  Id: number;
+  motivoDescricao: string;
+  motivoSituacao: string;
+  motivoTipoSolicitacao: string;
 }

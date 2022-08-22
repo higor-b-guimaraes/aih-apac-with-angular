@@ -1,1 +1,78 @@
-<p>auditoria works!</p>
+<div class="container-table">
+  <!--<div class="row" style="width: 100%">
+    <mat-form-field class="col-sm-9 col-md-6 col-lg-4 align-self-start">
+      <mat-label>Filtrar:</mat-label>
+      <input (keypress)="submeterFiltro($event)" id="inputFiltro" type="text" matInput [(ngModel)]="filtro">
+      <button *ngIf="filtro" matSuffix mat-icon-button aria-label="Clear" (click)="filtro='';filtrar();">
+        <mat-icon>close</mat-icon>
+      </button>
+    </mat-form-field>
+    <div class="col-3">
+      <button mat-raised-button color="primary" (click)="filtrar()">
+        <fa-icon [icon]="faSearch"></fa-icon>&nbsp;Filtrar</button>
+    </div>
+  </div>-->
+
+  <table mat-table [dataSource]="dataSource" matSort class="mat-elevation-z8 table">
+    <!--"Funcionalidade",
+    "Usuario",
+    "DataHora",
+    "TipoMovimentacao",
+    "NomeCampo",
+    "ValorInicial",
+    "ValorAlterado"-->
+
+    <!-- Funcionalidade -->
+    <ng-container matColumnDef="Funcionalidade" >
+      <th mat-header-cell class="header-table" *matHeaderCellDef mat-sort-header [style.placeContent]="'center'">Fucionalidade</th>
+      <td mat-cell *matCellDef="let row"> {{row.Funcionalidade }} </td>
+    </ng-container>
+    <!--| date: 'dd/MM/yyyy'-->
+
+    <!-- Usuário -->
+    <ng-container matColumnDef="Usuario" >
+      <th mat-header-cell class="header-table" *matHeaderCellDef mat-sort-header [style.placeContent]="'center'">Usuário</th>
+      <td  style="white-space: nowrap" mat-cell *matCellDef="let row" >
+        {{ row.NomeUsuario }}
+      </td>
+    </ng-container>
+
+    <!-- Data/Hora -->
+    <ng-container matColumnDef="DataHora" >
+      <th mat-header-cell class="header-table" *matHeaderCellDef mat-sort-header [style.placeContent]="'center'">Data/Hora</th>
+      <td mat-cell *matCellDef="let row"> {{row.DataHoraRegistro}} </td>
+    </ng-container>
+
+    <!-- TipoMovimentacao -->
+    <ng-container matColumnDef="TipoMovimentacao">
+      <th mat-header-cell class="header-table" *matHeaderCellDef mat-sort-header [style.placeContent]="'center'">Tipo de Movimentação</th>
+      <td mat-cell  *matCellDef="let row"> {{row.DescricaoTipoMovimentacao}} </td>
+    </ng-container>
+
+    <!-- NomeCampo -->
+    <ng-container matColumnDef="NomeCampo">
+      <th mat-header-cell class="header-table" *matHeaderCellDef mat-sort-header [style.placeContent]="'center'">Campo</th>
+      <td mat-cell *matCellDef="let row"> {{row.CampoAlterado}} </td>
+    </ng-container>
+
+    <!-- ValorInicial -->
+    <ng-container matColumnDef="ValorInicial">
+      <th mat-header-cell class="header-table" *matHeaderCellDef mat-sort-header [style.placeContent]="'center'">Valor Inicial</th>
+      <td mat-cell *matCellDef="let row"> {{row.ValorInicial}} </td>
+    </ng-container>
+
+    <!-- ValorAlterado -->
+    <ng-container matColumnDef="ValorAlterado">
+      <th mat-header-cell class="header-table" *matHeaderCellDef mat-sort-header [style.placeContent]="'center'">Valor Alterado</th>
+      <td mat-cell *matCellDef="let row">{{row.ValorFinal}}</td>
+    </ng-container>
+
+    <tr mat-header-row *matHeaderRowDef="columns"></tr>
+    <tr mat-row *matRowDef="let row; columns: columns;"></tr>
+    <tr class="mat-row" *matNoDataRow>
+      <td class="mat-cell" colspan="4">Nenhum resultado encontrado!</td>
+    </tr>
+  </table>
+
+  <mat-paginator (page)="getNewElements()" [pageSizeOptions]="[5, 10,30,50]" aria-label="Select page of users"></mat-paginator>
+</div>

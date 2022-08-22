@@ -25,6 +25,7 @@
 }
 
 .container-form {
+  padding-top: 8px;
   display: grid;
   height: 100%;
   align-content: center;
@@ -35,7 +36,6 @@
 .btn-login-active:hover {
   color: #fff;
   background-color: #363636;
-  width: 100%;
   margin-top: 15px;
 }
 
@@ -56,4 +56,8 @@
   align-items: center;
   justify-content: center;
   background-color: rgb(54, 54, 54, 0.7);
+}
+
+.container-btn-access {
+  text-align: center;
 }

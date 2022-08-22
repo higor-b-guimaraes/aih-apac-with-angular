@@ -27,20 +27,29 @@ export class ModalUnidadesComponent implements OnInit {
   estados!: Municipio[];
 
   opcoesEstados: any[] = [];
+  opcoesMunicipio: any[] = [];
+  opcoesSituacao: any[] = [
+    { "Codigo": 1, "Descricao": "Ativo"},
+    { "Codigo": 0, "Descricao": "Inativo"},
+  ]
 
   formUnidade: FormGroup = this.formBuilder.group({
-    Nome: ['', [Validators.required]],
+    Descricao: ['', [Validators.required]],
     Cnes: ['', Validators.required],
     Telefone: ['', Validators.required],
     preenchimentoAutomatico: [true, Validators.required],
-    Logradouro: ['', [Validators.required]],
-    Numero: [''],
+    Endereco: ['', [Validators.required]],
+    Numero: ['', Validators.required],
     Complemento: [''],
     Cep: ['', Validators.required],
     Bairro: ['', Validators.required],
-    Municipio: ['', Validators.required],
+    CodigoIbgeMunicipio: ['', Validators.required],
     Estado: ['', Validators.required],
-    Situacao: ['']
+    Situacao: [1],
+    CotaAihComumMensal: [0,Validators.required],
+    CotaApacComumMensal: [0,Validators.required],
+    CotaAihEletivaMensal: [0,Validators.required],
+    CotaApacEletivaMensal: [0,Validators.required]
   });
 
   constructor(
@@ -54,27 +63,32 @@ export class ModalUnidadesComponent implements OnInit {
 
     this.util.loading.next(true);
     this.getEstados();
+    this.getMunicipios();
 
     if(dataModal?.idRequest) {
       this.unidadeService.getUnidade(dataModal).subscribe({
         next: (res: any) => {
-          console.log(res)
           this.formUnidade.patchValue({
-            Nome: res.nome,
-            Cnes: res.cnes,
-            Telefone: res.telefone,
-            Logradouro: res.logradouro,
-            Numero: res.numero,
-            Complemento: res.complemento,
-            Cep: res.cep,
-            Bairro: res.bairro,
-            Municipio: res.municipio,
-            Estado: res.estado,
-            Situacao: res.situacao
+            Descricao: res.Descricao,
+            Cnes: res.Cnes,
+            Telefone: res.Telefone,
+            Endereco: res.Endereco,
+            Numero: res.Numero,
+            Complemento: res.Complemento,
+            Cep: res.Cep,
+            Bairro: res.Bairro,
+            CodigoIbgeMunicipio: res.CodigoIbgeMunicipio,
+            Estado: res.Estado,
+            Situacao: parseInt(res.Situacao),
+            CotaAihComumMensal: res.CotaAihComumMensal,
+            CotaApacComumMensal: res.CotaApacComumMensal,
+            CotaAihEletivaMensal: res.CotaAihEletivaMensal,
+            CotaApacEletivaMensal: res.CotaApacEletivaMensal
           });
-        this.novoCadastro = false;
+          this.formUnidade.get('Cnes')?.disable({onlySelf: true});
+          this.formUnidade.get('Descricao')?.disable({onlySelf: true});
+          this.novoCadastro = false;
         },
-
         error: () => {},
       })
     }else {
@@ -86,6 +100,10 @@ export class ModalUnidadesComponent implements OnInit {
     this.unidadeService.getEstados().subscribe({
       next: async (data: any) => {
         this.opcoesEstados = data;
+        this.formUnidade.patchValue({
+          Estado: 'RJ'
+        });
+        this.formUnidade.get('Estado')?.disable({onlySelf: true});
         this.util.loading.next(false);
       },
       error: (e) => {
@@ -95,12 +113,25 @@ export class ModalUnidadesComponent implements OnInit {
     })
   }
 
+  getMunicipios() {
+    this.unidadeService.getMunicipios().subscribe({
+      next: async (data: any) => {
+        this.opcoesMunicipio = data;
+        this.util.loading.next(false);
+      },
+      error: (e) => {
+        console.log(e);
+        this.util.loading.next(false);
+      }
+    })
+  }
+
   checkCNES() {
     if(this.formUnidade.get('Cnes')?.value.length === 7) {
       let request = {
         idUser: this.auth.getToken(),
         cnes: this.formUnidade.get('Cnes')?.value,
-        idUnidade: (this.unidadeModel?.id) ? this.unidadeModel.id : 0,
+        idUnidade: (this.dataModal?.idRequest) ? this.dataModal?.idRequest : 0,
       }
       this.util.loading.next(true);
       this.validateCNES(request);
@@ -117,7 +148,7 @@ export class ModalUnidadesComponent implements OnInit {
               this.formUnidade.patchValue({Cnes: ''});
               this.util.loading.next(false);
               resolve(false);
-            } else if (res.length > 0 && (this.unidadeModel.id !== res?.id)) {
+            } else if (res.length > 0 && (parseInt(this.dataModal?.idRequest) !== res[0]?.Id)) {
               this.util.openAlertModal('320px', 'warning-modal', 'CNES ao verificar CNES', 'Este CNES não pertence a unidade que está sendo atualizada!')
               this.formUnidade.patchValue({Cnes: ''});
               this.util.loading.next(false);
@@ -151,20 +182,24 @@ export class ModalUnidadesComponent implements OnInit {
   }
 
   getCep() {
+    if ( !this.formUnidade.get('preenchimentoAutomatico')?.value ) {
+      return;
+    }
     if(this.formUnidade.get('Cep')?.value.length === 9) {
       let cep = this.formUnidade.get('Cep')?.value.replace("-", "");
       this.unidadeService.getCep(cep).subscribe({
         next: (res: any) => {
-          if(res.erro) {
-            this.util.openAlertModal('320px', 'warning-modal', 'Cep inválido', 'Houve uma falha ao buscar os dados de endereço referente ao cep informado. Por favor, verfique se o cep está correto e tente novamente!');
-            return;
-          }
+          console.log(res);
           if(this.formUnidade.get('preenchimentoAutomatico')?.value) {
+            if(res.erro) {
+              this.util.openAlertModal('320px', 'warning-modal', 'Cep inválido', 'Houve uma falha ao buscar os dados de endereço referente ao cep informado. Por favor, verfique se o cep está correto e tente novamente!');
+              return;
+            }
             this.formUnidade.patchValue({
-              Logradouro: res?.logradouro,
+              Endereco: res?.logradouro,
               Complemento: res?.complemento,
               Bairro: res?.bairro,
-              Municipio: res?.localidade,
+              CodigoIbgeMunicipio: res?.ibge,
               Estado: res?.uf,
             });
           }
@@ -177,22 +212,23 @@ export class ModalUnidadesComponent implements OnInit {
   }
 
   async salvar(): Promise<any> {
+    this.formUnidade.removeControl('preenchimentoAutomatico');
     let request = {
       idUser: this.auth.getToken(),
-      data: this.formUnidade.value,
+      data: this.formUnidade.getRawValue(),
     }
     this.util.loading.next(true);
 
     if(await this.validateCNES(request)) {
       if(this.formUnidade.valid) {
         if(this.novoCadastro === true) {
-          await this.submitNovaUnidade(this.formUnidade.value);
-          this.util.openAlertModal("320px", "success-modal", "Unidade cadastrada!", `A unidade ${this.formUnidade.get(`Nome`)?.value}, foi cadastrado com sucesso no sistema!`).then((update) => {if(update) location.reload()});
+          await this.submitNovaUnidade(this.formUnidade.getRawValue());
+          this.util.openAlertModal("320px", "success-modal", "Unidade cadastrada!", `A unidade ${this.formUnidade.get(`Descricao`)?.value}, foi cadastrada com sucesso no sistema!`).then((update) => {if(update) location.reload()});
           this.closeModal(1);
           return;
         }else {
           await this.submitAtualizaUnidade(request);
-          this.util.openAlertModal("320px", "success-modal", "Atualização de dados realizada!", `Os dados da unidade ${this.formUnidade.get(`Nome`)?.value}, foram atualizados no sistema!`).then((update) => {if(update) location.reload()});
+          this.util.openAlertModal("320px", "success-modal", "Atualização de dados realizada!", `Os dados da unidade ${this.formUnidade.get(`Descricao`)?.value}, foram atualizados no sistema!`).then((update) => {if(update) location.reload()});
           this.closeModal(1);
           return;
         }
@@ -210,7 +246,7 @@ export class ModalUnidadesComponent implements OnInit {
           },
           error: () => {
             this.util.loading.next(false);
-            this.util.openAlertModal("320px", "error-modal", "Erro ao cadastrar Unidade", `Houve um erro ao tentar cadastrar a unidade ${this.formUnidade.get(`nomeUnidade`)?.value} em nossa base de dados! Por favor, tente novamente! Caso o problema persista, entre em contato via e-mail: sistemas.supinf@saude.rj.gov.br`);
+            this.util.openAlertModal("320px", "error-modal", "Erro ao cadastrar Unidade", `Houve um erro ao tentar cadastrar a unidade ${this.formUnidade.get(`Descricao`)?.value} em nossa base de dados! Por favor, tente novamente! Caso o problema persista, entre em contato via e-mail: sistemas.supinf@saude.rj.gov.br`);
             reject(false);
           },
         })
@@ -219,6 +255,7 @@ export class ModalUnidadesComponent implements OnInit {
   }
 
   submitAtualizaUnidade(request: any): Promise<any> {
+    console.log(request);
     return new Promise(
       (resolve, reject): void => {
         request.data.Id = this.dataModal?.idRequest;
@@ -231,7 +268,7 @@ export class ModalUnidadesComponent implements OnInit {
           },
           error: () => {
             this.util.loading.next(false);
-            this.util.openAlertModal("320px", "error-modal", "Erro ao atualizar unidade", `Houve um erro ao tentar atualizar os dados da unidade ${this.formUnidade.get(`Nome`)?.value} em nossa base de dados! Por favor, tente novamente! Caso o problema persista, entre em contato via e-mail: sistemas.supinf@saude.rj.gov.br`);
+            this.util.openAlertModal("320px", "error-modal", "Erro ao atualizar unidade", `Houve um erro ao tentar atualizar os dados da unidade ${this.formUnidade.get(`Descricao`)?.value} em nossa base de dados! Por favor, tente novamente! Caso o problema persista, entre em contato via e-mail: sistemas.supinf@saude.rj.gov.br`);
             reject(false);
           },
         })

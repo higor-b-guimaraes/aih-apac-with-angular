@@ -13,8 +13,7 @@ export class AuthInterceptor implements HttpInterceptor {
   intercept(request: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
 
     const token = this.auth.getToken();
-
-    if (token && request.url.startsWith(environment.API)) {
+    if (token && request.url.startsWith(environment.BASE_URL)) {
       request = request.clone({
         setHeaders: {
           Authorization: `${token}`,

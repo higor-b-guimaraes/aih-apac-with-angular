@@ -1,0 +1,11 @@
+<mat-dialog-actions class="container-modal" >
+  <h1 mat-dialog-title class="title-modal">{{data.title}}</h1>
+
+  <mat-dialog-content *ngIf="data.isHtmlString" [innerHTML]="data.msg" class="mat-typography body-modal"></mat-dialog-content>
+  <mat-dialog-content *ngIf="!data.isHtmlString" class="mat-typography body-modal">>{{data.msg}}</mat-dialog-content>
+
+  <mat-dialog-actions align="end" class="footer-modal">
+    <button class="btn-close-modal" mat-raised-button (click)="closeDialog()" *ngIf="data.showCloseButton">{{data.msgCloseButton ? data.msgCloseButton : 'Fechar'}}</button>
+    <button class="btn-confirm-modal" mat-raised-button (click)="confirmDialog()" color="primary">{{data.msgConfirmButton ? data.msgConfirmButton : 'OK'}}</button>
+  </mat-dialog-actions>
+</mat-dialog-actions>

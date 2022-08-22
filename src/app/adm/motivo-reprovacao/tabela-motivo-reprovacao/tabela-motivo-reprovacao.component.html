@@ -1,0 +1,63 @@
+<div class="container-table">
+  <div class="row" style="width: 100%">
+    <mat-form-field class="col-sm-9 col-md-6 col-lg-4 align-self-start">
+      <mat-label>Filtrar:</mat-label>
+      <input (keypress)="submeterFiltro($event)" id="inputFiltro" type="text" matInput [(ngModel)]="filtro">
+      <button *ngIf="filtro" matSuffix mat-icon-button aria-label="Clear" (click)="filtro='';filtrar();">
+        <mat-icon>close</mat-icon>
+      </button>
+    </mat-form-field>
+    <div class="col-3">
+      <button mat-raised-button color="primary" (click)="filtrar()">
+        <fa-icon [icon]="faSearch"></fa-icon>&nbsp;Filtrar</button>
+    </div>
+  </div>
+
+  <table mat-table [dataSource]="dataSource" matSort class="mat-elevation-z8 table">
+
+    <!-- Descrição -->
+    <ng-container matColumnDef="motivoDescricao">
+      <th mat-header-cell class="header-table" *matHeaderCellDef mat-sort-header [style.placeContent]="'center'">Motivo</th>
+      <td mat-cell [class]="getClass(row.Situacao)" *matCellDef="let row"> {{row.motivoDescricao}} </td>
+    </ng-container>
+
+    <!-- Tipo de Solicitação -->
+    <ng-container matColumnDef="motivoTipoSolicitacao" >
+      <th mat-header-cell class="header-table" *matHeaderCellDef mat-sort-header [style.placeContent]="'center'">Tipo de solicitação</th>
+      <td mat-cell [class]="getClass(row.Situacao)" *matCellDef="let row"> {{row.motivoTipoSolicitacao}} </td>
+    </ng-container>
+
+    <!-- Situação -->
+    <ng-container matColumnDef="motivoSituacao" >
+      <th mat-header-cell class="header-table" *matHeaderCellDef mat-sort-header [style.placeContent]="'center'">Situação</th>
+      <td mat-cell [class]="getClass(row.Situacao)" *matCellDef="let row"> {{row.motivoSituacao}} </td>
+    </ng-container>
+
+    <!-- Ações -->
+    <ng-container matColumnDef="acoes">
+      <th mat-header-cell class="header-table" *matHeaderCellDef [style]="{justify: 'end', width: '20px'}"> Ações </th>
+      <td mat-cell [class]="getClass(row.Situacao)" *matCellDef="let row">
+        <button *ngIf="row.Situacao == 1" mat-icon-button class="btn-outline-danger" (click)="desativarMotivo(row.Id)" >
+          <fa-icon [icon]="faBan"></fa-icon>
+        </button>
+        <button *ngIf="row.Situacao == 0" mat-icon-button class="btn-outline-success" (click)="ativarMotivo(row.Id)" >
+          <fa-icon [icon]="faCheck"></fa-icon>
+        </button>
+    </ng-container>
+
+    <tr mat-header-row *matHeaderRowDef="columns"></tr>
+    <tr mat-row *matRowDef="let row; columns: columns;"></tr>
+    <tr class="mat-row" *matNoDataRow>
+      <td class="mat-cell" colspan="4">Nenhum valor encontrado para o filtro</td>
+    </tr>
+  </table>
+
+  <mat-paginator (page)="getNewElements()" [pageSizeOptions]="[5, 10]" aria-label="Select page of users"></mat-paginator>
+
+  <div class="row" style="width: 100%;">
+    <div class="col-12 pull-right">
+      <button (click)="novoMotivo()" class="float-end" mat-raised-button color="primary">
+        <fa-icon [icon]="faPlus"></fa-icon>&nbsp;Incluir unidade</button>
+    </div>
+  </div>
+</div>

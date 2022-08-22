@@ -19,14 +19,14 @@ export class LoginComponent implements OnInit {
 
   logoRJ: string = `${environment.BASE_SITE}assets/resources/images/logoTISESRJ.png`;
 
-  validCpf:boolean = false;
-  errorCpfMsg: string = "";
+  validLogin:boolean = false;
+  errorLoginMsg: string = "";
   validPassword: boolean = false;
   errorAccessMsg: string = "";
   hidePassword: boolean = true;
 
   formLogin: FormGroup = this.formBuilder.group({
-    Cpf: ['', [this.validator.cpfValidator]],
+    Usuario: ['', [this.validator.loginValidator]],
     Senha: ['', Validators.required]
   });
 
@@ -42,11 +42,17 @@ export class LoginComponent implements OnInit {
     private util: UtilService
   ) {}
 
-  checkCpf() {
+  checkLogin() {
+    let statusLogin = this.util.checkLogin(this.formLogin, 'Login');
+    this.validLogin = statusLogin?.isValid;
+    this.errorLoginMsg = statusLogin?.msg;
+  }
+
+  /* checkCpf() {
     let statusCpf = this.util.checkCPF(this.formLogin, 'Cpf');
     this.validCpf =  statusCpf?.isValid;
     this.errorCpfMsg = statusCpf?.msg;
-  }
+  } */
 
   checkPassword() {
     if (this.formLogin.get('Senha')?.touched && this.formLogin.get('Senha')?.value === '') {
@@ -61,7 +67,7 @@ export class LoginComponent implements OnInit {
     this.util.loading.next(true);
     if(this.formLogin.valid) {
         this.auth.login({
-          Cpf: this.util.removeMaskCPF(<FormControl>this.formLogin.controls['Cpf']),
+          Usuario: this.formLogin.get('Usuario')?.value,
           Senha: this.formLogin.get('Senha')?.value,
         })
         .subscribe({

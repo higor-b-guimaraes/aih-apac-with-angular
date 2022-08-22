@@ -4,6 +4,7 @@ import { NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { HashLocationStrategy, LocationStrategy } from "@angular/common";
 
 import { AnalisarFaixasModule } from './adm/analisar-faixas/analisar-faixas.module';
 import { GerarFaixasModule } from './adm/gerar-faixas/gerar-faixas.module';
@@ -19,6 +20,8 @@ import { AuthService } from './core/services/auth.service';
 import { AppMaterialModule } from './shared/app-material/app-material.module';
 import { ModalAlert } from './shared/modals/error-alert/modal-error-alert';
 import { InserirTokenComponent } from './adm/inserir-token/inserir-token.component';
+import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
+import { GenericDialogComponent } from './adm/generic-dialog/generic-dialog.component';
 
 @NgModule({
   declarations: [
@@ -27,6 +30,7 @@ import { InserirTokenComponent } from './adm/inserir-token/inserir-token.compone
     MainContainerComponent,
     ModalAlert,
     InserirTokenComponent,
+    GenericDialogComponent,
   ],
   imports: [
     BrowserModule,
@@ -40,12 +44,13 @@ import { InserirTokenComponent } from './adm/inserir-token/inserir-token.compone
     HomeModule,
     GerarFaixasModule,
     AnalisarFaixasModule,
-
+    FontAwesomeModule
   ],
   providers: [
     AuthService,
     AuthGuardService,
     { provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true },
+    {provide: LocationStrategy, useClass: HashLocationStrategy}
   ],
   bootstrap: [AppComponent]
 })

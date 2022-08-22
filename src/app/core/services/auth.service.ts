@@ -1,4 +1,4 @@
-import { HttpClient } from '@angular/common/http';
+import {HttpClient, HttpHeaders} from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
 import { tap, map } from 'rxjs';
@@ -18,7 +18,7 @@ export class AuthService {
 
   getToken()  {
     let credential: any = JSON.parse(localStorage.getItem(this.STORAGE_KEY) || '{}');
-    return credential.token;
+    return credential;
   }
 
   getId(): number  {
@@ -56,7 +56,7 @@ export class AuthService {
 
   requestProfile() {
     let credential: any | null = JSON.parse(localStorage.getItem(this.STORAGE_KEY) || '{}');
-    return this.http.get(`${environment.BASE_URL}Perfil?token=${credential.token}`);
+    return this.http.get(`${environment.BASE_URL}PerfilUsuario/perfil`, {params:{token: credential}});
   }
 
   whiteoutPermission() {

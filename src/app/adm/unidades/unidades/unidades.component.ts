@@ -18,11 +18,13 @@ export class UnidadesComponent implements OnInit {
   private subVerifyHasUnit!: Subscription;
   private subModalResponse!: Subscription;
 
-  constructor(public modal: MatDialog,
-      private unitService: UnidadesService,
-      private auth: AuthService,
-      private util: UtilService,
-      private cdRef: ChangeDetectorRef) {
+  constructor(
+    public modal: MatDialog,
+    private unitService: UnidadesService,
+    private auth: AuthService,
+    private util: UtilService,
+    private cdRef: ChangeDetectorRef
+  ) {
     }
 
   openModalUnit() {

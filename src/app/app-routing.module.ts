@@ -23,11 +23,15 @@ const routes: Routes = [
     children: [
       {
         path: '',
-        loadChildren: () => import('./adm/home/home.module').then((m) => m.HomeModule),
+        loadChildren: () => import('./adm/pagina-inicial/pagina-inicial.module').then((m) => m.PaginaInicialModule),
       },
       {
-        path: 'gerar-faixas',
-        loadChildren: () => import('./adm/gerar-faixas/gerar-faixas.module').then((m) => m.GerarFaixasModule),
+        path: 'pagina-inicial',
+        loadChildren: () => import('./adm/pagina-inicial/pagina-inicial.module').then((m) => m.PaginaInicialModule),
+      },
+      {
+        path: 'obter-faixas',
+        loadChildren: () => import('./adm/obter-faixas/obter-faixas.module').then((m) => m.ObterFaixasModule),
       },
       {
         path: 'analisar-faixas',
@@ -50,6 +54,10 @@ const routes: Routes = [
         loadChildren: () => import('./adm/unidades/unidades.module').then((m) => m.UnidadesModule),
       },
       {
+        path: 'municipios',
+        loadChildren: () => import('./adm/municipios/municipios.module').then((m) => m.MunicipiosModule),
+      },
+      {
         path: 'usuarios',
         loadChildren: () => import('./adm/usuarios/usuarios.module').then((m) => m.UsuariosModule),
       },
@@ -62,9 +70,16 @@ const routes: Routes = [
         loadChildren: () => import('./adm/alterar-senha/alterar-senha.module').then((m) => m.AlterarSenhaModule),
       },
       {
+        path: 'solicitar-faixas-extras',
+        loadChildren: () => import('./adm/solicitar-faixas-extras/solicitar-faixas-extras.module').then((m) => m.SolicitarFaixasExtrasModule),
+      },
+      {
         path: 'inserir-token',
-        // loadChildren: () => import('./adm/inserir-token/inserir-token.module').then((m) => m.InserirTokenModule),
         component: InserirTokenComponent
+      },
+      {
+        path: 'analise-solicitacao-alteracao-senha',
+        loadChildren: () => import('./adm/analise-solicitacao-alteracao-senha/analise-solicitacao-alteracao-senha.module').then((m) => m.AnaliseSolicitacaoAlteracaoSenhaModule),
       },
     ]
   }

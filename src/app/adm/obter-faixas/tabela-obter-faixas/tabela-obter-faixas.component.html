@@ -1,0 +1,93 @@
+<div class="container-table">
+  <div class="row" style="width: 100%">
+    <mat-form-field class="col-sm-9 col-md-6 col-lg-4 align-self-start">
+      <mat-label>Filtrar:</mat-label>
+      <input (keypress)="submeterFiltro($event)" id="inputFiltro" type="text" matInput [(ngModel)]="filtro">
+      <button *ngIf="filtro" matSuffix mat-icon-button aria-label="Clear" (click)="filtro='';filtrar();">
+        <mat-icon>close</mat-icon>
+      </button>
+    </mat-form-field>
+    <div class="col-3">
+      <button mat-raised-button color="primary" (click)="filtrar()">
+        <fa-icon [icon]="faSearch"></fa-icon>&nbsp;Filtrar</button>
+    </div>
+  </div>
+
+  <table mat-table [dataSource]="dataSource" matSort class="mat-elevation-z8 table">
+
+    <!-- Solicitante -->
+    <ng-container matColumnDef="Solicitante" >
+      <th mat-header-cell class="header-table" *matHeaderCellDef mat-sort-header [style.placeContent]="'center'">Solicitante</th>
+      <td mat-cell *matCellDef="let row"> {{row.DataSolicitacao }} </td>
+    </ng-container>
+
+    <!-- Mes -->
+    <ng-container matColumnDef="Mes" >
+      <th mat-header-cell class="header-table" *matHeaderCellDef mat-sort-header [style.placeContent]="'center'">Mês</th>
+      <td  style="white-space: nowrap" mat-cell *matCellDef="let row" >
+        {{ row.Mes }}
+      </td>
+    </ng-container>
+
+    <!-- Competência -->
+    <ng-container matColumnDef="Competencia" >
+      <th mat-header-cell class="header-table" *matHeaderCellDef mat-sort-header [style.placeContent]="'center'">Competência</th>
+      <td mat-cell  *matCellDef="let row"> {{row.Competencia}} </td>
+    </ng-container>
+
+    <!-- Quantidade -->
+    <ng-container matColumnDef="QuantidadeFaixas">
+      <th mat-header-cell class="header-table" *matHeaderCellDef mat-sort-header [style.placeContent]="'center'">Quantidade de Faixas</th>
+      <td mat-cell  *matCellDef="let row"> {{row.QuantidadeFaixas}} </td>
+    </ng-container>
+
+    <!-- Descrição Tipo Faixa -->
+    <ng-container matColumnDef="DescricaoTipoFaixa">
+      <th mat-header-cell class="header-table" *matHeaderCellDef mat-sort-header [style.placeContent]="'center'">Tipo de Faixa</th>
+      <td mat-cell *matCellDef="let row"> {{row.DescricaoTipoFaixa}} </td>
+    </ng-container>
+
+    <!-- Faixa Inicial -->
+    <ng-container matColumnDef="FaixaInicial">
+      <th mat-header-cell class="header-table" *matHeaderCellDef mat-sort-header [style.placeContent]="'center'">Faixa Inicial</th>
+      <td mat-cell  *matCellDef="let row"> {{row.FaixaInicial}} </td>
+    </ng-container>
+
+    <!-- Faixa Final -->
+    <ng-container matColumnDef="FaixaFinal">
+      <th mat-header-cell class="header-table" *matHeaderCellDef mat-sort-header [style.placeContent]="'center'">Faixa Final</th>
+      <td mat-cell  *matCellDef="let row"> {{row.FaixaFinal}} </td>
+    </ng-container>
+
+    <!-- TipoCota -->
+    <ng-container matColumnDef="DescricaoTipoCota">
+      <th mat-header-cell class="header-table" *matHeaderCellDef mat-sort-header [style.placeContent]="'center'">Tipo de Cota</th>
+      <td mat-cell  *matCellDef="let row"> {{row.DescricaoTipoCota}} </td>
+    </ng-container>
+
+    <!-- Download -->
+    <ng-container matColumnDef="Download">
+      <th mat-header-cell class="header-table" *matHeaderCellDef mat-sort-header [style.placeContent]="'center'">Download</th>
+      <td mat-cell  *matCellDef="let row">
+        <button mat-icon-button class="btn-outline-danger" (click)="download(row.Id)" >
+          <fa-icon [icon]="faDownload"></fa-icon>
+        </button>
+      </td>
+    </ng-container>
+
+    <tr mat-header-row *matHeaderRowDef="columns"></tr>
+    <tr mat-row *matRowDef="let row; columns: columns;"></tr>
+    <tr class="mat-row" *matNoDataRow>
+      <td class="mat-cell" colspan="9">Nenhum resultado encontrado!</td>
+    </tr>
+  </table>
+
+  <mat-paginator (page)="getNewElements()" [pageSizeOptions]="[5, 10,30,50]" aria-label="Select page of users"></mat-paginator>
+
+  <div class="row" style="width: 100%;">
+    <div class="col-12 pull-right">
+      <button (click)="gerarFaixasManualmente()" class="float-end" mat-raised-button color="primary">
+        <fa-icon [icon]="faPlus"></fa-icon>&nbsp;Gerar Faixas Manualmente</button>
+    </div>
+  </div>
+</div>

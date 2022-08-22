@@ -5,6 +5,7 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ChangeDetectorRef, Component, Inject, OnInit } from '@angular/core';
 import { MotivoReprovacao } from '../models/motivoReprovacao.model';
 import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
+import {UtilService} from "../../../shared/services/utils/util.service";
 
 
 @Component({
@@ -20,13 +21,13 @@ export class ModalCadastroReprovacaoComponent implements OnInit {
       {"codigo": 0, "descricao": "Inativo",}
   ];
   novoMotivo!: boolean;
+  tipoSolicitacao: any;
 
   motivoReprovacaoModel!: MotivoReprovacao;
 
   formMotivoReprovacao: FormGroup = this.formBuilder.group({
-    Id: [],
-    Motivo: ['', [Validators.required]],
-    Status: ['', Validators.required]
+    Descricao: ['', [Validators.required]],
+    IdTipoSolicitacao: [null,[Validators.required]],
   });
 
   constructor(
@@ -34,74 +35,72 @@ export class ModalCadastroReprovacaoComponent implements OnInit {
     public dialogRef: MatDialogRef<MotivoReprovacaoComponent>,
     private formBuilder: FormBuilder,
     private auth: AuthService,
+    private util: UtilService,
     private motivoReprovacaoService: MotivoReprovacaoService,
-    private cdRef: ChangeDetectorRef) {
-      if(dataModal) {
-        this.motivoReprovacaoModel = {...dataModal.content};
-        this.novoMotivo = false;
+    private cdRef: ChangeDetectorRef) { }
 
-        this.formMotivoReprovacao.setValue({
-          Id: this.motivoReprovacaoModel.Id,
-          Motivo: this.motivoReprovacaoModel.Motivo,
-          Status: this.motivoReprovacaoModel.Status,
+  ngOnInit(): void {
+    this.listarTipoSolicitacao();
+
+    /*if(this.dataModal) {
+      this.motivoReprovacaoModel = {...this.dataModal.content};
+      this.novoMotivo = false;
+
+      this.formMotivoReprovacao.setValue({
+        Id: this.motivoReprovacaoModel.Id,
+        Motivo: this.motivoReprovacaoModel.Motivo,
+        Status: this.motivoReprovacaoModel.Status,
       });
-    }else {
+    }else {*/
       this.novoMotivo = true;
-    }
-  }
-  salvar() {
-
+    // }
   }
 
-  /*salvar() {
-    if(this.formMotivoReprovacao.valid) {
-      if((this.novoMotivo) && (this.novoMotivo === true)) {
+  async salvar(): Promise<any> {
+    this.util.loading.next(true);
+    await this.submitMotivoReprovacao();
+    this.util.openAlertModal("320px", "success-modal", "Motivo de reprovação cadastrada!", `O motivo de reprovação foi cadastrado com sucesso no sistema!`)
+      .then((update) => {if(update) location.reload()});
+    this.closeModal();
+    return;
+  }
 
-        let request = {
-          idUser: this.auth.getId(),
-          data: {
-            id: 0,
-            motivoReprovacao: this.formMotivoReprovacao.get('motivoReprovacao')?.value,
-            status: this.formMotivoReprovacao.get('status')?.value,
-          }
-        }
-
-        this.motivoReprovacaoService.salvarMotivoReprovacao(request).subscribe({
-          next: (x) => {
-
-            this.dialogRef.close(true);
-          },
-          error: (e) => {},
-        })
-
-      }else {
-
-        this.motivoReprovacaoModel.motivoReprovacao = this.formMotivoReprovacao.get('Motivo')?.value;
-        this.motivoReprovacaoModel.status = this.formMotivoReprovacao.get('Status')?.value
-
-        let request = {
-          idUser: this.auth.getId(),
-          data: this.motivoReprovacaoModel,
-        }
-
-        this.motivoReprovacaoService.atualizarMotivoReprovacao(request).subscribe({
-          next: (x) => {
-            this.dialogRef.close(this.motivoReprovacaoModel)
-          },
-          error: (e) => {},
-        })
+  submitMotivoReprovacao(): Promise<any> {
+    return new Promise(
+      (resolve, reject): void => {
+        this.motivoReprovacaoService.salvarMotivoReprovacao(this.formMotivoReprovacao.getRawValue())
+          .subscribe({
+            next: () => {
+              this.util.loading.next(false);
+              resolve(true);
+            },
+            error: () => {
+              this.util.loading.next(false);
+              this.util.openAlertModal("320px", "error-modal", "Erro ao cadastrar motivo de reprovação",
+                `Houve um erro ao tentar cadastrar o motivo de reprovação em nossa base de dados! Por favor, tente novamente! Caso o problema persista, entre em contato via e-mail: sistemas.supinf@saude.rj.gov.br`);
+              reject(false);
+            },
+          })
       }
-    }
-  }*/
+    );
+  }
+
+  listarTipoSolicitacao() {
+    this.motivoReprovacaoService.getTipoSolicitacao().subscribe({
+      next: async (data:any) => {
+        this.tipoSolicitacao = data;
+      }, error: (e) => {
+        console.log(e);
+        this.util.loading.next(false);
+      }
+    })
+  }
 
   closeModal(): void {
-    this.dialogRef.close(true);
+    this.dialogRef.close(false);
   }
 
   ngAfterContentChecked() {
     this.cdRef.detectChanges();
   }
-
-  ngOnInit(): void {}
-
 }

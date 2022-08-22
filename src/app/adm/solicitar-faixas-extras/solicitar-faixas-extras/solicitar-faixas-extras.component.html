@@ -1,0 +1,24 @@
+<div class="section-main">
+  <div class="row header-titulo" >
+    <span>Solicitar Faixas Extras</span>
+  </div>
+
+  <div class="empty-data" *ngIf="hasUnit === 2">
+    <mat-card>
+      <mat-card class="container-card">
+        <mat-card-title>Não há solicitações de faixas extras cadastradas!</mat-card-title>
+        <mat-divider inset></mat-divider>
+
+        <mat-card-content class="container-card-btn">
+          <button mat-button (click)="openModalUnit()">Cadastrar Nova Solicitação de Faixas</button>
+        </mat-card-content>
+      </mat-card>
+    </mat-card>
+  </div>
+
+  <div class="has-data" *ngIf="hasUnit === 1">
+    <div class="main-container-form">
+      <app-tabela-solicitar-faixas-extras></app-tabela-solicitar-faixas-extras>
+    </div>
+  </div>
+</div>

@@ -7,20 +7,24 @@ import { ModalUnidadesComponent } from './modal-unidades/modal-unidades.componen
 import { TabelaUnidadesComponent } from './tabela-unidades/tabela-unidades.component';
 import { AppMaterialModule } from 'src/app/shared/app-material/app-material.module';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import {FontAwesomeModule} from "@fortawesome/angular-fontawesome";
+import { DialogUnidadesComponent } from './dialog-unidades/dialog-unidades.component';
 
 
 @NgModule({
   declarations: [
     UnidadesComponent,
     ModalUnidadesComponent,
-    TabelaUnidadesComponent
+    TabelaUnidadesComponent,
+    DialogUnidadesComponent
   ],
   imports: [
     CommonModule,
     AppMaterialModule,
     FormsModule,
     ReactiveFormsModule,
-    UnidadesRoutingModule
+    UnidadesRoutingModule,
+    FontAwesomeModule
   ]
 })
 export class UnidadesModule { }

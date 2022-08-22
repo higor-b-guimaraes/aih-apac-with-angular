@@ -7,6 +7,7 @@ import { ModalUsuariosComponent } from './modal-usuarios/modal-usuarios.componen
 import { TabelaUsuariosComponent } from './tabela-usuarios/tabela-usuarios.component';
 import { AppMaterialModule } from 'src/app/shared/app-material/app-material.module';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import {FontAwesomeModule} from "@fortawesome/angular-fontawesome";
 
 
 @NgModule({
@@ -15,12 +16,13 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
     ModalUsuariosComponent,
     TabelaUsuariosComponent
   ],
-  imports: [
-    CommonModule,
-    AppMaterialModule,
-    FormsModule,
-    ReactiveFormsModule,
-    UsuariosRoutingModule
-  ]
+    imports: [
+        CommonModule,
+        AppMaterialModule,
+        FormsModule,
+        ReactiveFormsModule,
+        UsuariosRoutingModule,
+        FontAwesomeModule
+    ]
 })
 export class UsuariosModule { }

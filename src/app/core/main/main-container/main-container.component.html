@@ -8,7 +8,7 @@
   <button
   class="btn btn-menu btn-primary btn-standard btn-standard-mb-5"
   [routerLink]="(item?.link) ? item?.link : ''"
-  (click)="(item?.nome === 'sair') ? logout() : ''"
+  (click)="(item?.nome === 'sair') ? logout() : titulo = item?.nome"
   *ngFor="let item of menu">{{item.nome}}</button>
 </mat-nav-list>
 </mat-sidenav>
@@ -67,6 +67,7 @@
     <div class="container-menu-principal">
       <button appDirective id="btn-menu" class="modal-menu-principal" mat-icon-button (click)="nav.toggle()"><mat-icon>menu</mat-icon></button>
       <label class="btn-label-menu-principal" for="btn-menu">Menu</label>
+      <!--<span align="center" class="">{{ titulo }}</span>-->
       <button (click)="logout()" class="btn btn-primary btn-logout">
         <i class="fas fa-sign-out-alt"></i>Sair
       </button>

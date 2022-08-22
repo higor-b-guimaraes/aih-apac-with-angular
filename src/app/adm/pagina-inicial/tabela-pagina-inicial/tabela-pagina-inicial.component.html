@@ -1,0 +1,88 @@
+<div class="row " style="width: 100%">
+  <div class="col-12 align-self-center">
+    <h2 *ngIf="countSolicitacoes > 0" style="text-align:center;"><span class="text-danger">ATENÇÃO! Há solicitações pendentes de aprovação</span></h2>
+    <h2 *ngIf="countSolicitacoes == 0" style="text-align:center;"><span>Não há solicitações pendentes de análise</span></h2>
+  </div>
+</div>
+
+<div class="container-table">
+  <div class="row" style="width: 100%">
+    <mat-form-field class="col-sm-9 col-md-6 col-lg-4 align-self-start">
+      <mat-label>Filtrar:</mat-label>
+      <input (keypress)="submeterFiltro($event)" id="inputFiltro" type="text" matInput [(ngModel)]="filtro">
+      <button *ngIf="filtro" matSuffix mat-icon-button aria-label="Clear" (click)="filtro='';filtrar();">
+        <mat-icon>close</mat-icon>
+      </button>
+    </mat-form-field>
+    <div class="col-3">
+      <button mat-raised-button color="primary" (click)="filtrar()">
+        <fa-icon [icon]="faSearch"></fa-icon>&nbsp;Filtrar</button>
+    </div>
+  </div>
+
+  <table mat-table [dataSource]="dataSource" matSort class="mat-elevation-z8 table">
+
+    <!-- Data da solicitação -->
+    <ng-container matColumnDef="DataSolicitacao" >
+      <th mat-header-cell class="header-table" [style.width]="'auto'" *matHeaderCellDef mat-sort-header [style.placeContent]="'center'">Data da Solicitação</th>
+      <td [style.width]="'auto'" mat-cell [class]="getClass(row.Situacao)" *matCellDef="let row"> {{row.DataSolicitacao | date: 'dd/MM/yyyy'}} </td>
+    </ng-container>
+
+    <!-- Usuario -->
+    <ng-container matColumnDef="Usuario" >
+      <th mat-header-cell class="header-table" *matHeaderCellDef mat-sort-header [style.placeContent]="'center'">Usuário</th>
+      <td mat-cell [class]="getClass(row.Situacao)" *matCellDef="let row"> {{row.Usuario}} </td>
+    </ng-container>
+
+    <!-- Descrição Tipo Solicitacao -->
+    <ng-container matColumnDef="DescricaoTipoSolicitacao" >
+      <th mat-header-cell class="header-table" *matHeaderCellDef mat-sort-header [style.placeContent]="'center'">Tipo de solicitação</th>
+      <td mat-cell [class]="getClass(row.Situacao)" *matCellDef="let row"> {{row.DescricaoTipoSolicitacao}} </td>
+    </ng-container>
+
+    <!-- Solicitante -->
+    <ng-container matColumnDef="DescricaoSolicitante">
+      <th mat-header-cell class="header-table" *matHeaderCellDef mat-sort-header [style.placeContent]="'center'" >Solicitante</th>
+      <td mat-cell [class]="getClass(row.Situacao)" *matCellDef="let row">
+        {{ row.IdTipoSolicitacao == 2 && row.IdTipoSolicitante == 1 ? row.DescricaoUnidade : row.IdTipoSolicitacao == 2 && row.IdTipoSolicitante == 2 ? row.NomeMunicipio : ""}} </td>
+    </ng-container>
+
+    <!-- Descrição Tipo Faixa -->
+    <ng-container matColumnDef="DescricaoTipoFaixa" >
+      <th mat-header-cell class="header-table" *matHeaderCellDef mat-sort-header [style.placeContent]="'center'">Tipo de faixa</th>
+      <td mat-cell [class]="getClass(row.Situacao)" *matCellDef="let row"> {{row.DescricaoTipoFaixa}} </td>
+    </ng-container>
+
+    <!-- Quantidade -->
+    <ng-container matColumnDef="Quantidade" >
+      <th mat-header-cell class="header-table" *matHeaderCellDef mat-sort-header [style.placeContent]="'center'">Quantidade</th>
+      <td mat-cell [class]="getClass(row.Situacao)" *matCellDef="let row"> {{row.Quantidade}} </td>
+    </ng-container>
+
+    <!-- Competencia -->
+    <ng-container matColumnDef="Competencia" >
+      <th mat-header-cell class="header-table" *matHeaderCellDef mat-sort-header [style.placeContent]="'center'">Competência(ano)</th>
+      <td mat-cell [class]="getClass(row.Situacao)" *matCellDef="let row"> {{row.Competencia}} </td>
+    </ng-container>
+
+    <!-- Mês -->
+    <ng-container matColumnDef="Mes" >
+      <th mat-header-cell class="header-table" *matHeaderCellDef mat-sort-header [style.placeContent]="'center'">Mês</th>
+      <td mat-cell [class]="getClass(row.Situacao)" *matCellDef="let row"> {{row.Mes}} </td>
+    </ng-container>
+
+    <!-- Ofício -->
+    <ng-container matColumnDef="Oficio" >
+      <th mat-header-cell class="header-table" *matHeaderCellDef mat-sort-header [style.placeContent]="'center'">Ofício</th>
+      <td mat-cell [class]="getClass(row.Situacao)" *matCellDef="let row"> {{row.motivoSituacao}} </td>
+    </ng-container>
+
+    <tr mat-header-row *matHeaderRowDef="columns"></tr>
+    <tr mat-row *matRowDef="let row; columns: columns;"></tr>
+    <tr class="mat-row" *matNoDataRow>
+      <td class="mat-cell" colspan="columns.length">Não há solicitações pendentes de análise</td>
+    </tr>
+  </table>
+
+  <mat-paginator (page)="getNewElements()" [pageSizeOptions]="[5, 10]" aria-label="Select page of users"></mat-paginator>
+</div>

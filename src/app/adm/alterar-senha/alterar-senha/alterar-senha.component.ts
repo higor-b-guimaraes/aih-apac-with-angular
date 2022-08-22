@@ -4,7 +4,7 @@ import { AuthService } from './../../../core/services/auth.service';
 import { AlterarSenhaService } from './../services/alterar-senha.service';
 import { UtilService } from 'src/app/shared/services/utils/util.service';
 import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
-import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
+import {AbstractControl, FormBuilder, FormControl, FormGroup, ValidationErrors, Validators} from '@angular/forms';
 import { FileValidator } from 'ngx-material-file-input';
 import { CustomValidators } from 'src/app/shared/validators/custom-validators';
 import {Route, Router} from "@angular/router";
@@ -20,21 +20,23 @@ export class AlterarSenhaComponent implements OnInit {
   validCpf: boolean = false;
   errorCPFMsg: string = "";
   validOficio: boolean = false;
-  errorMsgOficio: string = "";
+  oficioValido: boolean = false;
+  msgErroOficio: string = "";
+
+  PerfilUsuario: any;
+
 
   readonly maxSize = 10485760;   //Max Filesize 10MB
 
   formResetPassword: FormGroup = this.formBuilder.group({
-    cpf: ['', [this.validator.cpfValidator]],
-    oficio: [
-      null,
-      [
-        Validators.required,
-        FileValidator.maxContentSize(this.maxSize),
-        this.validator.acceptTypeFileInput
-      ]
-    ]
-  });
+    NomeUsuario: new FormControl({value: "", disabled: true}),
+    SenhaAtual: new FormControl("",Validators.required),
+    NovaSenha: new FormControl("",Validators.required),
+    ConfirmarNovaSenha: new FormControl("",Validators.required),
+    Oficio: new FormControl(null, [Validators.required, FileValidator.maxContentSize(this.maxSize), this.validator.acceptTypeFileInput]),
+  },
+    { validator: this.matchPassword('NovaSenha', 'ConfirmarNovaSenha') }
+    );
 
   constructor(
     private cdRef: ChangeDetectorRef,
@@ -46,69 +48,147 @@ export class AlterarSenhaComponent implements OnInit {
     private router: Router,
   ) { }
 
-  // TODO: Refazer a verificação do usuário logado.
-  checkCpf() {
-    let statusCpf: any = this.util.checkCPF(this.formResetPassword, 'cpf');
-    this.validCpf =  statusCpf?.isValid;
-    this.errorCPFMsg = statusCpf?.msg;
-    console.log(statusCpf);
-
-    if(this.validCpf) {
-      this.alterarSenhaService.recoveryUser({
-          id: this.auth.getId(),
-          login: this.util.removeMaskCPF(<FormControl>this.formResetPassword.controls['cpf'])
-        }).subscribe({
-        next:(dados: any) => {
-          console.log(dados);
-          this.isAdm =
-            this.util.validateOficioRequiredByBackend(this.formResetPassword, 'oficio', dados?.codigoPerfil, this.maxSize);
-          /*if(dados['codigoPerfil'] !== 1) {
-            this.isAdm = false;
-          }else {
-            this.isAdm = true;
-            this.formResetPassword.get('oficio')?.patchValue(null, {oficio: null});
-          }*/
-          console.log(this.isAdm);
-        },
-        error: async () => {await this.util.openAlertModal("320px","warning-modal","Dados inválidos","Por favor, verifique os dados informados e tente novamente!")
-        this.isAdm = true;
-        this.formResetPassword.get('oficio')?.patchValue(null, {oficio: null});},
-      });
-    }
-  }
-
-  checkOficio() {
-    let statusOficio: any = this.util.checkOficio(this.formResetPassword, 'oficio');
-    this.validOficio =  statusOficio?.isValid;
-    this.errorMsgOficio = statusOficio?.msg;
-  }
-
-  onSubmit() {
-    debugger
-    const formData = new FormData();
-    if ( !this.isAdm )
-      formData.append('oficio', this.formResetPassword.get('oficio')?.value._files[0])
-    let data = {
-      id: this.auth.getId(),
-      cpf: this.util.removeMaskCPF(<FormControl>this.formResetPassword.controls['cpf'])
-    }
+  ngOnInit(): void {
     this.util.loading.next(true);
-    this.alterarSenhaService.submitResetPassword(formData, data).subscribe({
-      next: (event: HttpEvent<boolean>) => {
-        if(event.type === 4) {
-          this.util.loading.next(false)
-          this.router.navigate(["/inserir-token"]);
+    this.alterarSenhaService.getUsuario().subscribe({
+      next: (data:any) => {
+        this.PerfilUsuario = data;
+        this.formResetPassword.patchValue({
+          NomeUsuario: data?.NomeUsuario
+        })
+        if ( this.PerfilUsuario.IdPerfilUsuario == 1 ) {
+          this.formResetPassword.get(`Oficio`)?.clearValidators();
+          this.formResetPassword.get(`Oficio`)?.setValue(null);
+          /*this.formResetPassword.get(`Oficio`)?.;*/
+        } else {
+          this.formResetPassword.get(`SenhaAtual`)?.clearValidators();
+          this.formResetPassword.get(`SenhaAtual`)?.updateValueAndValidity();
+          this.formResetPassword.get(`NovaSenha`)?.clearValidators();
+          this.formResetPassword.get(`NovaSenha`)?.updateValueAndValidity();
+          this.formResetPassword.get(`ConfirmarNovaSenha`)?.clearValidators();
+          this.formResetPassword.get(`ConfirmarNovaSenha`)?.updateValueAndValidity();
         }
       },
-      error: () => this.util.loading.next(false)
+      error: (err: any) => {
+        console.log(err);
+      },
+      complete: () => {
+        this.util.loading.next(false);
+      }
     })
   }
+
+  matchPassword(firstControl:string, secondControl:string): Validators {
+    return (control: AbstractControl): ValidationErrors | null => {
+      const password = control.get(firstControl)?.value;
+      const confirm = control.get(secondControl)?.value;
+
+      if (password != confirm) { return { 'noMatch': true } }
+
+      return null
+    }
+  }
+
+  async onSubmit() {
+    if(this.formResetPassword.valid) {
+      this.util.loading.next(true);
+
+      var form = this.formResetPassword.value;
+      var uploadData = new FormData();
+
+      for (let i in form) {
+        if ((form[i] instanceof Object) && form[i]._files[0] instanceof Blob) {
+          uploadData.append(i,form[i]._files[0], form[i]._fileNames ? form[i]._fileNames : "");
+        } else {
+          uploadData.append(i,form[i]);
+        }
+      }
+
+      this.alterarSenhaService.validarSenha(form).subscribe({
+        next:(x) => {
+          console.log(x);
+          if ( x ) {
+            this.alterarSenhaService.alterarSenha(uploadData).subscribe({
+              next:(e: any) => {
+                this.util.openAlertModal("320px", "error-modal", "", `${e}`)
+                  .then((update) => {if(update) this.router.navigate([''])});
+              }
+            })
+          } else {
+            this.util.openAlertModal("320px", "error-modal", "Senha incorreta",
+              `A senha informada não corresponde à sua senha atual! Por favor, tente novamente! Caso o problema persista, entre em contato via e-mail: sistemas.supinf@saude.rj.gov.br`)
+              .then((update) => {if(update) this.router.navigate([''])});
+          }
+          this.util.loading.next(false);
+        },
+        error: (err) => {
+          console.log("Erro: ",err );
+          this.util.loading.next(false);
+        },complete: () => {
+          this.util.loading.next(false);
+        }
+      })
+      /*if(this.novoCadastro) {
+        await this.submitNovoUsuario(uploadData);
+        this.util.openAlertModal(
+          "320px", "success-modal", "Usuário cadastrado!",
+          `Usuário ${this.formUsuario.get(`Nome`)?.value}, foi cadastrado com sucesso no sistema!`
+        );
+        this.dialogRef.close(true);
+        return;
+      } else {
+        await this.submitAtualizaUsuario(uploadData);
+        this.util.openAlertModal(
+          "320px", "success-modal",
+          "Atualização de dados realizada!",
+          `Os dados do usuário ${this.formUsuario.get(`Nome`)?.value}, foram atualizados no sistema!`
+        );
+        this.dialogRef.close(true);
+        return;
+      }*/
+    }
+  }
+
+  /*onSubmit() {
+    this.util.loading.next(true);
+
+    let form = {
+      Id: this.PerfilUsuario.Id,
+      Senha: this.formResetPassword.get('SenhaAtual')?.value
+    }
+
+    this.alterarSenhaService.validarSenha(form).subscribe({
+      next:(x) => {
+        debugger
+        console.log(x);
+        if ( x ) {
+          this.alterarSenhaService.alterarSenha(this.formResetPassword).subscribe({
+            next:(e: any) => {
+              this.util.openAlertModal("320px", "error-modal", "", `${e}`);
+            }
+          })
+        } else {
+          this.util.openAlertModal("320px", "error-modal", "Senha incorreta", `A senha informada não corresponde à sua senha atual! Por favor, tente novamente! Caso o problema persista, entre em contato via e-mail: sistemas.supinf@saude.rj.gov.br`);
+        }
+        this.util.loading.next(false);
+      },
+      error: (err) => {
+        console.log("Erro: ",err );
+        this.util.loading.next(false);
+      },complete: () => {
+        this.util.loading.next(false);
+      }
+    })
+  }*/
 
   ngAfterContentChecked() {
     this.cdRef.detectChanges();
   }
 
-  ngOnInit(): void {
+  checkOficio(event: any) {
+    let statusOficio: any = this.util.checkOficio(this.formResetPassword, 'Oficio');
+    this.oficioValido =  statusOficio?.isValid;
+    this.msgErroOficio = statusOficio?.msg;
   }
 
 }

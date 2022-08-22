@@ -23,6 +23,19 @@ export class UtilService {
     return input.value.replaceAll('.', '').replace('-', '');
   }
 
+  checkLogin(formGroup: FormGroup, nameField: string): any {
+    if (formGroup?.get(`${nameField}`)?.touched && formGroup?.controls[`${nameField}`].hasError('campoVazio')) {
+      return {
+        isValid: false,
+        msg: 'O usuário não foi informado!',
+      }
+    }
+    return {
+      isValid: true,
+      msg: '',
+    }
+  }
+
   checkCPF(cpfField: FormGroup, nameField: string): any {
     if (cpfField?.get(`${nameField}`)?.touched && cpfField?.controls[`${nameField}`].hasError('cpfIncompleto')) {
       return {
