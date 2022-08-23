@@ -1,5 +1,5 @@
 <div class="container-table">
-  <div class="row" style="width: 100%">
+  <div class="row" style="width: 100%; margin-top: 18px;">
     <mat-form-field class="col-sm-9 col-md-6 col-lg-4 align-self-start">
       <mat-label>Filtrar:</mat-label>
       <input (keypress)="submeterFiltro($event)" id="inputFiltro" type="text" matInput [(ngModel)]="filtro">
@@ -24,47 +24,50 @@
     <!-- Usuario -->
     <ng-container matColumnDef="UsuarioDescricao" >
       <th mat-header-cell class="header-table" *matHeaderCellDef mat-sort-header [style.placeContent]="'center'">Usuário</th>
-      <td mat-cell [class]="getClass(row.Situacao)" *matCellDef="let row"> {{row.motivoTipoSolicitacao}} </td>
+      <td mat-cell [class]="getClass(row.IdSituacaoSolicitacao)" *matCellDef="let row"> {{row.NomeUsuario}} </td>
     </ng-container>
 
     <!-- Município/Unidade -->
     <ng-container matColumnDef="MunicipioUnidade" >
       <th mat-header-cell class="header-table" *matHeaderCellDef mat-sort-header [style.placeContent]="'center'">Município/Unidade</th>
-      <td mat-cell [class]="getClass(row.Situacao)" *matCellDef="let row"> {{row.motivoSituacao}} </td>
+      <td mat-cell [class]="getClass(row.IdSituacaoSolicitacao)" *matCellDef="let row">
+        {{ row.IdTipoSolicitante == 1 ? row.DescricaoUnidade : row.DescricaoMunicipio }}</td>
     </ng-container>
 
     <!-- Situação -->
     <ng-container matColumnDef="SituacaoDescricao" >
       <th mat-header-cell class="header-table" *matHeaderCellDef mat-sort-header [style.placeContent]="'center'">Situação</th>
-      <td mat-cell [class]="getClass(row.Situacao)" *matCellDef="let row"> {{row.motivoSituacao}} </td>
+      <td mat-cell [class]="getClass(row.IdSituacaoSolicitacao)" *matCellDef="let row"> {{row.DescricaoSituacao}} </td>
     </ng-container>
 
     <!-- Motivo Reprovação -->
     <ng-container matColumnDef="MotivoReprovacaoDescricao" >
       <th mat-header-cell class="header-table" *matHeaderCellDef mat-sort-header [style.placeContent]="'center'">Motivo da Reprovação</th>
-      <td mat-cell [class]="getClass(row.Situacao)" *matCellDef="let row"> {{row.motivoSituacao}} </td>
+      <td mat-cell [class]="getClass(row.IdSituacaoSolicitacao)" *matCellDef="let row"> {{row.DescricaoMotivoReprovacao}} </td>
     </ng-container>
 
     <!-- Observação -->
     <ng-container matColumnDef="Observacao" >
       <th mat-header-cell class="header-table" *matHeaderCellDef mat-sort-header [style.placeContent]="'center'">Observação</th>
-      <td mat-cell [class]="getClass(row.Situacao)" *matCellDef="let row"> {{row.motivoSituacao}} </td>
+      <td mat-cell [class]="getClass(row.IdSituacaoSolicitacao)" *matCellDef="let row"> {{row.Observacao}} </td>
     </ng-container>
 
     <!-- Ofício -->
     <ng-container matColumnDef="Oficio" >
       <th mat-header-cell class="header-table" *matHeaderCellDef mat-sort-header [style.placeContent]="'center'">Ofício</th>
-      <td mat-cell [class]="getClass(row.Situacao)" *matCellDef="let row"> {{row.motivoSituacao}} </td>
+      <td mat-cell [class]="getClass(row.IdSituacaoSolicitacao)" *matCellDef="let row">
+        <a href="" download="{{ row.Path }}">Ofício</a>
+      </td>
     </ng-container>
 
     <!-- Ações -->
     <ng-container matColumnDef="Acoes">
       <th mat-header-cell class="header-table" *matHeaderCellDef [style]="{justify: 'end', width: '20px'}"> Ações </th>
-      <td mat-cell [class]="getClass(row.Situacao)" *matCellDef="let row">
-        <button mat-icon-button title="Autorizar" class="btn-outline-success" (click)="autorizarSolicitacao(row.Id)" >
+      <td mat-cell [class]="getClass(row.IdSituacaoSolicitacao)" *matCellDef="let row">
+        <button *ngIf="row.IdSituacaoSolicitacao == 1" mat-icon-button title="Autorizar" class="btn-outline-success" (click)="autorizarSolicitacao(row.Id)" >
           <fa-icon [icon]="faCheck"></fa-icon>
         </button>
-        <button  mat-icon-button title="Negar" class="btn-outline-danger" (click)="negarSolicitacao(row.Id)" >
+        <button *ngIf="row.IdSituacaoSolicitacao == 1" mat-icon-button title="Negar" class="btn-outline-danger" (click)="negarSolicitacao(row.Id)" >
           <fa-icon [icon]="faBan"></fa-icon>
         </button>
     </ng-container>
@@ -76,5 +79,5 @@
     </tr>
   </table>
 
-  <mat-paginator (page)="getNewElements()" [pageSizeOptions]="[5, 10]" aria-label="Select page of users"></mat-paginator>
+  <mat-paginator (page)="getNewElements()" [pageSizeOptions]="[5, 10]" aria-label="Select page of users" style="margin-bottom: 18px;"></mat-paginator>
 </div>

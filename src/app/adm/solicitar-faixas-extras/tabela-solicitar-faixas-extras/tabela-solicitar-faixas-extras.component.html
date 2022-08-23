@@ -56,13 +56,17 @@
     <!-- Ofício de autorização -->
     <ng-container matColumnDef="OficioAutorizacao">
       <th mat-header-cell class="header-table" *matHeaderCellDef mat-sort-header [style.placeContent]="'center'">Ofício de autorizacao</th>
-      <td mat-cell [class]="getClass(row.IdSituacaoSolicitacao)" *matCellDef="let row"> {{row.OficioAutorizacao}} </td>
+      <td mat-cell [class]="getClass(row.IdSituacaoSolicitacao)" *matCellDef="let row">
+        <a href="" download="{{ row.Path }}">Ofício</a>
+        <!--<a href="{{ environment.BASE_URL + 'Oficio/getOficio/' + row.IdOficio }}">Baixar ofício</a>-->
+        <!--{{row.IdOficio}} -->
+      </td>
     </ng-container>
 
     <!-- Situacao -->
     <ng-container matColumnDef="SituacaoDescricao">
       <th mat-header-cell class="header-table" *matHeaderCellDef mat-sort-header [style.placeContent]="'center'">Situação</th>
-      <td mat-cell [class]="getClass(row.IdSituacaoSolicitacao)" *matCellDef="let row"></td>
+      <td mat-cell [class]="getClass(row.IdSituacaoSolicitacao)" *matCellDef="let row">{{ row.DescricaoSituacao }}</td>
     </ng-container>
 
     <tr mat-header-row *matHeaderRowDef="columns"></tr>

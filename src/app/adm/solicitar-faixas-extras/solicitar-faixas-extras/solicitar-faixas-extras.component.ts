@@ -20,7 +20,6 @@ export class SolicitarFaixasExtrasComponent implements OnInit {
   private subVerifyHasUnit!: Subscription;
   private subModalResponse!: Subscription;
 
-
   constructor(
     private solicitarFaixasExtrasService: SolicitarFaixasExtrasService,
     public modal: MatDialog,

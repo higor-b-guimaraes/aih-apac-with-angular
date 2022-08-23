@@ -17,6 +17,7 @@ import {MatDialogModule} from "@angular/material/dialog";
 import {MatInputModule} from "@angular/material/input";
 import {MatButtonModule} from "@angular/material/button";
 import {MatSelectModule} from "@angular/material/select";
+import {MatSortModule} from "@angular/material/sort";
 
 
 @NgModule({
@@ -33,7 +34,9 @@ import {MatSelectModule} from "@angular/material/select";
     MatTableModule,
     MatPaginatorModule,
     FormsModule,
-    MatInputModule
+    MatInputModule,
+    MatButtonModule,
+    MatSortModule
   ]
 })
 export class AnaliseSolicitacaoAlteracaoSenhaModule { }

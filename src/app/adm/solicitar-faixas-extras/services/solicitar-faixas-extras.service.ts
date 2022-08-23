@@ -1,6 +1,11 @@
-import { HttpClient } from '@angular/common/http';
+import {HttpClient, HttpHeaders, HttpResponse} from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { environment } from 'src/environments/environment';
+import {Observable} from "rxjs";
+// import {Http, ResponseContentType} from '@angular/http';
+
+// import { RequestOptions, ResponseContentType  } from '@angular/common/http';
+// import { } from '@angular'
 
 @Injectable({
   providedIn: 'root'
@@ -40,6 +45,12 @@ export class SolicitarFaixasExtrasService {
     return this.http.get(`${environment.BASE_URL}Solicitacao/contarSolicitacaoFaixaExtra`);
   }
 
+  downloadFile(id: number): any{
+    return this.http.get(`${environment.BASE_URL}Oficio/download/${id}`, {responseType: 'blob'});
+  }
 
+  getDownloadFile(id: number): any {
+    return this.http.get(`${environment.BASE_URL}Oficio/getUrlOficio/${id}`);
+  }
 
 }

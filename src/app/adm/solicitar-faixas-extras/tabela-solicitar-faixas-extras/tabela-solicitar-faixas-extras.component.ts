@@ -16,6 +16,9 @@ import {UtilService} from "../../../shared/services/utils/util.service";
 import {SolicitarFaixasExtrasService} from "../services/solicitar-faixas-extras.service";
 import {MatTableDataSource} from "@angular/material/table";
 import {solicitarFaixasExtras} from "../../../shared/models/faixasExtras";
+import { environment } from 'src/environments/environment';
+
+import { saveAs } from 'file-saver';
 
 @Component({
   selector: 'app-tabela-solicitar-faixas-extras',
@@ -38,13 +41,14 @@ export class TabelaSolicitarFaixasExtrasComponent implements OnInit {
   @ViewChild(MatPaginator) paginator!: MatPaginator;
   @ViewChild(MatSort) sort!: MatSort;
   getSolicitacoesFaixasExtras = new Subject<any>()
+  environment: any = environment;
 
   constructor(
     private service: SolicitarFaixasExtrasService,
     private auth: AuthService,
     private util: UtilService,
     public modal: MatDialog,
-    private cdRef: ChangeDetectorRef
+    private cdRef: ChangeDetectorRef,
   ) {
     this.columns = [
       "DataSolicitacao",
@@ -137,5 +141,20 @@ export class TabelaSolicitarFaixasExtrasComponent implements OnInit {
 
   ngAfterContentChecked() {
     this.cdRef.detectChanges();
+  }
+
+  downloadPdf(id: number) {
+    this.service.downloadFile(id)
+      .subscribe(
+        (response: any) => {
+          debugger
+          let url = response;
+
+          /*let blob:any = new Blob([response], { type: 'text/json; charset=utf-8'});
+          const url = window.URL.createObjectURL(blob);
+          //window.open(url);
+          saveAs(blob, 'employees.json');*/
+        }
+      )
   }
 }
