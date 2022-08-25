@@ -1,0 +1,52 @@
+<mat-dialog-content>
+  <form [formGroup]="formNegarAlteracaoSenha">
+    <fieldset>
+      <legend>Analisar Solicitação de Alteração/Recuperação de Senha</legend>
+    </fieldset>
+    <br>
+    <fieldset>
+      <p>Tem certeza que deseja NEGAR esta solicitação? Esta ação não pode ser desfeita.</p>
+    </fieldset>
+    <br>
+    <fieldset>
+      <legend style="margin-bottom: 24px;">Motivo(s) de Reprovação</legend>
+
+      <section class="checkbox-section">
+        <div *ngFor="let reprovacao of motivosReprovacao" class="row">
+          <mat-checkbox class="checkbox-motivo-reprovacao" [value]="reprovacao.Id">{{ reprovacao.Descricao }}</mat-checkbox>
+        </div>
+      </section>
+    </fieldset>
+
+    <fieldset>
+      <mat-form-field appearance="outline" class="col-12">
+        <textarea id="observacoes" [rows]="4" maxlength="500" matInput placeholder="Observações"></textarea>
+      </mat-form-field>
+    </fieldset>
+<!--
+    <fieldset>
+      <mat-form-field appearance="outline" class="col-12">
+        <mat-label>Motivo de Reprovação</mat-label>
+        <input matInput formControlName="Descricao" maxlength="100">
+        <mat-error *ngIf="formNegarAlteracaoSenha.get('Descricao')?.hasError('required')">É preciso informar o motivo de cancelamento</mat-error>
+      </mat-form-field>
+    </fieldset>
+
+    <fieldset>
+      <mat-form-field appearance="outline" class="col-12">
+        <mat-label>Tipo de Solicitação</mat-label>
+        <mat-select formControlName="IdTipoSolicitacao">
+          <mat-option *ngFor="let solicitacao of tipoSolicitacao" [value]="solicitacao.Id" required>
+            {{solicitacao.Descricao}}
+          </mat-option>
+        </mat-select>
+        <mat-error *ngIf="formNegarAlteracaoSenha.get('IdTipoSolicitacao')?.hasError('required')">É preciso selecionar o tipo de solicitação</mat-error>
+      </mat-form-field>
+    </fieldset>-->
+  </form>
+
+</mat-dialog-content>
+<mat-dialog-actions align="end">
+  <button mat-button mat-dialog-close (click)="closeModal()">Fechar</button>
+  <button mat-button (click)="salvar()">Salvar</button>
+</mat-dialog-actions>

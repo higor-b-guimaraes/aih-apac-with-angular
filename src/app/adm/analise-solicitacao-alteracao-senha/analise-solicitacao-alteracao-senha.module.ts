@@ -9,21 +9,21 @@ import {MatIconModule} from "@angular/material/icon";
 import {FontAwesomeModule} from "@fortawesome/angular-fontawesome";
 import {MatTableModule} from "@angular/material/table";
 import {MatPaginatorModule} from "@angular/material/paginator";
-import {FormsModule} from "@angular/forms";
-import {MatCardModule} from "@angular/material/card";
-import {MatDividerModule} from "@angular/material/divider";
-import {ReactiveFormsModule} from "@angular/forms";
+import {FormsModule, ReactiveFormsModule} from "@angular/forms";
 import {MatDialogModule} from "@angular/material/dialog";
 import {MatInputModule} from "@angular/material/input";
 import {MatButtonModule} from "@angular/material/button";
 import {MatSelectModule} from "@angular/material/select";
 import {MatSortModule} from "@angular/material/sort";
-
+import {ModalNegarAnaliseSolicitacaoAlteracaoSenhaComponent} from "./modal-negar-analise-solicitacao-alteracao-senha/modal-negar-analise-solicitacao-alteracao-senha.component";
+import {MatLineModule} from "@angular/material/core";
+import {MatCheckboxModule} from "@angular/material/checkbox";
 
 @NgModule({
   declarations: [
     AnaliseSolicitacaoAlteracaoSenhaComponent,
-    TabelaAnaliseSolicitacaoAlteracaoSenhaComponent
+    TabelaAnaliseSolicitacaoAlteracaoSenhaComponent,
+    ModalNegarAnaliseSolicitacaoAlteracaoSenhaComponent
   ],
   imports: [
     CommonModule,
@@ -36,7 +36,12 @@ import {MatSortModule} from "@angular/material/sort";
     FormsModule,
     MatInputModule,
     MatButtonModule,
-    MatSortModule
+    MatSortModule,
+    MatDialogModule,
+    ReactiveFormsModule,
+    MatSelectModule,
+    MatLineModule,
+    MatCheckboxModule,
   ]
 })
 export class AnaliseSolicitacaoAlteracaoSenhaModule { }

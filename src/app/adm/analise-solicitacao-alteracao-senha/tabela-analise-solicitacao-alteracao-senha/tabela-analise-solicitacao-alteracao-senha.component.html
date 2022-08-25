@@ -48,8 +48,8 @@
 
     <!-- Observação -->
     <ng-container matColumnDef="Observacao" >
-      <th mat-header-cell class="header-table" *matHeaderCellDef mat-sort-header [style.placeContent]="'center'">Observação</th>
-      <td mat-cell [class]="getClass(row.IdSituacaoSolicitacao)" *matCellDef="let row"> {{row.Observacao}} </td>
+      <th mat-header-cell class="header-table header-table-observacao" *matHeaderCellDef mat-sort-header [style.placeContent]="'center'">Observação</th>
+      <td mat-cell [class]="getClass(row.IdSituacaoSolicitacao) + ' header-table-observacao'" *matCellDef="let row" [innerText]="row.Observacao"></td>
     </ng-container>
 
     <!-- Ofício -->

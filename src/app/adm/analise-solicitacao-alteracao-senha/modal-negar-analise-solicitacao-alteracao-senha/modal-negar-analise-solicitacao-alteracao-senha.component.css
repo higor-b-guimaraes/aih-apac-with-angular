@@ -1,0 +1,6 @@
+.checkbox-section {
+  margin: 18px 0;
+  max-height: 220px;
+  overflow-y: auto;
+  overflow-x: hidden;
+}
