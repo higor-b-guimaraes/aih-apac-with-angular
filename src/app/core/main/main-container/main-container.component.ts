@@ -63,7 +63,8 @@ export class MainContainerComponent implements OnInit {
     {
       nome: 'Analisar Solicitações de Faixa Extra',
       link: '/analise-solicitacao-faixa-extra',
-      permission: 1
+      permission: 1,
+      secondPermission: 2,
     },
     {
       nome: 'Obter Faixas',

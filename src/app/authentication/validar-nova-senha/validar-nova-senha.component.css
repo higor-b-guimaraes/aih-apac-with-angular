@@ -1,0 +1,152 @@
+
+.container-principal {
+  height: 80vh;
+  width: 100%;
+  display: flex;
+  align-items: center;
+}
+
+.container-conteudo {
+  width: 100%;
+  max-height: 80vh;
+  display: grid;
+}
+
+.container-faixas {
+  padding: 10px;
+  border-radius: 10px;
+  max-height: 75vh;
+  box-shadow: 0px 0px 7px 2px #aaaaaa;
+  overflow: auto;
+  max-width: fit-content;
+  min-width: 300px;
+  height: 100%;
+  min-height: 230px;
+}
+
+.container-form {
+  padding-top: 8px;
+  display: grid;
+  height: 100%;
+  align-content: center;
+}
+
+.btn-login,
+.btn-login:disabled,
+.btn-login-active:hover {
+  color: #fff;
+  background-color: #363636;
+  margin-top: 15px;
+}
+
+
+.btn-login:disabled {
+  opacity: 0.5;
+}
+
+.btn-login-active:hover {
+  opacity: 0.8;
+}
+
+.container-btn-access {
+  text-align: center;
+}
+
+
+/* START TOPO CABEÇALHO */
+
+
+
+
+
+.container-topo-site {
+  background-color: #363636;
+  height: 5vh;
+  direction: rtl;
+}
+
+.topo-site {
+  height: 100%;
+}
+
+.container-fluid {
+  height: 50%;
+}
+
+/* END TOPO CABEÇALHO */
+
+/* START SECONDE TOPO CABEÇALHO */
+
+nav.navbar.navbar-expand-lg.nav-bg-color {
+  background-color: #005c94;
+  height: 10vh;
+  margin: 0px;
+  padding: 0px;
+}
+
+.container-logo {
+  height: 100%;
+  display: flex;
+}
+
+.logo-top {
+  height: 100%;
+  width: 220px;
+}
+
+/* END SECONDE TOPO CABEÇALHO */
+
+.example-container {
+  display: flex;
+  flex-direction: column;
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+}
+
+.example-is-mobile .example-toolbar {
+  position: fixed;
+  z-index: 2;
+}
+
+h1.example-app-name {
+  margin-left: 8px;
+}
+
+.example-sidenav-container {
+  flex: 1;
+}
+
+.example-is-mobile .example-sidenav-container {
+  flex: 1 0 auto;
+}
+
+.offcanvas.offcanvas-start {
+  position: fixed;
+}
+
+
+.main-container {
+  height: 80vh;
+}
+
+.cdk-overlay-container {
+  position: fixed;
+  z-index: 1;
+}
+
+@media (max-width: 575px) {
+
+  nav.navbar.navbar-expand-lg.nav-bg-color {
+    height: 10vh;
+  }
+
+  .logo-top {
+    width: 100%;
+  }
+}
+
+
+

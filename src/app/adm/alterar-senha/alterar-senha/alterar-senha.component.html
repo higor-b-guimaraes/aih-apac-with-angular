@@ -2,33 +2,32 @@
   <div class="container-conteudo">
     <div class="container container-faixas">
       <div class="row g-3 container-form">
-        <!--<form [formGroup]="formResetPassword" class="row g-3">-->
-          <!-- Nome Usuário -->
-          <mat-form-field class="col-12" [formGroup]="formResetPassword" appearance="outline">
-            <mat-label>Usuário</mat-label>
-            <input matInput formControlName="NomeUsuario">
-          </mat-form-field>
+        <!-- Nome Usuário -->
+        <mat-form-field class="col-12" [formGroup]="formResetPassword" appearance="outline">
+          <mat-label>Usuário</mat-label>
+          <input matInput formControlName="NomeUsuario">
+        </mat-form-field>
 
-          <!-- Senha atual -->
-          <mat-form-field class="col-12" [formGroup]="formResetPassword" appearance="outline" *ngIf="PerfilUsuario?.IdPerfilUsuario == 1">
-            <mat-label>Senha atual</mat-label>
-            <input matInput formControlName="SenhaAtual" type="password">
-            <mat-error *ngIf="formResetPassword.get('SenhaAtual')?.hasError('required')">Informe a sua senha atual</mat-error>
-          </mat-form-field>
+        <!-- Senha atual -->
+        <mat-form-field class="col-12" [formGroup]="formResetPassword" appearance="outline" *ngIf="PerfilUsuario?.IdPerfilUsuario == 1">
+          <mat-label>Senha atual</mat-label>
+          <input matInput formControlName="SenhaAtual" type="password">
+          <mat-error *ngIf="formResetPassword.get('SenhaAtual')?.hasError('required')">Informe a sua senha atual</mat-error>
+        </mat-form-field>
 
-          <!-- Nova Senha -->
-          <mat-form-field class="col-12" [formGroup]="formResetPassword" appearance="outline" *ngIf="PerfilUsuario?.IdPerfilUsuario == 1">
-            <mat-label>Nova senha</mat-label>
-            <input matInput formControlName="NovaSenha" type="password">
-            <mat-error *ngIf="formResetPassword.get('NovaSenha')?.hasError('required')">Informe a sua nova senha</mat-error>
-          </mat-form-field>
+        <!-- Nova Senha -->
+        <mat-form-field class="col-12" [formGroup]="formResetPassword" appearance="outline" *ngIf="PerfilUsuario?.IdPerfilUsuario == 1">
+          <mat-label>Nova senha</mat-label>
+          <input matInput formControlName="NovaSenha" type="password">
+          <mat-error *ngIf="formResetPassword.get('NovaSenha')?.hasError('required')">Informe a sua nova senha</mat-error>
+        </mat-form-field>
 
-          <!-- Confirmar Nova Senha -->
-          <mat-form-field class="col-12" [formGroup]="formResetPassword" appearance="outline" *ngIf="PerfilUsuario?.IdPerfilUsuario == 1">
-            <mat-label>Confirmar nova senha</mat-label>
-            <input matInput formControlName="ConfirmarNovaSenha" type="password">
-            <mat-error *ngIf="formResetPassword.get('ConfirmarNovaSenha')?.hasError('required')">Confirme a sua nova senha</mat-error>
-          </mat-form-field>
+        <!-- Confirmar Nova Senha -->
+        <mat-form-field class="col-12" [formGroup]="formResetPassword" appearance="outline" *ngIf="PerfilUsuario?.IdPerfilUsuario == 1">
+          <mat-label>Confirmar nova senha</mat-label>
+          <input matInput formControlName="ConfirmarNovaSenha" type="password">
+          <mat-error *ngIf="formResetPassword.get('ConfirmarNovaSenha')?.hasError('required')">Confirme a sua nova senha</mat-error>
+        </mat-form-field>
 
         <mat-form-field [formGroup]="formResetPassword" appearance="outline" class="col-12"
           *ngIf="PerfilUsuario?.IdPerfilUsuario != 1"
@@ -42,8 +41,6 @@
           <mat-error class="error-access" *ngIf="!oficioValido">{{ msgErroOficio }}</mat-error>
         </mat-form-field>
 
-        <!--</form>-->
-
         <mat-card-actions [formGroup]="formResetPassword" class="container-btn-access">
           <button mat-button
                   [disabled]="!formResetPassword.valid"
@@ -51,25 +48,6 @@
                   (click)="onSubmit()"
           >Salvar</button>
         </mat-card-actions>
-
-        <!--<mat-form-field
-        *ngIf="!isAdm"
-        [formGroup]="formResetPassword"
-        appearance="outline">
-        <mat-label>Insira o ofício de autorização de recuperação de senha</mat-label>
-            <ngx-mat-file-input
-            formControlName="oficio"
-            placeholder="Ofício"
-            name="oficio"
-            valuePlaceholder="Insira o ofício"
-            (change)="checkOficio()"
-            required></ngx-mat-file-input>
-            <mat-icon matSuffix>folder</mat-icon>
-            <mat-error class="error-access" *ngIf="!validOficio">{{ errorMsgOficio }}</mat-error>
-            <mat-error class="error-access"></mat-error>
-          </mat-form-field>-->
-
-
       </div>
     </div>
   </div>

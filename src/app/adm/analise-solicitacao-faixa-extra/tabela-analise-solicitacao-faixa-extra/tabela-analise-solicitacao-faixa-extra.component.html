@@ -1,0 +1,101 @@
+<div class="container-table">
+  <div class="row" style="width: 100%; margin-top: 18px;">
+    <mat-form-field class="col-sm-9 col-md-6 col-lg-4 align-self-start">
+      <mat-label>Filtrar:</mat-label>
+      <input (keypress)="submeterFiltro($event)" id="inputFiltro" type="text" matInput [(ngModel)]="filtro">
+      <button *ngIf="filtro" matSuffix mat-icon-button aria-label="Clear" (click)="filtro='';filtrar();">
+        <mat-icon>close</mat-icon>
+      </button>
+    </mat-form-field>
+    <div class="col-3">
+      <button mat-raised-button color="primary" (click)="filtrar()">
+        <fa-icon [icon]="faSearch"></fa-icon>&nbsp;Filtrar</button>
+    </div>
+  </div>
+
+  <table mat-table [dataSource]="dataSource" matSort class="mat-elevation-z8 table">
+
+    <!-- Data da solicitação -->
+    <ng-container matColumnDef="DataSolicitacao" >
+      <th mat-header-cell class="header-table" *matHeaderCellDef mat-sort-header [style.placeContent]="'center'">Data da Solicitação</th>
+      <td mat-cell [class]="getClass(row.IdSituacaoSolicitacao)" *matCellDef="let row"> {{row.DataSolicitacao | date: 'dd/MM/yyyy'}} </td>
+    </ng-container>
+
+    <!-- Município/Unidade (Solicitante) -->
+    <ng-container matColumnDef="MunicipioUnidade" >
+      <th mat-header-cell class="header-table" *matHeaderCellDef mat-sort-header [style.placeContent]="'center'">Solicitante</th>
+      <td mat-cell [class]="getClass(row.IdSituacaoSolicitacao)" style="white-space: nowrap;" *matCellDef="let row">
+        {{ row.IdTipoSolicitante == 1 ? row.DescricaoUnidade : row.DescricaoMunicipio }}</td>
+    </ng-container>
+
+    <!-- Tipo de Faixa -->
+    <ng-container matColumnDef="DescricaoTipoFaixa" >
+      <th mat-header-cell class="header-table" *matHeaderCellDef mat-sort-header [style.placeContent]="'center'">Tipo de Faixa</th>
+      <td mat-cell [class]="getClass(row.IdSituacaoSolicitacao)" *matCellDef="let row"> {{row.DescricaoTipoFaixa}} </td>
+    </ng-container>
+
+    <!-- Quantidade -->
+    <ng-container matColumnDef="Quantidade" >
+      <th mat-header-cell class="header-table" *matHeaderCellDef mat-sort-header [style.placeContent]="'center'">Quantidade de Faixas</th>
+      <td mat-cell [class]="getClass(row.IdSituacaoSolicitacao)" *matCellDef="let row"> {{row.QuantidadeFaixas}} </td>
+    </ng-container>
+
+    <!-- Competência -->
+    <ng-container matColumnDef="Competencia" >
+      <th mat-header-cell class="header-table" *matHeaderCellDef mat-sort-header [style.placeContent]="'center'">Competencia (ano)</th>
+      <td mat-cell [class]="getClass(row.IdSituacaoSolicitacao)" *matCellDef="let row"> {{row.Competencia}} </td>
+    </ng-container>
+
+    <!-- Mes -->
+    <ng-container matColumnDef="Mes" >
+      <th mat-header-cell class="header-table" *matHeaderCellDef mat-sort-header [style.placeContent]="'center'">Mês</th>
+      <td mat-cell [class]="getClass(row.IdSituacaoSolicitacao)" *matCellDef="let row"> {{row.Mes}} </td>
+    </ng-container>
+
+    <!-- Ofício -->
+    <ng-container matColumnDef="Oficio" >
+      <th mat-header-cell class="header-table" *matHeaderCellDef mat-sort-header [style.placeContent]="'center'">Ofício</th>
+      <td mat-cell [class]="getClass(row.IdSituacaoSolicitacao)" *matCellDef="let row">
+        <a href="" download="{{ row.Path }}">Ofício</a>
+      </td>
+    </ng-container>
+
+    <!-- Situação -->
+    <ng-container matColumnDef="SituacaoDescricao" >
+      <th mat-header-cell class="header-table" *matHeaderCellDef mat-sort-header [style.placeContent]="'center'">Situação</th>
+      <td mat-cell [class]="getClass(row.IdSituacaoSolicitacao)" *matCellDef="let row"> {{row.DescricaoSituacao}} </td>
+    </ng-container>
+
+    <!-- Motivo Reprovação -->
+    <ng-container matColumnDef="MotivoReprovacaoDescricao" >
+      <th mat-header-cell class="header-table" *matHeaderCellDef mat-sort-header [style.placeContent]="'center'">Motivo da Reprovação</th>
+      <td mat-cell [class]="getClass(row.IdSituacaoSolicitacao)" *matCellDef="let row"> {{row.DescricaoMotivoReprovacao}} </td>
+    </ng-container>
+
+    <!-- Observação -->
+    <ng-container matColumnDef="Observacao" >
+      <th mat-header-cell class="header-table header-table-observacao" *matHeaderCellDef mat-sort-header [style.placeContent]="'center'">Observação</th>
+      <td mat-cell [class]="getClass(row.IdSituacaoSolicitacao) + ' header-table-observacao'" *matCellDef="let row" [innerText]="row.Observacao"></td>
+    </ng-container>
+
+    <!-- Ações -->
+    <ng-container matColumnDef="Acoes">
+      <th mat-header-cell class="header-table" *matHeaderCellDef [style]="{justify: 'end', width: '20px'}"> Ações </th>
+      <td mat-cell [class]="getClass(row.IdSituacaoSolicitacao)" *matCellDef="let row">
+        <button *ngIf="row.IdSituacaoSolicitacao == 1" mat-icon-button title="Autorizar" class="btn-outline-success" (click)="autorizarSolicitacao(row.Id)" >
+          <fa-icon [icon]="faCheck"></fa-icon>
+        </button>
+        <button *ngIf="row.IdSituacaoSolicitacao == 1" mat-icon-button title="Negar" class="btn-outline-danger" (click)="negarSolicitacao(row.Id)" >
+          <fa-icon [icon]="faBan"></fa-icon>
+        </button>
+    </ng-container>
+
+    <tr mat-header-row *matHeaderRowDef="columns"></tr>
+    <tr mat-row *matRowDef="let row; columns: columns;"></tr>
+    <tr class="mat-row" *matNoDataRow>
+      <td class="mat-cell" colspan="columns.length">Nenhum valor encontrado.</td>
+    </tr>
+  </table>
+
+  <mat-paginator (page)="getNewElements()" [pageSizeOptions]="[5, 10]" aria-label="Select page of users" style="margin-bottom: 18px;"></mat-paginator>
+</div>

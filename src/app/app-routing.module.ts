@@ -5,12 +5,15 @@ import { AuthGuardService } from './core/guards/main/auth-guard.service';
 import { LoginComponent } from './authentication/login/login.component';
 import { MainContainerComponent } from './core/main/main-container/main-container.component';
 import {InserirTokenComponent} from "./adm/inserir-token/inserir-token.component";
+import {ValidarNovaSenhaComponent} from "./authentication/validar-nova-senha/validar-nova-senha.component";
 
 
 const routes: Routes = [
-
   {
     path: 'login',  component: LoginComponent,
+  },
+  {
+    path: 'redefinir-senha',  component: ValidarNovaSenhaComponent,
   },
   {
     path: 'authentication',
@@ -80,6 +83,10 @@ const routes: Routes = [
       {
         path: 'analise-solicitacao-alteracao-senha',
         loadChildren: () => import('./adm/analise-solicitacao-alteracao-senha/analise-solicitacao-alteracao-senha.module').then((m) => m.AnaliseSolicitacaoAlteracaoSenhaModule),
+      },
+      {
+        path: 'analise-solicitacao-faixa-extra',
+        loadChildren: () => import('./adm/analise-solicitacao-faixa-extra/analise-solicitacao-faixa-extra.module').then((m) => m.AnaliseSolicitacaoFaixaExtraModule),
       },
     ]
   }

@@ -110,76 +110,35 @@ export class AlterarSenhaComponent implements OnInit {
           if ( x ) {
             this.alterarSenhaService.alterarSenha(uploadData).subscribe({
               next:(e: any) => {
-                this.util.openAlertModal("320px", "error-modal", "", `${e}`)
-                  .then((update) => {if(update) this.router.navigate([''])});
-              }
+                this.util.loading.next(false);
+                this.util.openAlertModal("320px", "success-modal", "", `${e}`)
+                  .then((update) => {
+                    if(update)
+                      this.router.navigate(['/']);
+                  });
+              },
+              error: (err: any) => {
+                this.util.loading.next(false);
+                this.util.openAlertModal("320px", "error-modal", "Erro",
+                  `Não foi possível alterar a senha! Por favor, tente novamente! Caso o problema persista, entre em contato via e-mail: sistemas.supinf@saude.rj.gov.br`);
+            }
             })
           } else {
             this.util.openAlertModal("320px", "error-modal", "Senha incorreta",
-              `A senha informada não corresponde à sua senha atual! Por favor, tente novamente! Caso o problema persista, entre em contato via e-mail: sistemas.supinf@saude.rj.gov.br`)
-              .then((update) => {if(update) this.router.navigate([''])});
+              `A senha informada não corresponde à sua senha atual! Por favor, tente novamente! Caso o problema persista, entre em contato via e-mail: sistemas.supinf@saude.rj.gov.br`);
+            this.util.loading.next(false);
           }
-          this.util.loading.next(false);
         },
         error: (err) => {
-          console.log("Erro: ",err );
           this.util.loading.next(false);
+          this.util.openAlertModal("320px", "error-modal", "Erro",
+            `Não foi possível alterar a senha! Por favor, tente novamente! Caso o problema persista, entre em contato via e-mail: sistemas.supinf@saude.rj.gov.br`);
         },complete: () => {
           this.util.loading.next(false);
         }
       })
-      /*if(this.novoCadastro) {
-        await this.submitNovoUsuario(uploadData);
-        this.util.openAlertModal(
-          "320px", "success-modal", "Usuário cadastrado!",
-          `Usuário ${this.formUsuario.get(`Nome`)?.value}, foi cadastrado com sucesso no sistema!`
-        );
-        this.dialogRef.close(true);
-        return;
-      } else {
-        await this.submitAtualizaUsuario(uploadData);
-        this.util.openAlertModal(
-          "320px", "success-modal",
-          "Atualização de dados realizada!",
-          `Os dados do usuário ${this.formUsuario.get(`Nome`)?.value}, foram atualizados no sistema!`
-        );
-        this.dialogRef.close(true);
-        return;
-      }*/
     }
   }
-
-  /*onSubmit() {
-    this.util.loading.next(true);
-
-    let form = {
-      Id: this.PerfilUsuario.Id,
-      Senha: this.formResetPassword.get('SenhaAtual')?.value
-    }
-
-    this.alterarSenhaService.validarSenha(form).subscribe({
-      next:(x) => {
-        debugger
-        console.log(x);
-        if ( x ) {
-          this.alterarSenhaService.alterarSenha(this.formResetPassword).subscribe({
-            next:(e: any) => {
-              this.util.openAlertModal("320px", "error-modal", "", `${e}`);
-            }
-          })
-        } else {
-          this.util.openAlertModal("320px", "error-modal", "Senha incorreta", `A senha informada não corresponde à sua senha atual! Por favor, tente novamente! Caso o problema persista, entre em contato via e-mail: sistemas.supinf@saude.rj.gov.br`);
-        }
-        this.util.loading.next(false);
-      },
-      error: (err) => {
-        console.log("Erro: ",err );
-        this.util.loading.next(false);
-      },complete: () => {
-        this.util.loading.next(false);
-      }
-    })
-  }*/
 
   ngAfterContentChecked() {
     this.cdRef.detectChanges();

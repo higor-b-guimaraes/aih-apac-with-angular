@@ -1,27 +1,29 @@
 import {ChangeDetectorRef, Component, OnInit, ViewChild} from '@angular/core';
-import { faCheck, faBan, faSearch, faPlus } from '@fortawesome/free-solid-svg-icons';
 import {MatPaginator} from "@angular/material/paginator";
 import {MatSort} from "@angular/material/sort";
 import {Subject} from "rxjs";
 import {AuthService} from "../../../core/services/auth.service";
 import {UtilService} from "../../../shared/services/utils/util.service";
 import {MatDialog} from "@angular/material/dialog";
+import {
+  AnaliseSolicitacaoFaixaExtraService
+} from "../analise-solicitacao-faixa-extra-service/analise-solicitacao-faixa-extra.service";
+import { faCheck, faBan, faSearch, faPlus } from '@fortawesome/free-solid-svg-icons';
 import {MatTableDataSource} from "@angular/material/table";
-import { AnaliseSolicitacaoAlteracaoSenhaService } from "../analise-solicitacao-alteracao-senha-service/analise-solicitacao-alteracao-senha.service";
 import {AnalisarSolicitacaoAlteracaoSenha} from "../../../shared/models/analisarSolicitacaoAlteracaoSenha";
 import {DialogModel} from "../../unidades/dialog-unidades/dialog-model/dialog-model";
 import {GenericDialogComponent} from "../../generic-dialog/generic-dialog.component";
 import {
-  ModalNegarAnaliseSolicitacaoAlteracaoSenhaComponent
-} from "../modal-negar-analise-solicitacao-alteracao-senha/modal-negar-analise-solicitacao-alteracao-senha.component";
+  ModalNegarAnaliseSolicitacaoFaixaExtraComponent
+} from "../modal-negar-analise-solicitacao-faixa-extra/modal-negar-analise-solicitacao-faixa-extra.component";
+
 
 @Component({
-  selector: 'app-tabela-analise-solicitacao-alteracao-senha',
-  templateUrl: './tabela-analise-solicitacao-alteracao-senha.component.html',
-  styleUrls: ['./tabela-analise-solicitacao-alteracao-senha.component.css']
+  selector: 'app-tabela-analise-solicitacao-faixa-extra',
+  templateUrl: './tabela-analise-solicitacao-faixa-extra.component.html',
+  styleUrls: ['./tabela-analise-solicitacao-faixa-extra.component.css']
 })
-export class TabelaAnaliseSolicitacaoAlteracaoSenhaComponent implements OnInit {
-
+export class TabelaAnaliseSolicitacaoFaixaExtraComponent implements OnInit {
   // Ícones
   faCheck = faCheck;
   faBan = faBan;
@@ -41,13 +43,16 @@ export class TabelaAnaliseSolicitacaoAlteracaoSenhaComponent implements OnInit {
     private util: UtilService,
     public modal: MatDialog,
     private cdRef: ChangeDetectorRef,
-    private service: AnaliseSolicitacaoAlteracaoSenhaService
+    private service: AnaliseSolicitacaoFaixaExtraService
   )
   {
     this.columns = [
       "DataSolicitacao",
-      "UsuarioDescricao",
       "MunicipioUnidade",
+      "DescricaoTipoFaixa",
+      "Quantidade",
+      "Competencia",
+      "Mes",
       "SituacaoDescricao",
       "MotivoReprovacaoDescricao",
       "Observacao",
@@ -57,14 +62,14 @@ export class TabelaAnaliseSolicitacaoAlteracaoSenhaComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.listarSolicitacaoAlteracaoSenha();
+    this.listarSolicitacoesFaixaExtra();
   }
 
-  listarSolicitacaoAlteracaoSenha() {
+  listarSolicitacoesFaixaExtra() {
     this.util.loading.next(true);
     this.subject.subscribe({
       next: (data) => {
-        this.service.getListaSolicitacoesAlteracaoSenha( this.filtro).subscribe({
+        this.service.getListaSolicitacoesFaixasExtras( this.filtro).subscribe({
           next: (data) => {
             console.log(data);
             this.dataSource = new MatTableDataSource<AnalisarSolicitacaoAlteracaoSenha>(data as any);
@@ -94,8 +99,9 @@ export class TabelaAnaliseSolicitacaoAlteracaoSenhaComponent implements OnInit {
   }
 
   filtrar() {
-    this.listarSolicitacaoAlteracaoSenha();
+    this.listarSolicitacoesFaixaExtra();
   }
+
 
   getClass(situacao: any) {
     situacao = parseInt(situacao);
@@ -155,7 +161,7 @@ export class TabelaAnaliseSolicitacaoAlteracaoSenhaComponent implements OnInit {
   }
 
   negarSolicitacao(id: number) {
-    const dialogRef = this.modal.open(ModalNegarAnaliseSolicitacaoAlteracaoSenhaComponent, {
+    const dialogRef = this.modal.open(ModalNegarAnaliseSolicitacaoFaixaExtraComponent, {
       width: '100%',
       panelClass: 'common-modal',
       data: {
@@ -167,12 +173,6 @@ export class TabelaAnaliseSolicitacaoAlteracaoSenhaComponent implements OnInit {
   }
 
   getNewElements() {
-    this.util.loading.next(true);
-    let data = {
-      pageIndex: (this.dataSource?.paginator?.pageIndex) ? this.dataSource?.paginator?.pageIndex : 0 ,
-      pageSize: (this.dataSource?.paginator?.pageSize) ? this.dataSource?.paginator?.pageSize : 0 ,
-    }
 
-    this.subject.next(data);
   }
 }

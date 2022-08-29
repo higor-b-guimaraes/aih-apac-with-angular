@@ -1,0 +1,48 @@
+<nav class="navbar navbar-expand-lg nav-bg-color">
+  <div class="container-fluid">
+    <div class="container-logo">
+      <a href="https://www.saude.rj.gov.br/" target="_blank">
+        <img class="logo-top" [src]="logoSESRJ" alt="">
+      </a>
+    </div>
+  </div>
+</nav>
+<div class="container-principal">
+  <div class="container-conteudo">
+    <div class="container container-faixas">
+      <div class="row g-3 container-form">
+        <legend>Redefinir Senha</legend>
+        <!-- Código Verificação -->
+        <mat-form-field class="col-12" [formGroup]="form" appearance="outline">
+          <mat-label>Código de Verificação</mat-label>
+          <input  matInput formControlName="CodigoVerificacao" (blur)="VerificarCodigo()">
+        </mat-form-field>
+
+        <!-- Nova Senha -->
+        <mat-form-field [formGroup]="form" *ngIf="isCodigoVerificacao" class="col-12 mat-form-field-redefinir-senha" appearance="outline">
+          <mat-label>Nova senha</mat-label>
+          <input matInput formControlName="NovaSenha" type="password">
+          <mat-error *ngIf="form.get('NovaSenha')?.hasError('required')">Informe a sua nova senha</mat-error>
+        </mat-form-field>
+
+        <!-- Confirmar Nova Senha -->
+        <mat-form-field class="col-12 mat-form-field-redefinir-senha" *ngIf="isCodigoVerificacao" [formGroup]="form" appearance="outline">
+          <mat-label>Confirmar nova senha</mat-label>
+          <input matInput formControlName="ConfirmarNovaSenha" type="password">
+          <mat-error *ngIf="form.get('ConfirmarNovaSenha')?.hasError('required')">Confirme a sua nova senha</mat-error>
+        </mat-form-field>
+
+        <mat-card-actions [formGroup]="form" class="container-btn-access">
+          <button mat-button
+                  [disabled]="!form.valid"
+                  class="btn-login"
+                  (click)="onSubmit()"
+          >Salvar</button>
+        </mat-card-actions>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+

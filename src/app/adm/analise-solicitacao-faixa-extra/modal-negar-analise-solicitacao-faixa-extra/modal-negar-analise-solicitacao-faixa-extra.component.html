@@ -1,0 +1,32 @@
+<mat-dialog-content>
+  <form [formGroup]="formNegarFaixasExtras">
+    <fieldset>
+      <legend>Analisar Solicitação de Faixa Extra</legend>
+    </fieldset>
+    <br>
+    <fieldset>
+      <p>Tem certeza que deseja NEGAR esta solicitação? Esta ação não pode ser desfeita.</p>
+    </fieldset>
+    <br>
+    <fieldset>
+      <legend style="margin-bottom: 24px;">Motivo(s) de Reprovação</legend>
+
+      <section class="checkbox-section">
+        <div *ngFor="let reprovacao of motivosReprovacao" class="row">
+          <mat-checkbox class="checkbox-motivo-reprovacao" [value]="reprovacao.Id">{{ reprovacao.Descricao }}</mat-checkbox>
+        </div>
+      </section>
+    </fieldset>
+
+    <fieldset>
+      <mat-form-field appearance="outline" class="col-12">
+        <textarea id="observacoes" [rows]="4" maxlength="500" matInput placeholder="Observações"></textarea>
+      </mat-form-field>
+    </fieldset>
+  </form>
+
+</mat-dialog-content>
+<mat-dialog-actions align="end">
+  <button mat-button mat-dialog-close (click)="closeModal()">Fechar</button>
+  <button mat-button (click)="salvar()">Salvar</button>
+</mat-dialog-actions>
