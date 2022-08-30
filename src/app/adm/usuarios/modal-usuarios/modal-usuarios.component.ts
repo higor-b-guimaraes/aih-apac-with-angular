@@ -89,10 +89,10 @@ export class ModalUsuariosComponent implements OnInit {
     this.usuariosService.getTipoPerfil().subscribe( (data) => {
       this.opcoesPerfil = data;
     })
-    this.usuariosService.getMunicipios().subscribe( (data) => {
+    this.usuariosService.getMunicipiosCadastro().subscribe( (data) => {
       this.opcoesMunicipio = data;
     })
-    this.usuariosService.getUnidades().subscribe( (data) => {
+    this.usuariosService.getUnidadesCadastro().subscribe( (data) => {
       console.log(data);
       this.opcoesUnidades = data;
     })
@@ -187,8 +187,8 @@ export class ModalUsuariosComponent implements OnInit {
           "320px", "success-modal", "Usuário cadastrado!",
           `Usuário ${this.formUsuario.get(`Nome`)?.value}, foi cadastrado com sucesso no sistema!`
         ).then((update) => {if(update) location.reload()});
-        this.dialogRef.close(true);
-        return;
+        // this.dialogRef.close(true);
+
       } else {
         await this.submitAtualizaUsuario(uploadData);
         this.util.openAlertModal(
@@ -196,8 +196,8 @@ export class ModalUsuariosComponent implements OnInit {
           "Atualização de dados realizada!",
           `Os dados do usuário ${this.formUsuario.get(`Nome`)?.value}, foram atualizados no sistema!`
         ).then((update) => {if(update) location.reload()});
-        this.dialogRef.close(true);
-        return;
+        //this.dialogRef.close(true);
+
       }
     }
   }
@@ -210,13 +210,17 @@ export class ModalUsuariosComponent implements OnInit {
             this.util.loading.next(false)
             resolve(true)
           },
-          error: () => {
+          error: (err: any) => {
             this.util.loading.next(false);
+            console.log(err)
             this.util.openAlertModal(
               "320px", "error-modal", "Erro ao salvar usuário",
-              `Houve um erro ao tentar salvar o usuário ${this.formUsuario.get(`Nome`)?.value} em nossa base de dados! Por favor, tente novamente! Caso o problema persista, entre em contato via e-mail: sistemas.supinf@saude.rj.gov.br`
+              err.error
             );
-            reject(false);
+            /*this.util.openAlertModal(
+              "320px", "error-modal", "Erro ao salvar usuário",
+              `Houve um erro ao tentar salvar o usuário ${this.formUsuario.get(`Nome`)?.value} em nossa base de dados! Por favor, tente novamente! Caso o problema persista, entre em contato via e-mail: sistemas.supinf@saude.rj.gov.br`
+            );*/
           },
         })
       }
@@ -238,7 +242,6 @@ export class ModalUsuariosComponent implements OnInit {
               "320px", "error-modal", "Erro ao salvar usuário",
               `Houve um erro ao tentar atualizar o usuário ${this.formUsuario.get(`Nome`)?.value} em nossa base de dados! Por favor, tente novamente! Caso o problema persista, entre em contato via e-mail: sistemas.supinf@saude.rj.gov.br`
             );
-            reject(false);
           },
         })
       }
