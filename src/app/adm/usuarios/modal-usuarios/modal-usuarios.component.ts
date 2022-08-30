@@ -99,6 +99,38 @@ export class ModalUsuariosComponent implements OnInit {
 
   }
 
+  /* inputMaskNumber(number?: any) {
+
+    let phoneNumber = this.formUsuario.get('Telefone')?.value;
+    let foneFormatado = '';
+
+    if(number == undefined) {
+      const value = phoneNumber.toString().replace(/\D/g, '');
+      if (phoneNumber) {
+        if (value.length > 10) {
+          foneFormatado = value.replace(/(\d{2})?(\d{1})?(\d{4})?(\d{4})/, '($1) $2 $3-$4');
+        } else if (value.length > 9) {
+          foneFormatado = value.replace(/(\d{2})?(\d{4})?(\d{4})/, '($1) $2-$3');
+        }else {
+          this.formUsuario.patchValue({Telefone: phoneNumber});
+          return;
+        }
+      }
+
+      this.formUsuario.patchValue({Telefone: foneFormatado});
+    }else {
+      if (number.length > 10) {
+        foneFormatado = number.replace(/(\d{2})?(\d{1})?(\d{4})?(\d{4})/, '($1) $2 $3-$4');
+        console.log(foneFormatado)
+      } else if (number.length > 9) {
+        foneFormatado = number.replace(/(\d{2})?(\d{4})?(\d{4})/, '($1) $2-$3');
+        console.log('2')
+
+      }
+      this.formUsuario.patchValue({Telefone: foneFormatado});
+    }
+  } */
+
   ngOnInit(): void {
     this.util.loading.next(true);
     if(this.dataModal?.idRequest) {
@@ -106,11 +138,12 @@ export class ModalUsuariosComponent implements OnInit {
         next: (res: any) => {
           console.log(res);
           this.form = res;
+
           this.formUsuario.patchValue({
             Nome: res?.Nome,
             NomeSocial: res?.NomeSocial,
-            Cpf: res?.Cpf,
-            Telefone: res?.Telefone,
+            Cpf: this.util.addMaskCPF(res?.Cpf),
+            Telefone: this.util.addphoneMask(res?.Telefone),
             Email: res?.Email,
             NomeUsuario: res?.NomeUsuario,
             Situacao: parseInt(res?.Situacao),
@@ -120,6 +153,7 @@ export class ModalUsuariosComponent implements OnInit {
             CodigoIbgeMunicipio: res?.CodigoIbgeMunicipio,
             Oficio: null,
           })
+
           this.getMunicipioOuUnidade();
           this.validaNecessidadeOficio();
           this.novoCadastro = false;
@@ -130,6 +164,8 @@ export class ModalUsuariosComponent implements OnInit {
           this.formUsuario.get('Cpf')?.disable({onlySelf: true});
 
           this.idUsuario = res?.Id;
+
+          console.log(this.formUsuario)
         },
         error: () => {},
       })

@@ -23,6 +23,48 @@ export class UtilService {
     return input.value.replaceAll('.', '').replace('-', '');
   }
 
+  addMaskCPF(cpf: string) {
+    let cpfFormatado = '';
+    if (cpf) {
+      const value = cpf.toString().replace(/\D/g, '');
+      cpfFormatado = value.replace(/(\d{3})?(\d{3})?(\d{3})?(\d{2})/, '$1.$2.$3-$4');
+    }
+
+    return cpfFormatado;
+  }
+
+
+  addphoneMask(phoneNumber: string) {
+
+    let foneFormatado = '';
+    if (phoneNumber) {
+      const value = phoneNumber.toString().replace(/\D/g, '');
+
+      if (value.length > 12) {
+        foneFormatado = value.replace(/(\d{2})?(\d{2})?(\d{5})?(\d{4})/, '+$1 ($2) $3-$4');
+
+      } else if (value.length > 11) {
+        foneFormatado = value.replace(/(\d{2})?(\d{2})?(\d{4})?(\d{4})/, '+$1 ($2) $3-$4');
+
+      } else if (value.length > 10) {
+        foneFormatado = value.replace(/(\d{2})?(\d{1})?(\d{4})?(\d{4})/, '($1) $2 $3-$4');
+
+      } else if (value.length > 9) {
+        foneFormatado = value.replace(/(\d{2})?(\d{4})?(\d{4})/, '($1) $2-$3');
+
+      } else if (value.length > 5) {
+        foneFormatado = value.replace(/^(\d{2})?(\d{4})?(\d{0,4})/, '($1) $2-$3');
+
+      } else if (value.length > 1) {
+        foneFormatado = value.replace(/^(\d{2})?(\d{0,5})/, '($1) $2');
+      } else {
+        if (phoneNumber !== '') { foneFormatado = value.replace(/^(\d*)/, '($1'); }
+      }
+    }
+
+    return foneFormatado;
+  }
+
   checkLogin(formGroup: FormGroup, nameField: string): any {
     if (formGroup?.get(`${nameField}`)?.touched && formGroup?.controls[`${nameField}`].hasError('campoVazio')) {
       return {
