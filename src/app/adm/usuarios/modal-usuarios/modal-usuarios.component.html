@@ -107,7 +107,7 @@
           <mat-select
           formControlName="IdUnidade">
             <mat-option *ngFor="let unidades of opcoesUnidades" [value]="unidades.Id" required >
-              {{unidades.UnidadeDescricao}}
+              {{unidades.Descricao}}
             </mat-option>
           </mat-select>
           <mat-error *ngIf="formUsuario.get('IdUnidade')?.hasError('required')">É preciso selecionar a unidade do usuário</mat-error>
@@ -129,5 +129,5 @@
 
 <mat-dialog-actions align="end">
   <button mat-button mat-dialog-close (click)="closeModal()">Fechar</button>
-  <button mat-button [mat-dialog-close]="usuarioModel" cdkFocusInitial [disabled]="!formUsuario.valid" (click)="salvar()">Salvar</button>
+  <button mat-button cdkFocusInitial [disabled]="!formUsuario.valid" (click)="salvar()">Salvar</button>
 </mat-dialog-actions>

@@ -53,8 +53,15 @@ export class UsuariosService {
     return this.http.get(`${environment.BASE_URL}Municipio/listarMunicipios`)
   }
 
+  getMunicipiosCadastro() {
+    return this.http.get(`${environment.BASE_URL}Municipio/listarMunicipiosCadastros`)
+  }
+
   getUnidades() {
     return this.http.get(`${environment.BASE_URL}Unidade/listarUnidades`);
+  }
+  getUnidadesCadastro() {
+    return this.http.get(`${environment.BASE_URL}Unidade/listarUnidadesCadastro`);
   }
 
   excluirUsuario(id: number) {
