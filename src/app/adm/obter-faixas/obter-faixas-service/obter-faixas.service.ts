@@ -15,4 +15,8 @@ export class ObterFaixasService {
     }
     return this.http.get(`${environment.BASE_URL}ObterFaixas/listarFaixasGeradas`,{params:options});
   }
+
+  gravarObterFaixa(uploadData: FormData) {
+    return this.http.post(`${environment.BASE_URL}ObterFaixas/gerarArquivoFaixasManualmente`, uploadData);
+  }
 }

@@ -18,57 +18,57 @@
     <!-- Solicitante -->
     <ng-container matColumnDef="Solicitante" >
       <th mat-header-cell class="header-table" *matHeaderCellDef mat-sort-header [style.placeContent]="'center'">Solicitante</th>
-      <td mat-cell *matCellDef="let row"> {{row.DataSolicitacao }} </td>
+      <td mat-cell class="alert-success" *matCellDef="let row"> {{row.Solicitante }} </td>
     </ng-container>
 
     <!-- Mes -->
     <ng-container matColumnDef="Mes" >
       <th mat-header-cell class="header-table" *matHeaderCellDef mat-sort-header [style.placeContent]="'center'">Mês</th>
-      <td  style="white-space: nowrap" mat-cell *matCellDef="let row" >
-        {{ row.Mes }}
+      <td class="alert-success" style="white-space: nowrap" mat-cell *matCellDef="let row" >
+        {{ meses[row.Mes] }}
       </td>
     </ng-container>
 
     <!-- Competência -->
     <ng-container matColumnDef="Competencia" >
-      <th mat-header-cell class="header-table" *matHeaderCellDef mat-sort-header [style.placeContent]="'center'">Competência</th>
-      <td mat-cell  *matCellDef="let row"> {{row.Competencia}} </td>
+      <th mat-header-cell class="header-table" *matHeaderCellDef mat-sort-header [style.placeContent]="'center'">Competência (Ano)</th>
+      <td mat-cell class="alert-success" *matCellDef="let row"> {{row.Competencia}} </td>
     </ng-container>
 
     <!-- Quantidade -->
     <ng-container matColumnDef="QuantidadeFaixas">
       <th mat-header-cell class="header-table" *matHeaderCellDef mat-sort-header [style.placeContent]="'center'">Quantidade de Faixas</th>
-      <td mat-cell  *matCellDef="let row"> {{row.QuantidadeFaixas}} </td>
+      <td mat-cell class="alert-success" *matCellDef="let row"> {{row.Quantidade}} </td>
     </ng-container>
 
     <!-- Descrição Tipo Faixa -->
     <ng-container matColumnDef="DescricaoTipoFaixa">
       <th mat-header-cell class="header-table" *matHeaderCellDef mat-sort-header [style.placeContent]="'center'">Tipo de Faixa</th>
-      <td mat-cell *matCellDef="let row"> {{row.DescricaoTipoFaixa}} </td>
+      <td class="alert-success" mat-cell *matCellDef="let row"> {{row.DescricaoFaixa}} </td>
     </ng-container>
 
     <!-- Faixa Inicial -->
     <ng-container matColumnDef="FaixaInicial">
       <th mat-header-cell class="header-table" *matHeaderCellDef mat-sort-header [style.placeContent]="'center'">Faixa Inicial</th>
-      <td mat-cell  *matCellDef="let row"> {{row.FaixaInicial}} </td>
+      <td mat-cell class="alert-success" *matCellDef="let row"> {{row.FaixaInicial}} </td>
     </ng-container>
 
     <!-- Faixa Final -->
     <ng-container matColumnDef="FaixaFinal">
       <th mat-header-cell class="header-table" *matHeaderCellDef mat-sort-header [style.placeContent]="'center'">Faixa Final</th>
-      <td mat-cell  *matCellDef="let row"> {{row.FaixaFinal}} </td>
+      <td mat-cell class="alert-success" *matCellDef="let row"> {{row.FaixaFinal}} </td>
     </ng-container>
 
     <!-- TipoCota -->
     <ng-container matColumnDef="DescricaoTipoCota">
       <th mat-header-cell class="header-table" *matHeaderCellDef mat-sort-header [style.placeContent]="'center'">Tipo de Cota</th>
-      <td mat-cell  *matCellDef="let row"> {{row.DescricaoTipoCota}} </td>
+      <td mat-cell class="alert-success" *matCellDef="let row"> {{row.TipoCotaDescricao}} </td>
     </ng-container>
 
     <!-- Download -->
     <ng-container matColumnDef="Download">
       <th mat-header-cell class="header-table" *matHeaderCellDef mat-sort-header [style.placeContent]="'center'">Download</th>
-      <td mat-cell  *matCellDef="let row">
+      <td mat-cell class="alert-success" *matCellDef="let row">
         <button mat-icon-button class="btn-outline-danger" (click)="download(row.Id)" >
           <fa-icon [icon]="faDownload"></fa-icon>
         </button>

@@ -55,7 +55,6 @@ export class ModalUsuariosComponent implements OnInit {
 
   form: any = [];
 
-
   formUsuario: FormGroup = this.formBuilder.group({
     Nome: new FormControl('', [Validators.required]),
     NomeSocial: new FormControl(''),
@@ -271,4 +270,28 @@ export class ModalUsuariosComponent implements OnInit {
 
   // TODO: Criar uma rotina par testar o CPF se não existe na base de dados
 
+  verificarNomeUsuarioValido() {
+    this.util.loading.next(true);
+    var nomeUsuario = this.formUsuario.get('NomeUsuario')?.value;
+    this.usuariosService.getNomeUsuarioValido(nomeUsuario).subscribe( {
+      next: (data: any) => {
+        this.util.loading.next(false);
+        if ( data > 0 ) {
+          this.util.openAlertModal(
+            "320px", "error-modal", "Usuário já cadastrado no sistema!",
+            `Este nome de usuário já está cadastrado em nossa base de dados.`
+          );
+          this.formUsuario.get('NomeUsuario')?.setValue("");
+        }
+      },
+      error: (err: any) => {
+        this.util.loading.next(false);
+        this.util.openAlertModal(
+          "320px", "error-modal", "Atenção.",
+          `Não foi possível verificar se o usuário informado já se encontra cadastrado em nossa base de dados! Por favor, tente novamente! Caso o problema persista, entre em contato via e-mail: sistemas.supinf@saude.rj.gov.br`
+        );
+        this.formUsuario.get('NomeUsuario')?.setValue("");
+      }
+    })
+  }
 }

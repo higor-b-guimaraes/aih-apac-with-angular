@@ -1,43 +1,83 @@
 <form [formGroup]="formObterFaixa" class="row g-3">
   <fieldset>
     <div class="row">
-      <mat-form-field appearance="outline"  class="col-md-6">
-        <mat-label>Nome</mat-label>
-        <input matInput formControlName="TipoSolicitante">
-        <mat-error *ngIf="formObterFaixa.get('TipoSolicitante')?.hasError('required')">É preciso informar o nome do usuário</mat-error>
+
+      <!-- Tipo de Solicitante -->
+      <mat-form-field appearance="outline"  class="col-md-4">
+        <mat-label>Tipo de Solicitante</mat-label>
+        <mat-select  (selectionChange)="buscarListaTiposFaixas()"
+                     formControlName="IdTipoSolicitante">
+          <mat-option *ngFor="let tsolicitante of opcoesTipoSolicitante" [value]="tsolicitante.Id" required>
+            {{tsolicitante.Descricao}}
+          </mat-option>
+        </mat-select>
       </mat-form-field>
 
-      <mat-form-field appearance="outline"  class="col-md-3">
-        <mat-label>Usuário</mat-label>
-        <input matInput formControlName="Unidade">
-        <mat-error *ngIf="formObterFaixa.get('Unidade')?.hasError('required')">É preciso informar um nome de acesso válido!</mat-error>
+      <!-- Unidade -->
+      <mat-form-field appearance="outline"  class="col-md-6" *ngIf="formObterFaixa.get('IdTipoSolicitante')?.value === 1">
+        <mat-label>Unidade</mat-label>
+        <mat-select  (selectionChange)="buscarListaTiposFaixas()"
+                     formControlName="IdUnidade">
+          <mat-option *ngFor="let unidades of opcoesUnidade" [value]="unidades.Id" required >
+            {{unidades.UnidadeDescricao}}
+          </mat-option>
+        </mat-select>
+        <mat-error *ngIf="formObterFaixa.get('IdUnidade')?.hasError('required')">É preciso selecionar a unidade do usuário</mat-error>
+      </mat-form-field>
+
+      <!-- Município -->
+      <mat-form-field appearance="outline"  class="col-md-6" *ngIf="formObterFaixa.get('IdTipoSolicitante')?.value === 2">
+        <mat-label>Município</mat-label>
+        <mat-select (selectionChange)="buscarListaTiposFaixas()"
+                    formControlName="CodigoIbgeMunicipio">
+          <mat-option *ngFor="let municipio of opcoesMunicipio" [value]="municipio['CodigoIbge']" required >
+            {{municipio['NomeMunicipio'] + " - " + municipio['CodigoIbge']}}
+          </mat-option>
+        </mat-select>
+        <mat-error *ngIf="formObterFaixa.get('CodigoIbgeMunicipio')?.hasError('required')">É preciso selecionar o município do usuário</mat-error>
+      </mat-form-field>
+
+      <!-- Tipo de Faixa -->
+      <mat-form-field appearance="outline"  class="col-md-2">
+        <mat-label>Tipo de Faixa</mat-label>
+        <mat-select (selectionChange)="buscarCotaPadrao(); buscarTotalCotaExtraAprovada()"
+                    formControlName="IdTipoFaixa">
+          <mat-option *ngFor="let tipoFaixa of opcoesTipoFaixa" [value]="tipoFaixa.Id" required>
+            {{tipoFaixa.Descricao}}
+          </mat-option>
+        </mat-select>
+        <mat-error *ngIf="formObterFaixa.get('IdTipoFaixa')?.hasError('required')">É preciso informar o tipo de faixa</mat-error>
       </mat-form-field>
     </div>
 
     <div class="row">
-      <mat-form-field appearance="outline"  class="col-md-6">
-        <mat-label>Nome Social do Usuário</mat-label>
-        <input matInput formControlName="TipoFaixa">
+      <!-- Competência -->
+      <mat-form-field appearance="outline"  class="col-md-4">
+        <mat-label>Competência (ano)</mat-label>
+        <mat-select (selectionChange)="buscarTotalCotaExtraAprovada()"
+                    formControlName="Competencia">
+          <mat-option *ngFor="let competencia of opcoesCompetencia" [value]="competencia" required>
+            {{competencia}}
+          </mat-option>
+        </mat-select>
+        <mat-error *ngIf="formObterFaixa.get('Competencia')?.hasError('required')">É preciso informar uma competência</mat-error>
+      </mat-form-field>
+
+      <!-- Mês -->
+      <mat-form-field appearance="outline"  class="col-md-8">
+        <mat-label>Mês</mat-label>
+        <mat-select (selectionChange)="buscarTotalCotaExtraAprovada()" formControlName="Mes">
+          <mat-option *ngFor="let mes of opcoesMes" [value]="mes.mes" required>
+            {{mes.descricao}}
+          </mat-option>
+        </mat-select>
+        <mat-error *ngIf="formObterFaixa.get('Mes')?.hasError('required')">É preciso informar um mês</mat-error>
       </mat-form-field>
     </div>
 
     <div class="row">
-      <mat-form-field appearance="outline"  class="col-md-6">
-        <mat-label>Nome Social do Usuário</mat-label>
-        <input matInput formControlName="Competencia">
-      </mat-form-field>
-    </div>
-
-    <div class="row">
-      <mat-form-field appearance="outline"  class="col-md-6">
-        <mat-label>Nome Social do Usuário</mat-label>
-        <input matInput formControlName="Mes">
-      </mat-form-field>
-    </div>
-
-    <div class="row">
-      <mat-form-field appearance="outline"  class="col-md-6">
-        <mat-label>Nome Social do Usuário</mat-label>
+      <mat-form-field appearance="outline"  class="col-md-12">
+        <mat-label>Cota Padrão</mat-label>
         <input matInput formControlName="CotaPadrao">
       </mat-form-field>
     </div>

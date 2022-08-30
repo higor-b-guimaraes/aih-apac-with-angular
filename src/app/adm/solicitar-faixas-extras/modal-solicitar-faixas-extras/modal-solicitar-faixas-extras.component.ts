@@ -166,7 +166,6 @@ export class ModalSolicitarFaixasExtrasComponent implements OnInit {
   }
 
   buscarTotalCotaExtraAprovada() {
-    console.log("buscarTotalCotaExtraAprovada");
     if (
       !this.formSolicitacaoFaixa.get('IdTipoSolicitante')?.value||
       !this.formSolicitacaoFaixa.get('IdTipoFaixa')?.value ||
@@ -194,14 +193,6 @@ export class ModalSolicitarFaixasExtrasComponent implements OnInit {
         this.formSolicitacaoFaixa.get('Mes')?.value;
       this.filtroTotalCotaExtraAprovada.Competencia =
         this.formSolicitacaoFaixa.get('Competencia')?.value;
-
-      /*filtroTotalCotaExtraAprovada:any = {
-        IdTipoSolicitante: "",
-        IdSolicitante: "",
-        IdTipoFaixa: "",
-        Mes: "",
-        Competencia: "",
-      }*/
 
       this.solicitacaoFaixaExtraService.getTotalCotaExtraAprovada(this.filtroTotalCotaExtraAprovada)
         .subscribe( (data:any) => {

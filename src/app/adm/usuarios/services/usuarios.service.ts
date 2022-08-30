@@ -66,4 +66,7 @@ export class UsuariosService {
     return this.http.get(`${environment.BASE_URL}Usuario/contarLog/${id}`);
   }
 
+  getNomeUsuarioValido(nomeUsuario: string) {
+    return this.http.get(`${environment.BASE_URL}Usuarios/verificarNomeUsuarioValido/${nomeUsuario}`);
+  }
 }

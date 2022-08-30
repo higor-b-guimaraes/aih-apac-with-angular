@@ -34,6 +34,21 @@ export class TabelaObterFaixasComponent implements OnInit {
   @ViewChild(MatSort) sort!: MatSort;
   subject = new Subject<any>()
 
+  meses: any = {
+    "01": "Janeiro",
+    "02": "Fevereiro",
+    "03": "Março",
+    "04": "Abril",
+    "05": "Maio",
+    "06": "Junho",
+    "07": "Julho",
+    "08": "Agosto",
+    "09": "Setembro",
+    "10": "Outubro",
+    "11": "Novembro",
+    "12": "Dezembro",
+  }
+
   constructor(
     private service: ObterFaixasService,
     private auth: AuthService,
@@ -128,10 +143,20 @@ export class TabelaObterFaixasComponent implements OnInit {
 
   }
 
+  /*const dialogRef = this.modal.open(ModalUnidadesComponent, {
+    width: '100%',
+    panelClass: 'common-modal',
+    data: {
+      idUser: this.auth.getId(),
+      idRequest: unidade
+    }
+  });
+  dialogRef.afterClosed().subscribe(result => {
+  location.reload();
+});*/
   gerarFaixasManualmente() {
-    return;
     const dialogRef = this.modal.open(ModalObterFaixasComponent, {
-      width: '100%',
+      width: '70%',
       panelClass: 'common-modal'
     });
     dialogRef.afterClosed().subscribe(result => {

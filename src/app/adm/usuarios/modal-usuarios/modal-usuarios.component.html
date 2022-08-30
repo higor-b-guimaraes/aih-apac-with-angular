@@ -19,7 +19,7 @@
 
       <mat-form-field appearance="outline"  class="col-md-3">
         <mat-label>Usuário</mat-label>
-        <input matInput formControlName="NomeUsuario">
+        <input matInput formControlName="NomeUsuario" (blur)="verificarNomeUsuarioValido()">
         <mat-error *ngIf="formUsuario.get('NomeUsuario')?.hasError('required')">É preciso informar um nome de acesso válido!</mat-error>
       </mat-form-field>
     </div>
