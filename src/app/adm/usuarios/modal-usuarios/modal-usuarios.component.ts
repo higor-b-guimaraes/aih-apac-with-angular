@@ -34,6 +34,7 @@ export class ModalUsuariosComponent implements OnInit {
   cpfValido: boolean = true;
   msgErroCPF: string = "";
   oficioValido: boolean = false;
+  oficioObrigatorio = true;
   msgErroOficio: string = "";
   readonly maxSize = 10485760;   //Max Filesize 10MB
   idUsuario: number = 0;
@@ -99,38 +100,6 @@ export class ModalUsuariosComponent implements OnInit {
 
   }
 
-  /* inputMaskNumber(number?: any) {
-
-    let phoneNumber = this.formUsuario.get('Telefone')?.value;
-    let foneFormatado = '';
-
-    if(number == undefined) {
-      const value = phoneNumber.toString().replace(/\D/g, '');
-      if (phoneNumber) {
-        if (value.length > 10) {
-          foneFormatado = value.replace(/(\d{2})?(\d{1})?(\d{4})?(\d{4})/, '($1) $2 $3-$4');
-        } else if (value.length > 9) {
-          foneFormatado = value.replace(/(\d{2})?(\d{4})?(\d{4})/, '($1) $2-$3');
-        }else {
-          this.formUsuario.patchValue({Telefone: phoneNumber});
-          return;
-        }
-      }
-
-      this.formUsuario.patchValue({Telefone: foneFormatado});
-    }else {
-      if (number.length > 10) {
-        foneFormatado = number.replace(/(\d{2})?(\d{1})?(\d{4})?(\d{4})/, '($1) $2 $3-$4');
-        console.log(foneFormatado)
-      } else if (number.length > 9) {
-        foneFormatado = number.replace(/(\d{2})?(\d{4})?(\d{4})/, '($1) $2-$3');
-        console.log('2')
-
-      }
-      this.formUsuario.patchValue({Telefone: foneFormatado});
-    }
-  } */
-
   ngOnInit(): void {
     this.util.loading.next(true);
     if(this.dataModal?.idRequest) {
@@ -164,9 +133,12 @@ export class ModalUsuariosComponent implements OnInit {
           this.formUsuario.get('Cpf')?.disable({onlySelf: true});
 
           this.idUsuario = res?.Id;
-
+          this.formUsuario.get(`Oficio`)?.clearValidators();
+          this.formUsuario.get(`Oficio`)?.setValue(null);
+          this.oficioObrigatorio = false;
           console.log(this.formUsuario)
         },
+
         error: () => {},
       })
     }else {
@@ -272,12 +244,16 @@ export class ModalUsuariosComponent implements OnInit {
             this.util.loading.next(false)
             resolve(true)
           },
-          error: () => {
+          error: (err: any) => {
             this.util.loading.next(false);
             this.util.openAlertModal(
               "320px", "error-modal", "Erro ao salvar usuário",
-              `Houve um erro ao tentar atualizar o usuário ${this.formUsuario.get(`Nome`)?.value} em nossa base de dados! Por favor, tente novamente! Caso o problema persista, entre em contato via e-mail: sistemas.supinf@saude.rj.gov.br`
+              err.error
             );
+            /*this.util.openAlertModal(
+              "320px", "error-modal", "Erro ao salvar usuário",
+              `Houve um erro ao tentar atualizar o usuário ${this.formUsuario.get(`Nome`)?.value} em nossa base de dados! Por favor, tente novamente! Caso o problema persista, entre em contato via e-mail: sistemas.supinf@saude.rj.gov.br`
+            );*/
           },
         })
       }
@@ -293,7 +269,6 @@ export class ModalUsuariosComponent implements OnInit {
   }
 
   setValidatorSolicitante(event: any) {
-    console.log("Validar Solicitante")
     if ( this.formUsuario.get('IdPerfilUsuario')?.value == 3 ) {
       this.formUsuario.get('IdTipoSolicitante')?.setValidators([Validators.required]);
       this.getMunicipioOuUnidade();
@@ -307,7 +282,22 @@ export class ModalUsuariosComponent implements OnInit {
     }
   }
 
-  // TODO: Criar uma rotina par testar o CPF se não existe na base de dados
+  exigirOficio() {
+    if (
+        this.formUsuario.get('IdUnidade')?.value != this.form.IdUnidade
+      || this.formUsuario.get('CodigoIbgeMunicipio')?.value != this.form.CodigoIbgeMunicipio
+      || this.formUsuario.get('IdPerfilUsuario')?.value != this.form.IdPerfilUsuario
+      || this.formUsuario.get('Situacao')?.value != this.form.Situacao
+    ) {
+      this.oficioObrigatorio = true;
+      this.formUsuario.get(`Oficio`)?.setValidators(
+        [Validators.required,
+          FileValidator.maxContentSize(this.maxSize),
+          this.validator.acceptTypeFileInput]
+      );
+    }
+
+  }
 
   verificarNomeUsuarioValido() {
     this.util.loading.next(true);

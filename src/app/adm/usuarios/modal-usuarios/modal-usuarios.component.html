@@ -50,7 +50,11 @@
     </div>
 
     <div class="row">
-      <mat-form-field appearance="outline" class="col-md-12" *ngIf="formUsuario.get('IdPerfilUsuario')?.value !== 1">
+      <mat-form-field appearance="outline" class="col-md-12"
+                      *ngIf="formUsuario.get('IdPerfilUsuario')?.value !== 1
+                        && oficioObrigatorio
+                      "
+      >
         <ngx-mat-file-input
           formControlName="Oficio"
           placeholder="oficio"
@@ -68,7 +72,7 @@
     <div class="row">
       <mat-form-field appearance="outline" class="col-md-2">
         <mat-label>Perfil</mat-label>
-          <mat-select (ngModelChange)="setValidatorSolicitante($event)"
+          <mat-select (ngModelChange)="setValidatorSolicitante($event); exigirOficio();"
             formControlName="IdPerfilUsuario">
             <mat-option *ngFor="let perfil of opcoesPerfil" [value]="perfil.Id" required (focusout)="validaNecessidadeOficio()">
               {{perfil.Descricao}}
@@ -80,7 +84,7 @@
         <mat-form-field  appearance="outline" class="col-md-3" *ngIf="formUsuario.get('IdPerfilUsuario')?.value == 3">
           <mat-label>Solicitante</mat-label>
           <mat-select
-          formControlName="IdTipoSolicitante">
+          formControlName="IdTipoSolicitante" (selectionChange)="exigirOficio();">
             <mat-option *ngFor="let tipoUnidade of opcoesTipoUnidade" [value]="tipoUnidade.Id" required (focusout)="getMunicipioOuUnidade()">
               {{tipoUnidade.Descricao}}
             </mat-option>
@@ -93,7 +97,7 @@
 
         <mat-form-field appearance="outline" class="col-md-5" *ngIf="formUsuario.get('IdTipoSolicitante')?.value === 2">
           <mat-label>Município</mat-label>
-          <mat-select
+          <mat-select (selectionChange)="exigirOficio();"
           formControlName="CodigoIbgeMunicipio">
             <mat-option *ngFor="let municipio of opcoesMunicipio" [value]="municipio['CodigoIbge']" required >
               {{municipio['NomeMunicipio'] + " - " + municipio['CodigoIbge']}}
@@ -104,7 +108,7 @@
 
         <mat-form-field appearance="outline" class="col-md-5" *ngIf="formUsuario.get('IdTipoSolicitante')?.value === 1">
           <mat-label>Unidade</mat-label>
-          <mat-select
+          <mat-select (selectionChange)="exigirOficio();"
           formControlName="IdUnidade">
             <mat-option *ngFor="let unidades of opcoesUnidades" [value]="unidades.Id" required >
               {{unidades.Descricao}}
@@ -115,7 +119,7 @@
 
         <mat-form-field appearance="outline" class="col-md-2">
           <mat-label>Situação</mat-label>
-          <mat-select
+          <mat-select (selectionChange)="exigirOficio();"
           formControlName="Situacao">
             <mat-option *ngFor="let situacao of opcoesSituacao" [value]="situacao.Codigo" required>
               {{situacao.Descricao}}

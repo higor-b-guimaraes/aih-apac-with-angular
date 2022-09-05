@@ -1,6 +1,6 @@
 import {ChangeDetectorRef, Component, OnInit, ViewChild} from '@angular/core';
 
-import { faPen,faBan, faCheck, faPlus, faSearch } from '@fortawesome/free-solid-svg-icons';
+import { faPen,faBan, faCheck, faPlus, faSearch, faDownload } from '@fortawesome/free-solid-svg-icons';
 import {AuthService} from "../../../core/services/auth.service";
 import {UtilService} from "../../../shared/services/utils/util.service";
 import {MatDialog} from "@angular/material/dialog";
@@ -25,6 +25,7 @@ export class TabelaPaginaInicialComponent implements OnInit {
   faCheck = faCheck;
   faPlus = faPlus;
   faSearch = faSearch;
+  faDownload = faDownload;
 
   filtro: string = "";
   dataSource!: any;
@@ -133,4 +134,40 @@ export class TabelaPaginaInicialComponent implements OnInit {
     }
     this.subject.next(data);
   }
+
+  downloadOficio(id: number) {
+    if ( !id )
+      return;
+    // TODO: Proteger se por acaso não tiver um Id de Ofício válido
+    this.service.downloadOficio(id).subscribe({
+      next: (data: any) => {
+        console.log(data);
+        const blob = new Blob([data], {type: data.type});
+        if ( !blob ) {
+          console.error("Erro ao gerar pdf");
+          return;
+        }
+        const anchor = document.createElement('a');
+        anchor.download = 'aihapac_oficio';
+        anchor.href = (window.webkitURL || window.URL).createObjectURL(blob);
+        anchor.click();
+
+        // console.log(data);
+        /*const blob = new Blob([data.arquivo], {type: 'application/pdf'});
+        if ( !blob ) {
+          console.error("Erro ao gerar pdf");
+          return;
+        }*/
+
+        /*const anchor = document.createElement('a');
+        anchor.download = 'arquivo.pdf';
+        anchor.href = (window.webkitURL || window.URL).createObjectURL(blob);
+        anchor.click();*/
+      },
+      error: (data: any) => {
+        console.error(data);
+      }
+    })
+  }
 }
+

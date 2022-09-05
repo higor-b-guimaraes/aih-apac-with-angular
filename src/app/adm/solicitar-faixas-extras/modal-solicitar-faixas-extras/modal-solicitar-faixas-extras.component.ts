@@ -234,8 +234,10 @@ export class ModalSolicitarFaixasExtrasComponent implements OnInit {
     this.opcoesMes = mes;
   }
 
-  checkOficio($event: Event) {
-
+  checkOficio(event: any) {
+    let statusOficio: any = this.util.checkOficio(this.formSolicitacaoFaixa, 'Oficio');
+    this.oficioValido =  statusOficio?.isValid;
+    this.msgErroOficio = statusOficio?.msg;
   }
 
   closeModal() {

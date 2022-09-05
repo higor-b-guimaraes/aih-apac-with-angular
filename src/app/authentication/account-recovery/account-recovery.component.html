@@ -19,14 +19,6 @@
           <mat-icon matSuffix *ngIf="!validLogin">person_2</mat-icon>
           <mat-icon matSuffix *ngIf="validLogin">how_to_reg</mat-icon>
           <mat-error class="error-access" *ngIf="!validLogin">{{ errorLoginMsg }}</mat-error>
-
-          <!--<mat-label>CPF</mat-label>
-          <input matInput
-          formControlName="cpf"
-          mask="000.000.000-00"
-          (focusout)="checkCpf()" required>
-          <mat-error class="error-access" *ngIf="!validCpf">{{ errorCpfMsg }}</mat-error>
-        </mat-form-field>-->
         </mat-form-field>
           <!-- Ofício -->
         <mat-form-field [formGroup]="formRecovery" appearance="outline" *ngIf="!isAdm">

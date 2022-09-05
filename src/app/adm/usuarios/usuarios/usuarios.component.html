@@ -4,7 +4,7 @@
     <span>Usuários</span>
   </div>
 
-  <div class="empty-data" *ngIf="!getVerifyHasUser()">
+  <!--<div class="empty-data" *ngIf="!getVerifyHasUser()">
     <mat-card>
       <mat-card class="container-card">
         <mat-card-title>Não há usuários cadastrados no sistema!</mat-card-title>
@@ -15,9 +15,9 @@
         </mat-card-content>
       </mat-card>
     </mat-card>
-  </div>
+  </div>-->
 
-  <div class="has-data" *ngIf="getVerifyHasUser()">
+  <div class="has-data">
     <div class="main-container-form">
       <app-tabela-usuarios></app-tabela-usuarios>
     </div>

@@ -39,25 +39,25 @@ export class MotivoReprovacaoComponent implements OnInit {
     this.cdRef.detectChanges();
   }
 
-  ngOnInit(): Promise<number> {
-    let data = {
-      pageIndex: 0 ,
-      pageSize: 5 ,
-    }
-    return new Promise((resolve, reject) => {
-      this.motivoReprovacaoService.countMotivosReprovacao().subscribe({
-        next: (res: any) => {
-          /*(res?.length > 0) ? resolve(1) : resolve(2);*/
-          if ( res > 0 )
-            this.hasData = true;
-          this.utils.loading.next(false);
-        },
-        error: (erro) => {
-          reject(0);
-          this.utils.loading.next(false);
-        },
-      })
-    })
+  ngOnInit() {
+    // let data = {
+    //   pageIndex: 0 ,
+    //   pageSize: 5 ,
+    // }
+    // return new Promise((resolve, reject) => {
+    //   this.motivoReprovacaoService.countMotivosReprovacao().subscribe({
+    //     next: (res: any) => {
+    //       /*(res?.length > 0) ? resolve(1) : resolve(2);*/
+    //       if ( res > 0 )
+    //         this.hasData = true;
+    //       this.utils.loading.next(false);
+    //     },
+    //     error: (erro) => {
+    //       reject(0);
+    //       this.utils.loading.next(false);
+    //     },
+    //   })
+    // })
     /*let request = {
       idUser: this.auth.getId()
     }

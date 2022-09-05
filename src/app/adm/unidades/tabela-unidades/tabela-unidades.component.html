@@ -54,7 +54,7 @@
 
     <ng-container matColumnDef="UsuarioResponsavel">
       <th mat-header-cell class="header-table" *matHeaderCellDef mat-sort-header [style.placeContent]="'center'">Usuário Responsável</th>
-      <td mat-cell [class]="getClass(row.Situacao)" *matCellDef="let row"></td>
+      <td mat-cell [class]="getClass(row.Situacao)" *matCellDef="let row">{{ row.UsuarioResponsavel }}</td>
     </ng-container>
 
     <ng-container matColumnDef="Situacao">

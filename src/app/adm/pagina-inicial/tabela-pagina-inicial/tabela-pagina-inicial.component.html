@@ -74,7 +74,11 @@
     <!-- Ofício -->
     <ng-container matColumnDef="Oficio" >
       <th mat-header-cell class="header-table" *matHeaderCellDef mat-sort-header [style.placeContent]="'center'">Ofício</th>
-      <td mat-cell [class]="getClass(row.Situacao)" *matCellDef="let row"> {{row.motivoSituacao}} </td>
+      <td mat-cell [class]="getClass(row.Situacao)" *matCellDef="let row">
+        <button mat-icon-button class="btn-outline-danger" *ngIf="row.IdOficio" (click)="downloadOficio(row.IdOficio)" >
+          <fa-icon [icon]="faDownload"></fa-icon>
+        </button>
+      </td>
     </ng-container>
 
     <tr mat-header-row *matHeaderRowDef="columns"></tr>

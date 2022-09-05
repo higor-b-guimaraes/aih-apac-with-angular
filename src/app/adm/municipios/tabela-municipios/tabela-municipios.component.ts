@@ -77,6 +77,7 @@ export class TabelaMunicipiosComponent implements OnInit {
   });
 
   ngOnInit(): void {
+    this.util.loading.next(true);
     this.buscarMunicipios();
   }
 
@@ -85,8 +86,6 @@ export class TabelaMunicipiosComponent implements OnInit {
       next: (data) => {
         this.municipioService.listarMunicipios(data, this.filtro).subscribe({
           next: (data) => {
-            console.log(this.paginator);
-            console.log(this.sort);
             this.dataSource = new MatTableDataSource<Municipio>(data as any);
             this.dataSource.paginator = this.paginator;
             this.dataSource.sort = this.sort;

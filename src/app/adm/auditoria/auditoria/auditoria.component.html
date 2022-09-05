@@ -1,27 +1,6 @@
 <div class="container-table">
-  <!--<div class="row" style="width: 100%">
-    <mat-form-field class="col-sm-9 col-md-6 col-lg-4 align-self-start">
-      <mat-label>Filtrar:</mat-label>
-      <input (keypress)="submeterFiltro($event)" id="inputFiltro" type="text" matInput [(ngModel)]="filtro">
-      <button *ngIf="filtro" matSuffix mat-icon-button aria-label="Clear" (click)="filtro='';filtrar();">
-        <mat-icon>close</mat-icon>
-      </button>
-    </mat-form-field>
-    <div class="col-3">
-      <button mat-raised-button color="primary" (click)="filtrar()">
-        <fa-icon [icon]="faSearch"></fa-icon>&nbsp;Filtrar</button>
-    </div>
-  </div>-->
 
   <table mat-table [dataSource]="dataSource" matSort class="mat-elevation-z8 table">
-    <!--"Funcionalidade",
-    "Usuario",
-    "DataHora",
-    "TipoMovimentacao",
-    "NomeCampo",
-    "ValorInicial",
-    "ValorAlterado"-->
-
     <!-- Funcionalidade -->
     <ng-container matColumnDef="Funcionalidade" >
       <th mat-header-cell class="header-table" *matHeaderCellDef mat-sort-header [style.placeContent]="'center'">Fucionalidade</th>

@@ -82,7 +82,7 @@
     <ng-container matColumnDef="Oficio">
       <th mat-header-cell class="header-table" *matHeaderCellDef mat-sort-header [style.placeContent]="'center'"> Ofício </th>
       <td mat-cell [class]="getClass(row.Situacao)" *matCellDef="let row">
-        <button mat-icon-button color="warn" (click)="editarUsuario(row.Id)" >
+        <button mat-icon-button color="warn" (click)="visualizarHistoricoOficios(row.Id)" >
           <fa-icon [icon]="faFile"></fa-icon>
         </button>
       </td>

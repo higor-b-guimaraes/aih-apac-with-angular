@@ -73,7 +73,7 @@ export class UnidadesComponent implements OnInit {
 
   async ngOnInit(): Promise<void> {
     this.util.loading.next(true);
-    this.hasUnit = await this.getVerifyHasUser();
+    // this.hasUnit = await this.getVerifyHasUser();
     this.util.loading.next(false);
   }
 

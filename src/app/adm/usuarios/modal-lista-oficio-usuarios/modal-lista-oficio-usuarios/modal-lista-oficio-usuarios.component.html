@@ -1,0 +1,79 @@
+<mat-dialog-content>
+  <legend>Visualizar Ofícios</legend>
+  <div class="container-table">
+    <table mat-table [dataSource]="dataSource" matSort class="mat-elevation-z8 table">
+
+      <!-- Tipo de Ofício -->
+      <ng-container matColumnDef="DescricaoTipoOficio">
+        <th mat-header-cell class="header-table" *matHeaderCellDef mat-sort-header [style.placeContent]="'center'"> Tipo de Ofício </th>
+        <td mat-cell *matCellDef="let row"> {{ row.DescricaoTipoOficio }} </td>
+      </ng-container>
+
+      <!-- Data/Hora Cadastro/Alteração -->
+      <ng-container matColumnDef="DataHoraEvento">
+        <th mat-header-cell class="header-table" *matHeaderCellDef mat-sort-header [style.placeContent]="'center'"> Data/Hora </th>
+        <td mat-cell *matCellDef="let row"> {{ row.DataHoraEvento | date: "dd/MM/yyyy HH:mm:ss" }} </td>
+      </ng-container>
+
+      <!-- Campos Alterados -->
+      <ng-container matColumnDef="CamposAlterados">
+        <th mat-header-cell class="header-table" *matHeaderCellDef mat-sort-header [style.placeContent]="'center'"> Campos Alterados </th>
+        <td mat-cell *matCellDef="let row"> {{ row.CamposAlterados }} </td>
+      </ng-container>
+
+      <!-- TODO: Incluir botão de download do Ofício -->
+      <!-- Ofício -->
+      <ng-container matColumnDef="Oficio">
+        <th mat-header-cell class="header-table" *matHeaderCellDef mat-sort-header [style.placeContent]="'center'"> Ofício </th>
+        <td mat-cell *matCellDef="let row">
+
+        </td>
+      </ng-container>
+
+      <tr mat-header-row *matHeaderRowDef="columns"></tr>
+      <tr mat-row *matRowDef="let row; columns: columns;"></tr>
+      <tr class="mat-row" *matNoDataRow>
+        <td class="mat-cell" colspan="4">Nenhum valor encontrado!</td>
+      </tr>
+
+    </table>
+  </div>
+</mat-dialog-content>
+<mat-dialog-actions align="end">
+  <button mat-button mat-dialog-close (click)="closeModal()">Fechar</button>
+</mat-dialog-actions>
+
+<!--
+<mat-dialog-content>
+  <form [formGroup]="formNegarAlteracaoSenha">
+    <fieldset>
+      <legend>Analisar Solicitação de Alteração/Recuperação de Senha</legend>
+    </fieldset>
+    <br>
+    <fieldset>
+      <p>Tem certeza que deseja NEGAR esta solicitação? Esta ação não pode ser desfeita.</p>
+    </fieldset>
+    <br>
+    <fieldset>
+      <legend style="margin-bottom: 24px;">Motivo(s) de Reprovação</legend>
+
+      <section class="checkbox-section">
+        <div *ngFor="let reprovacao of motivosReprovacao" class="row">
+          <mat-checkbox class="checkbox-motivo-reprovacao" [value]="reprovacao.Id">{{ reprovacao.Descricao }}</mat-checkbox>
+        </div>
+      </section>
+    </fieldset>
+
+    <fieldset>
+      <mat-form-field appearance="outline" class="col-12">
+        <textarea id="observacoes" [rows]="4" maxlength="500" matInput placeholder="Observações"></textarea>
+      </mat-form-field>
+    </fieldset>
+  </form>
+
+</mat-dialog-content>
+<mat-dialog-actions align="end">
+  <button mat-button mat-dialog-close (click)="closeModal()">Fechar</button>
+  <button mat-button (click)="salvar()">Salvar</button>
+</mat-dialog-actions>
+-->

@@ -51,7 +51,6 @@ export class AuditoriaComponent implements OnInit {
          this.service.listarLog(filtro).subscribe({
           next: (e:any) => {
             this.dataSource = e;
-            console.log("Lista Log: ",e);
             this.util.loading.next(false);
           },
            error: (err) => {

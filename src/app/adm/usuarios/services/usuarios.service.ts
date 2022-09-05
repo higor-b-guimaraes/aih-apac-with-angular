@@ -76,4 +76,8 @@ export class UsuariosService {
   getNomeUsuarioValido(nomeUsuario: string) {
     return this.http.get(`${environment.BASE_URL}Usuarios/verificarNomeUsuarioValido/${nomeUsuario}`);
   }
+
+  buscarOficios(id: number) {
+    return this.http.get(`${environment.BASE_URL}Oficio/buscarListaOficio/${id}`);
+  }
 }

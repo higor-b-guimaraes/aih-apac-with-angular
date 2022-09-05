@@ -8,13 +8,15 @@ import { TabelaUsuariosComponent } from './tabela-usuarios/tabela-usuarios.compo
 import { AppMaterialModule } from 'src/app/shared/app-material/app-material.module';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import {FontAwesomeModule} from "@fortawesome/angular-fontawesome";
+import { ModalListaOficioUsuariosComponent } from './modal-lista-oficio-usuarios/modal-lista-oficio-usuarios/modal-lista-oficio-usuarios.component';
 
 
 @NgModule({
   declarations: [
     UsuariosComponent,
     ModalUsuariosComponent,
-    TabelaUsuariosComponent
+    TabelaUsuariosComponent,
+    ModalListaOficioUsuariosComponent
   ],
     imports: [
         CommonModule,

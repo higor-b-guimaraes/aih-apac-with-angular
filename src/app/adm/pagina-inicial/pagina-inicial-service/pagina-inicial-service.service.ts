@@ -19,4 +19,8 @@ export class PaginaInicialServiceService {
     }
     return this.http.get(`${environment.BASE_URL}Solicitacao/listarSolicitacaoPendentes`, {params:options});
   }
+
+  downloadOficio(id: number) {
+    return this.http.get(`${environment.BASE_URL}Oficio/getOficio/${id}`,{responseType:'blob'});
+  }
 }

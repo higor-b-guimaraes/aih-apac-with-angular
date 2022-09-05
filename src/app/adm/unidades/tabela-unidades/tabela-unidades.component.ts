@@ -1,6 +1,9 @@
 import { ModalUnidadesComponent } from './../modal-unidades/modal-unidades.component';
-import { ChangeDetectorRef, Component, OnInit, ViewChild } from '@angular/core';
-import { Subject } from 'rxjs';
+import {ChangeDetectorRef, Component, Inject, OnInit, ViewChild} from '@angular/core';
+import {Subject, Subscription} from 'rxjs';
+
+import { PLATFORM_ID } from "@angular/core";
+import { isPlatformBrowser } from '@angular/common';
 
 import { AuthService } from 'src/app/core/services/auth.service';
 import { UtilService } from 'src/app/shared/services/utils/util.service';
@@ -40,6 +43,8 @@ export class TabelaUnidadesComponent implements OnInit {
 
   filtro: string = "";
 
+  subscription: Subscription;
+
   @ViewChild(MatPaginator) paginator!: MatPaginator;
   @ViewChild(MatSort) sort!: MatSort;
   getUnidade = new Subject<any>()
@@ -49,8 +54,10 @@ export class TabelaUnidadesComponent implements OnInit {
     private auth: AuthService,
     private util: UtilService,
     public modal: MatDialog,
-    private cdRef: ChangeDetectorRef
+    private cdRef: ChangeDetectorRef,
+    @Inject(PLATFORM_ID) private platformId: Object
   ) {
+    this.subscription = Subscription.EMPTY;
     this.columns = [
       "Cnes",
       "Descricao",
@@ -314,5 +321,11 @@ error: () => {this.util.loading.next(false)}*/
 
   ngAfterContentChecked() {
     this.cdRef.detectChanges();
+  }
+
+  ngOnDestroy() {
+    if (isPlatformBrowser(this.platformId)) {
+      this.subscription.unsubscribe();
+    }
   }
 }

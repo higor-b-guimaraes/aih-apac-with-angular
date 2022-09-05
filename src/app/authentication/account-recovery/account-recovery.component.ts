@@ -7,6 +7,7 @@ import { CustomValidators } from 'src/app/shared/validators/custom-validators';
 
 import { AccountRecoveryService } from '../services/account-recovery/account-recovery.service';
 import { Subscription } from 'rxjs';
+import {Router} from "@angular/router";
 
 
 @Component({
@@ -50,7 +51,8 @@ export class AccountRecoveryComponent implements OnInit {
     private validator: CustomValidators,
     private util: UtilService,
     private cdRef: ChangeDetectorRef,
-    public dialog: MatDialog
+    public dialog: MatDialog,
+    private route: Router
   ) {}
 
   /*checkCpf() {
@@ -73,7 +75,6 @@ export class AccountRecoveryComponent implements OnInit {
     this.service.getUsuarioLogin(login).subscribe({
       next: (e: any) => {
         this.util.loading.next(false);
-        console.log(e);
         this.dataSource = e;
 
         if ( e.IdPerfilUsuario == 1 ) {
@@ -108,29 +109,6 @@ export class AccountRecoveryComponent implements OnInit {
     })
   }
 
-  /*validateProfileByCpf() {
-    this.util.loading.next(true);
-    this.account.recoveryUser({
-      login: this.util.removeMaskCPF(<FormControl>this.formRecovery.controls['cpf'])
-    })
-    .subscribe({
-      next: (res: any) => {
-        this.isAdm =
-          this.util.validateOficioRequiredByBackend(this.formRecovery, 'oficio', res?.codigoPerfil, this.maxSize);
-        console.log(res);
-        this.util.loading.next(false);
-        },
-      error: (error) => {
-        if(error.status === 404) {
-          this.util.openAlertModal('320px', 'warning-modal', 'Usuário não encontrado!', `Olá, infelizmente não conseguimos encontrar o usuário de CPF ${this.formRecovery.get('cpf')?.value} em nossa base de dados.
-          Por favor, verifique se o CPF informado está correto e tente novamente.`);
-          this.util.loading.next(false);
-          return;
-        }
-      }
-    });
-  }*/
-
   checkOficio() {
     let statusOficio = this.util.checkOficio(this.formRecovery, 'Oficio');
     this.validOficio = statusOficio?.isValid;
@@ -161,64 +139,14 @@ export class AccountRecoveryComponent implements OnInit {
         "320px", "success-modal", "Solicitação de recuperação de senha gerada com sucesso!",
         `Sua solicitação foi enviada e está pendente de autorização. Você receberá um e-mail com a resposta.`
       );
+      this.route.navigate(['login']);
       return;
     }
-    /*this.util.loading.next(true);
-
-    var form = this.formUsuario.value;
-    var uploadData = new FormData();
-    for (let i in form) {
-      if ((form[i] instanceof Object) && form[i]._files[0] instanceof Blob) {
-        uploadData.append(i,form[i]._files[0], form[i]._fileNames ? form[i]._fileNames : "");
-      } else {
-        uploadData.append(i,form[i]);
-      }
-    }
-    if(this.novoCadastro) {
-      await this.submitNovoUsuario(uploadData);
-      this.util.openAlertModal(
-        "320px", "success-modal", "Usuário cadastrado!",
-        `Usuário ${this.formUsuario.get(`Nome`)?.value}, foi cadastrado com sucesso no sistema!`
-      );
-      this.dialogRef.close(true);
-      return;
-    } else {
-      await this.submitAtualizaUsuario(uploadData);
-      this.util.openAlertModal(
-        "320px", "success-modal",
-        "Atualização de dados realizada!",
-        `Os dados do usuário ${this.formUsuario.get(`Nome`)?.value}, foram atualizados no sistema!`
-      );
-      this.dialogRef.close(true);
-      return;
-    }*/
-    /*if(this.formRecovery.valid) {
-      this.util.loading.next(true);
-      const dataForm: FormData = new FormData();
-
-      dataForm.append('oficio', this.formRecovery.get('oficio')?.value?._files[0]);
-      // dataForm.append('cpf', JSON.stringify(this.formRecovery.get('cpf')?.value));
-      dataForm.append('cpf', this.util.removeMaskCPF(<FormControl>this.formRecovery.controls['cpf']));
-
-      this.account.recoveryAccount(dataForm)
-      .subscribe({
-        next: (res) => {
-          this.util.loading.next(false);
-          this.util.openAlertModal('320px', 'success-modal', 'Sucesso!', `Solicitação registrada com sucesso!`);
-
-        },
-        error: (error) => {
-          this.util.openAlertModal('320px', 'error-modal', 'Falha ao enviar os dados!', `Olá, infelizmente houve um problema inesperado ao enviarmos os dados para recuperação da conta! Por favor, tente novamente e caso o problema persista, envie um e-mail para: sistemas.supinf@saude.rj.gov.br, relatando o ocorrido.`);
-          this.util.loading.next(false);
-        }
-      })
-    }*/
   }
 
   submitRecuperarSenha(uploadData: FormData): Promise<any> {
     return new Promise(
       (resolve, reject): void => {
-
         if ( this.isAdm ) {
           this.service.recuperarSenha(this.dataSource.Id).subscribe({
             next: (e) => {
@@ -265,6 +193,4 @@ export class AccountRecoveryComponent implements OnInit {
   ngOnDestroy(): void {
     this.subscribeLoading.unsubscribe();
   }
-
-
 }

@@ -19,6 +19,9 @@ import { GenericDialogComponent } from "../../generic-dialog/generic-dialog.comp
 import { faPen, faBan, faCheck, faPlus, faSearch,faFilePdf, faFile, faClose } from '@fortawesome/free-solid-svg-icons';
 import {DialogModel} from "../../unidades/dialog-unidades/dialog-model/dialog-model";
 import {DialogMotivosComponent} from "../../motivo-reprovacao/dialog-motivos/dialog-motivos.component";
+import {
+  ModalListaOficioUsuariosComponent
+} from "../modal-lista-oficio-usuarios/modal-lista-oficio-usuarios/modal-lista-oficio-usuarios.component";
 
 @Component({
   selector: 'app-tabela-usuarios',
@@ -266,44 +269,25 @@ export class TabelaUsuariosComponent implements OnInit {
               this.util.loading.next(false);
             }
           })
-
-          /*this.usuariosService.excluirUsuario(id).subscribe({
-            next: (x) => {
-              this.util.openAlertModal("320px", "success-modal", "Usuário excluído!", `O usuário foi excluído do sistema com sucesso!`).then((update) => {
-                if (update) location.reload()
-              });
-              this.util.loading.next(false);
-            }
-          })*/
         }
       }
     })
-    /*dialog.afterClosed().subscribe({
-      next: (data) => {
-        if ( data ){
-          this.util.loading.next(true);
-          this.usuariosService.excluirUsuario(id).subscribe({
-            next: (x) => {
-              this.util.openAlertModal("320px", "success-modal", "Usuário excluído!", `O usuário foi excluído do sistema com sucesso!`).then((update) => {if(update) location.reload()});
-              this.util.loading.next(false);
-            }
-          })
-          /!*this.motivoReprovacaoService.ativarMotivoReprovacao(id).subscribe({
-            next: (x) => {
-              this.util.openAlertModal("320px", "success-modal", "Motivo de reprovação ativada!", `O motivo de reprovação foi ativado no sistema com sucesso!`).then((update) => {if(update) location.reload()});
-              this.util.loading.next(false);
-            },
-            error: () => {
-              this.util.openAlertModal("320px", "error-modal", "Erro ao ativar o motivo de reprovação", `Houve um erro ao tentarmos ativar este motivo de reprovação! Por favor, tente novamente! Caso o problema persista, entre em contato via e-mail: sistemas.supinf@saude.rj.gov.br`);
-              this.util.loading.next(false);
-            }
-          })*!/
+  }
+
+  visualizarHistoricoOficios(id: number) {
+    this.util.loading.next(true);
+    this.abrirModalOficio(id);
+  }
+
+  abrirModalOficio(id: number) {
+    const dialogRef = this.modal.open(ModalListaOficioUsuariosComponent, {
+        width: '100%',
+        panelClass: 'common-modal',
+        data: {
+          id: id
         }
-      },
-      error: (e) => {
-        this.util.loading.next(false);
-        console.log(e);
-      }
-    })*/
+      });
+
+      dialogRef.afterClosed().subscribe(result => { });
   }
 }
