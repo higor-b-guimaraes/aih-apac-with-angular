@@ -55,14 +55,6 @@ export class AccountRecoveryComponent implements OnInit {
     private route: Router
   ) {}
 
-  /*checkCpf() {
-    let statusCpf = this.util.checkCPF(this.formRecovery, 'cpf');
-    this.validCpf =  statusCpf?.isValid;
-    this.errorCpfMsg = statusCpf?.msg;
-
-    if(this.validCpf) this.validateProfileByCpf();
-  }*/
-
   testarUsuario() {
     this.util.loading.next(true);
     var login = this.formRecovery.get('Usuario')?.value;

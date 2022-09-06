@@ -53,4 +53,8 @@ export class SolicitarFaixasExtrasService {
     return this.http.get(`${environment.BASE_URL}Oficio/getUrlOficio/${id}`);
   }
 
+  downloadOficio(id: number) {
+    return this.http.get(`${environment.BASE_URL}Oficio/getOficio/${id}`,{responseType:'blob'});
+  }
+
 }

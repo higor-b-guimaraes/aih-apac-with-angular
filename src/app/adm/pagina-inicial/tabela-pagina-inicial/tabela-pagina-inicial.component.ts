@@ -151,18 +151,6 @@ export class TabelaPaginaInicialComponent implements OnInit {
         anchor.download = 'aihapac_oficio';
         anchor.href = (window.webkitURL || window.URL).createObjectURL(blob);
         anchor.click();
-
-        // console.log(data);
-        /*const blob = new Blob([data.arquivo], {type: 'application/pdf'});
-        if ( !blob ) {
-          console.error("Erro ao gerar pdf");
-          return;
-        }*/
-
-        /*const anchor = document.createElement('a');
-        anchor.download = 'arquivo.pdf';
-        anchor.href = (window.webkitURL || window.URL).createObjectURL(blob);
-        anchor.click();*/
       },
       error: (data: any) => {
         console.error(data);

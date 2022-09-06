@@ -5,6 +5,7 @@ import {MatSort} from "@angular/material/sort";
 import {Subject} from "rxjs";
 import {UtilService} from "../../../../shared/services/utils/util.service";
 import {MAT_DIALOG_DATA} from "@angular/material/dialog";
+import { faDownload } from '@fortawesome/free-solid-svg-icons';
 
 @Component({
   selector: 'app-modal-lista-oficio-usuarios',
@@ -14,6 +15,8 @@ import {MAT_DIALOG_DATA} from "@angular/material/dialog";
 export class ModalListaOficioUsuariosComponent implements OnInit {
   dataSource!: any;
   columns: string[] = [];
+
+  faDownload = faDownload;
 
   @ViewChild(MatPaginator) paginator!: MatPaginator;
   @ViewChild(MatSort) sort!: MatSort;
@@ -52,5 +55,28 @@ export class ModalListaOficioUsuariosComponent implements OnInit {
 
   closeModal() {
 
+  }
+
+  downloadOficio(id: number) {
+    if ( !id )
+      return;
+    // TODO: Proteger se por acaso não tiver um Id de Ofício válido
+    this.service.downloadOficio(id).subscribe({
+      next: (data: any) => {
+        console.log(data);
+        const blob = new Blob([data], {type: data.type});
+        if ( !blob ) {
+          console.error("Erro ao gerar pdf");
+          return;
+        }
+        const anchor = document.createElement('a');
+        anchor.download = 'aihapac_oficio';
+        anchor.href = (window.webkitURL || window.URL).createObjectURL(blob);
+        anchor.click();
+      },
+      error: (data: any) => {
+        console.error(data);
+      }
+    })
   }
 }

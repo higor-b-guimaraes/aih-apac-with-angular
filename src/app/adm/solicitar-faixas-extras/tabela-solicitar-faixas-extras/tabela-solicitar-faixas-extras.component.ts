@@ -1,6 +1,6 @@
 import {ChangeDetectorRef, Component, OnInit, ViewChild} from '@angular/core';
 
-import { faPen,faBan, faCheck, faPlus, faSearch } from '@fortawesome/free-solid-svg-icons';
+import { faPen,faBan, faCheck, faPlus, faSearch, faDownload } from '@fortawesome/free-solid-svg-icons';
 import {MatPaginator} from "@angular/material/paginator";
 import {MatSort} from "@angular/material/sort";
 import {Subject} from "rxjs";
@@ -18,8 +18,6 @@ import {MatTableDataSource} from "@angular/material/table";
 import {solicitarFaixasExtras} from "../../../shared/models/faixasExtras";
 import { environment } from 'src/environments/environment';
 
-import { saveAs } from 'file-saver';
-
 @Component({
   selector: 'app-tabela-solicitar-faixas-extras',
   templateUrl: './tabela-solicitar-faixas-extras.component.html',
@@ -33,6 +31,7 @@ export class TabelaSolicitarFaixasExtrasComponent implements OnInit {
   faCheck = faCheck;
   faPlus = faPlus;
   faSearch = faSearch;
+  faDownload = faDownload;
 
   filtro: string = "";
   columns: string[] = [];
@@ -156,5 +155,27 @@ export class TabelaSolicitarFaixasExtrasComponent implements OnInit {
           saveAs(blob, 'employees.json');*/
         }
       )
+  }
+
+  downloadOficio(id: number) {
+    if ( !id )
+      return;
+    this.service.downloadOficio(id).subscribe({
+      next: (data: any) => {
+        console.log(data);
+        const blob = new Blob([data], {type: data.type});
+        if ( !blob ) {
+          console.error("Erro ao gerar pdf");
+          return;
+        }
+        const anchor = document.createElement('a');
+        anchor.download = 'aihapac_oficio';
+        anchor.href = (window.webkitURL || window.URL).createObjectURL(blob);
+        anchor.click();
+      },
+      error: (data: any) => {
+        console.error(data);
+      }
+    })
   }
 }

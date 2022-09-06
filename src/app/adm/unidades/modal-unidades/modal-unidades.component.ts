@@ -75,7 +75,7 @@ export class ModalUnidadesComponent implements OnInit {
             Endereco: res.Endereco,
             Numero: res.Numero,
             Complemento: res.Complemento,
-            Cep: res.Cep,
+            Cep: this.util.addMaskCep(res.Cep),
             Bairro: res.Bairro,
             CodigoIbgeMunicipio: res.CodigoIbgeMunicipio,
             Estado: res.Estado,

@@ -69,7 +69,9 @@ export class MainContainerComponent implements OnInit {
     {
       nome: 'Obter Faixas',
       link: '/obter-faixas',
-      permission: 1
+      permission: 1,
+      secondPermission: 2,
+      thirdPermission: 3
     },
     {
       nome: 'Motivos de Reprovação de Solicitações',

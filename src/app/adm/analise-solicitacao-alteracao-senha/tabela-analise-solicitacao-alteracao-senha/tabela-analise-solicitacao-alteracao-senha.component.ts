@@ -1,5 +1,5 @@
 import {ChangeDetectorRef, Component, OnInit, ViewChild} from '@angular/core';
-import { faCheck, faBan, faSearch, faPlus } from '@fortawesome/free-solid-svg-icons';
+import { faCheck, faBan, faSearch, faPlus, faDownload } from '@fortawesome/free-solid-svg-icons';
 import {MatPaginator} from "@angular/material/paginator";
 import {MatSort} from "@angular/material/sort";
 import {Subject} from "rxjs";
@@ -27,6 +27,7 @@ export class TabelaAnaliseSolicitacaoAlteracaoSenhaComponent implements OnInit {
   faBan = faBan;
   faSearch = faSearch;
   faPlus = faPlus;
+  faDownload = faDownload;
 
   dataSource!: any;
   columns: string[] = [];
@@ -174,5 +175,26 @@ export class TabelaAnaliseSolicitacaoAlteracaoSenhaComponent implements OnInit {
     }
 
     this.subject.next(data);
+  }
+
+  downloadOficio(id: number) {
+    if ( !id )
+      return;
+    this.service.downloadOficio(id).subscribe({
+      next: (data: any) => {
+        console.log(data);
+        const blob = new Blob([data], {type: data.type});
+        if ( !blob ) {
+          return;
+        }
+        const anchor = document.createElement('a');
+        anchor.download = 'aihapac_oficio';
+        anchor.href = (window.webkitURL || window.URL).createObjectURL(blob);
+        anchor.click();
+      },
+      error: (data: any) => {
+        console.error(data);
+      }
+    })
   }
 }

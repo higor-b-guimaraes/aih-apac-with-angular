@@ -94,25 +94,23 @@ export class ModalSolicitarFaixasExtrasComponent implements OnInit {
     this.usuariosService.getTipoUnidade().subscribe( (data) => {
       this.opcoesTipoSolicitante = data;
     })
-    this.usuariosService.getMunicipios().subscribe( (data) => {
+    this.usuariosService.getMunicipiosCadastro().subscribe( (data) => {
       this.opcoesMunicipio = data;
     })
-    this.usuariosService.getUnidades().subscribe( (data) => {
-      console.log(data);
+    this.usuariosService.getUnidadesCadastro().subscribe( (data) => {
       this.opcoesUnidade = data;
     })
 
     this.auth.requestProfile().subscribe((data:any) => {
       this.perfilUsuario = data;
-      console.log("Perfil Usuário", this.perfilUsuario);
     })
 
     var fullDate = new Date();
+    console.log("Full Date: ", fullDate);
     this.formSolicitacaoFaixa.patchValue({
-      Mes: ("00" + (fullDate.getUTCMonth() + 1).toString()).substring(("00" + (fullDate.getUTCMonth() + 1).toString()).length - 2)
-    });
-
-
+      Mes: ("00" + (fullDate.getUTCMonth() + 1).toString()).substring(("00" + (fullDate.getUTCMonth() + 1).toString()).length - 2),
+      Competencia: fullDate.getUTCFullYear().toString()
+    })
   }
 
   buscarListaTiposFaixas() {
@@ -207,10 +205,11 @@ export class ModalSolicitarFaixasExtrasComponent implements OnInit {
     var competencia: string[] = [];
     var fullDate = new Date();
 
-    if (fullDate.getUTCMonth() < 3 ) {
+    if (fullDate.getUTCMonth() < 4 ) {
       competencia.push((fullDate.getUTCFullYear() - 1).toString());
     }
     competencia.push((fullDate.getUTCFullYear()).toString());
+    console.log(competencia);
     this.opcoesCompetencia = competencia;
   }
 
@@ -233,6 +232,20 @@ export class ModalSolicitarFaixasExtrasComponent implements OnInit {
     }
     this.opcoesMes = mes;
   }
+
+  /*selectOpcoesAno() {
+    var ano: any[] = [];
+    var fullDate = new Date();
+    if ( fullDate.getUTCMonth() < 4 ) {
+      ano.push({
+        ano: fullDate.getUTCFullYear() - 1
+      });
+    }
+    ano.push({
+      ano: fullDate.getUTCFullYear()
+    });
+    this.opcoesCompetencia;
+  }*/
 
   checkOficio(event: any) {
     let statusOficio: any = this.util.checkOficio(this.formSolicitacaoFaixa, 'Oficio');

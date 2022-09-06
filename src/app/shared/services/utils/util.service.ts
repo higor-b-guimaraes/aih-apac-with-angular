@@ -29,10 +29,17 @@ export class UtilService {
       const value = cpf.toString().replace(/\D/g, '');
       cpfFormatado = value.replace(/(\d{3})?(\d{3})?(\d{3})?(\d{2})/, '$1.$2.$3-$4');
     }
-
     return cpfFormatado;
   }
 
+  addMaskCep(cep: string) {
+    let cepFormatado = '';
+    if (cep) {
+      const value = cep.toString().replace(/\D/g, '');
+      cepFormatado = value.replace(/(\d{5})?(\d{3})/, '$1-$2');
+    }
+    return cepFormatado;
+  }
 
   addphoneMask(phoneNumber: string) {
 

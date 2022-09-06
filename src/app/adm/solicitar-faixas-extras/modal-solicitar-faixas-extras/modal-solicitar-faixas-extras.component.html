@@ -19,7 +19,7 @@
       <mat-select  (selectionChange)="buscarListaTiposFaixas()"
         formControlName="IdUnidade">
         <mat-option *ngFor="let unidades of opcoesUnidade" [value]="unidades.Id" required >
-          {{unidades.UnidadeDescricao}}
+          {{unidades.Descricao}}
         </mat-option>
       </mat-select>
       <mat-error *ngIf="formSolicitacaoFaixa.get('IdUnidade')?.hasError('required')">É preciso selecionar a unidade do usuário</mat-error>
@@ -70,7 +70,7 @@
             {{mes.descricao}}
           </mat-option>
         </mat-select>
-        <mat-error *ngIf="formSolicitacaoFaixa.get('Competencia')?.hasError('required')">É preciso informar um mês</mat-error>
+        <mat-error *ngIf="formSolicitacaoFaixa.get('Mes')?.hasError('required')">É preciso informar um mês</mat-error>
       </mat-form-field>
 
       <!-- Quantidade de faixas -->

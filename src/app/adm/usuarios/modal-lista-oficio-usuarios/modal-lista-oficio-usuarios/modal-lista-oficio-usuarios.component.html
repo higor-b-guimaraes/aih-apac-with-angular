@@ -1,6 +1,7 @@
 <mat-dialog-content>
   <legend>Visualizar Ofícios</legend>
   <div class="container-table">
+    <br>
     <table mat-table [dataSource]="dataSource" matSort class="mat-elevation-z8 table">
 
       <!-- Tipo de Ofício -->
@@ -26,7 +27,9 @@
       <ng-container matColumnDef="Oficio">
         <th mat-header-cell class="header-table" *matHeaderCellDef mat-sort-header [style.placeContent]="'center'"> Ofício </th>
         <td mat-cell *matCellDef="let row">
-
+          <button mat-icon-button class="btn-outline-danger" *ngIf="row.Id" (click)="downloadOficio(row.Id)" >
+            <fa-icon [icon]="faDownload"></fa-icon>
+          </button>
         </td>
       </ng-container>
 

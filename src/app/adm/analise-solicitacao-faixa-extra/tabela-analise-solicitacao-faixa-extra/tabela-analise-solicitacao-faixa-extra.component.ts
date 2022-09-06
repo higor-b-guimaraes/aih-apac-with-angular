@@ -8,7 +8,7 @@ import {MatDialog} from "@angular/material/dialog";
 import {
   AnaliseSolicitacaoFaixaExtraService
 } from "../analise-solicitacao-faixa-extra-service/analise-solicitacao-faixa-extra.service";
-import { faCheck, faBan, faSearch, faPlus } from '@fortawesome/free-solid-svg-icons';
+import { faCheck, faBan, faSearch, faPlus, faDownload } from '@fortawesome/free-solid-svg-icons';
 import {MatTableDataSource} from "@angular/material/table";
 import {AnalisarSolicitacaoAlteracaoSenha} from "../../../shared/models/analisarSolicitacaoAlteracaoSenha";
 import {DialogModel} from "../../unidades/dialog-unidades/dialog-model/dialog-model";
@@ -29,6 +29,7 @@ export class TabelaAnaliseSolicitacaoFaixaExtraComponent implements OnInit {
   faBan = faBan;
   faSearch = faSearch;
   faPlus = faPlus;
+  faDownload = faDownload;
 
   dataSource!: any;
   columns: string[] = [];
@@ -174,5 +175,26 @@ export class TabelaAnaliseSolicitacaoFaixaExtraComponent implements OnInit {
 
   getNewElements() {
 
+  }
+
+  downloadOficio(id: number) {
+    if ( !id )
+      return;
+    this.service.downloadOficio(id).subscribe({
+      next: (data: any) => {
+        console.log(data);
+        const blob = new Blob([data], {type: data.type});
+        if ( !blob ) {
+          return;
+        }
+        const anchor = document.createElement('a');
+        anchor.download = 'aihapac_oficio';
+        anchor.href = (window.webkitURL || window.URL).createObjectURL(blob);
+        anchor.click();
+      },
+      error: (data: any) => {
+        console.error(data);
+      }
+    })
   }
 }

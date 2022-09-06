@@ -57,9 +57,9 @@
     <ng-container matColumnDef="OficioAutorizacao">
       <th mat-header-cell class="header-table" *matHeaderCellDef mat-sort-header [style.placeContent]="'center'">Ofício de autorizacao</th>
       <td mat-cell [class]="getClass(row.IdSituacaoSolicitacao)" *matCellDef="let row">
-        <a href="" download="{{ row.Path }}">Ofício</a>
-        <!--<a href="{{ environment.BASE_URL + 'Oficio/getOficio/' + row.IdOficio }}">Baixar ofício</a>-->
-        <!--{{row.IdOficio}} -->
+        <button mat-icon-button class="btn-outline-danger" *ngIf="row.IdOficio" (click)="downloadOficio(row.IdOficio)" >
+          <fa-icon [icon]="faDownload"></fa-icon>
+        </button>
       </td>
     </ng-container>
 

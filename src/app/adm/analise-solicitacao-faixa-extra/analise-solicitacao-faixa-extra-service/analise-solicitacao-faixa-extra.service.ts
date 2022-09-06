@@ -35,4 +35,7 @@ export class AnaliseSolicitacaoFaixaExtraService {
   }
 
   //Solicitacao/listarSolicitacaoFaixaExtras
+  downloadOficio(id: number) {
+    return this.http.get(`${environment.BASE_URL}Oficio/getOficio/${id}`,{responseType:'blob'});
+  }
 }

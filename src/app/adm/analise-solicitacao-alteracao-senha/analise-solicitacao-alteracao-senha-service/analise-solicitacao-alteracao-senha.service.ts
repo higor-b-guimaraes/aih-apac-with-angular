@@ -34,4 +34,8 @@ export class AnaliseSolicitacaoAlteracaoSenhaService {
   listarMotivosReprovacao() {
     return this.http.get(`${environment.BASE_URL}MotivoReprovacao/listarMotivosReprovacaoAlteracaoSenha`);
   }
+
+  downloadOficio(id: number) {
+    return this.http.get(`${environment.BASE_URL}Oficio/getOficio/${id}`,{responseType:'blob'});
+  }
 }

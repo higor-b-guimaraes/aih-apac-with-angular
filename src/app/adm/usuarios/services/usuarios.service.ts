@@ -80,4 +80,8 @@ export class UsuariosService {
   buscarOficios(id: number) {
     return this.http.get(`${environment.BASE_URL}Oficio/buscarListaOficio/${id}`);
   }
+
+  downloadOficio(id: number) {
+    return this.http.get(`${environment.BASE_URL}Oficio/getOficio/${id}`,{responseType:'blob'});
+  }
 }
