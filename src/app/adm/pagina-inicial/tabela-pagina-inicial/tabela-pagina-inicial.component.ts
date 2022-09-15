@@ -32,6 +32,7 @@ export class TabelaPaginaInicialComponent implements OnInit {
   columns: string[] = [];
   isSolicitacaoPendente: boolean = false;
   countSolicitacoes: number = 0;
+  tipoUsuario: number = 0;
 
   @ViewChild(MatPaginator) paginator!: MatPaginator;
   @ViewChild(MatSort) sort!: MatSort;
@@ -62,7 +63,6 @@ export class TabelaPaginaInicialComponent implements OnInit {
     this.util.loading.next(true);
     this.service.contarSolicitacoesPendentes().subscribe({
       next: (e:any) => {
-        console.log("E: ",e);
         this.countSolicitacoes = e;
       }
     })

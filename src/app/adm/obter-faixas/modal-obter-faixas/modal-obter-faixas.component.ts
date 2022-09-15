@@ -88,10 +88,10 @@ export class ModalObterFaixasComponent implements OnInit {
       this.util.loading.next(false);
     })
 
-    this.usuariosService.getMunicipios().subscribe( (data) => {
+    this.usuariosService.getMunicipiosCadastro().subscribe( (data) => {
       this.opcoesMunicipio = data;
     })
-    this.usuariosService.getUnidades().subscribe( (data) => {
+    this.usuariosService.getUnidadesCadastro().subscribe( (data) => {
       this.opcoesUnidade = data;
     })
 
@@ -101,9 +101,9 @@ export class ModalObterFaixasComponent implements OnInit {
 
     var fullDate = new Date();
     this.formObterFaixa.patchValue({
-      Mes: ("00" + (fullDate.getUTCMonth() + 1).toString()).substring(("00" + (fullDate.getUTCMonth() + 1).toString()).length - 2)
+      Mes: ("00" + (fullDate.getUTCMonth() + 1).toString()).substring(("00" + (fullDate.getUTCMonth() + 1).toString()).length - 2),
+      Competencia: fullDate.getUTCFullYear().toString()
     });
-
   }
 
   /*getMunicipioOuUnidade() {
@@ -135,13 +135,26 @@ export class ModalObterFaixasComponent implements OnInit {
           uploadData.append(i,form[i]);
         }
       }
-      await this.submitGerarFaixa(uploadData);
-      this.util.openAlertModal(
-        "320px", "success-modal", "Faixas obtidas com sucesso!",
-        `Arquivo de faixas gerado com sucesso.`
-      ).then((update) => {if(update) location.reload()});
-      this.dialogRef.close(true);
-      return;
+
+      this.service.verificarArquivoFaixaGerado(uploadData).subscribe( {
+        next: (data: any) => {
+          if ( data > 0 ) {
+            this.util.openAlertModal(
+              "320px", "error-modal", "Não é possível gerar as faixas.",
+              `O arquivo de faixas para a Unidade/Município, Tipo de Faixa, Mês e Competência selecionado já existe e está disponível para download.`
+            );
+            this.util.loading.next(false);
+            return;
+          }
+          this.submitGerarFaixa(uploadData);
+        },
+        error: (err: any) => {
+          this.util.openAlertModal(
+            "320px", "error-modal", "Erro ao verificar faixas",
+            `Houve um erro ao tentar verificar faixas em nossa base de dados! Por favor, tente novamente! Caso o problema persista, entre em contato via e-mail: sistemas.supinf@saude.rj.gov.br`
+          );
+        }
+      })
     }
   }
 
@@ -151,6 +164,10 @@ export class ModalObterFaixasComponent implements OnInit {
         this.service.gravarObterFaixa(uploadData).subscribe({
           next: ( data: any) => {
             this.util.loading.next(false);
+            this.util.openAlertModal(
+              "320px", "success-modal", "Faixas obtidas com sucesso!",
+              `Arquivo de faixas gerado com sucesso.`
+            ).then((update) => {if(update) location.reload()});
             resolve(true);
           },
           error: () => {
@@ -162,20 +179,6 @@ export class ModalObterFaixasComponent implements OnInit {
             reject(false);
           },
         })
-        /*this.solicitacaoFaixaExtraService.salvarSolicitacaoFaixa(uploadData).subscribe({
-          next: () => {
-            this.util.loading.next(false)
-            resolve(true)
-          },
-          error: () => {
-            this.util.loading.next(false);
-            this.util.openAlertModal(
-              "320px", "error-modal", "Erro ao salvar usuário",
-              `Houve um erro ao tentar salvar gerar a solicitação de faixas extras em nossa base de dados! Por favor, tente novamente! Caso o problema persista, entre em contato via e-mail: sistemas.supinf@saude.rj.gov.br`
-            );
-            reject(false);
-          },
-        })*/
       }
     )
   }

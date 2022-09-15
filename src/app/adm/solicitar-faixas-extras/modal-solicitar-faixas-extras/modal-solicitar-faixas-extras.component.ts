@@ -168,7 +168,6 @@ export class ModalSolicitarFaixasExtrasComponent implements OnInit {
       !this.formSolicitacaoFaixa.get('IdTipoSolicitante')?.value||
       !this.formSolicitacaoFaixa.get('IdTipoFaixa')?.value ||
       !this.formSolicitacaoFaixa.get('Mes')?.value ||
-      !this.formSolicitacaoFaixa.get('Competencia')?.value ||
       !this.formSolicitacaoFaixa.get('Competencia')?.value
     )
       return;

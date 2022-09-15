@@ -260,6 +260,10 @@ export class TabelaUsuariosComponent implements OnInit {
                       if (update) location.reload()
                     });
                     this.util.loading.next(false);
+                  },
+                  error: (err) => {
+                    console.error(err.error);
+                    this.util.loading.next(false);
                   }
                 })
               }
@@ -270,6 +274,10 @@ export class TabelaUsuariosComponent implements OnInit {
             }
           })
         }
+      },
+      error: (erro) => {
+        console.error(erro.error);
+        this.util.loading.next(false);
       }
     })
   }

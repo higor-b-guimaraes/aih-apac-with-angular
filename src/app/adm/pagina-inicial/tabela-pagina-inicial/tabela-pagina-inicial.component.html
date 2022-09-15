@@ -84,7 +84,7 @@
     <tr mat-header-row *matHeaderRowDef="columns"></tr>
     <tr mat-row *matRowDef="let row; columns: columns;"></tr>
     <tr class="mat-row" *matNoDataRow>
-      <td class="mat-cell" colspan="columns.length">Não há solicitações pendentes de análise</td>
+      <td class="mat-cell" [colSpan]="columns.length">Não há solicitações pendentes de análise</td>
     </tr>
   </table>
 

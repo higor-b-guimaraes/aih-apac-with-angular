@@ -74,41 +74,6 @@ export class TabelaObterFaixasComponent implements OnInit {
     this.listarObterFaixas();
   }
 
-  /*getLog() {
-    debugger
-    this.util.loading.next(true);
-    var filtro = {
-      filtro: this.filtro
-    };
-    this.subject.subscribe( {
-      next: (e) => {
-        this.service.listarLog(filtro).subscribe({
-          next: (e:any) => {
-            debugger
-            this.dataSource = e;
-            console.log("Lista Log: ",e);
-            this.util.loading.next(false);
-          },
-          error: (err) => {
-            this.util.loading.next(false);
-          }
-        })
-      },
-      error: (erro) => {
-        this.util.loading.next(false);
-        console.error(erro);
-      }
-    })
-
-    let data = {
-      pageIndex: 0 ,
-      pageSize: 5 ,
-    }
-
-    this.subject.next(data);
-    this.util.loading.next(true);
-  }*/
-
   listarObterFaixas() {
     this.util.loading.next(true);
     this.subject.subscribe({
@@ -160,11 +125,29 @@ export class TabelaObterFaixasComponent implements OnInit {
       panelClass: 'common-modal'
     });
     dialogRef.afterClosed().subscribe(result => {
-      location.reload();
+
     });
   }
 
-  download(Id: number) {
-
+  download(id: number) {
+    this.util.loading.next(true);
+    this.service.downloadArquivoFaixas(id).subscribe({
+      next: (data: any) => {
+        const blob = new Blob([data], {type: data.type});
+        if ( !blob ) {
+          this.util.loading.next(false);
+          return;
+        }
+        const anchor = document.createElement('a');
+        anchor.download = 'arquivo-faixas.txt';
+        anchor.href = (window.webkitURL || window.URL).createObjectURL(blob);
+        anchor.click();
+        this.util.loading.next(false);
+      },
+      error: (err: any) => {
+        console.log(err);
+        this.util.loading.next(false);
+      }
+    })
   }
 }

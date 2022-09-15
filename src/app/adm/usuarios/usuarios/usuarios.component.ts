@@ -54,12 +54,4 @@ export class UsuariosComponent implements OnInit {
   ngAfterContentChecked() {
     this.cdRef.detectChanges();
   }
-
-
-
-  ngOnDestroy() {
-    this.subVerifyHasUser.unsubscribe();
-    if(this.subModalResponse) this.subModalResponse.unsubscribe();
-  }
-
 }

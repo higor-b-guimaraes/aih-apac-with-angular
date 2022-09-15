@@ -68,11 +68,10 @@ export class AlterarSenhaComponent implements OnInit {
           this.formResetPassword.get(`ConfirmarNovaSenha`)?.clearValidators();
           this.formResetPassword.get(`ConfirmarNovaSenha`)?.updateValueAndValidity();
         }
+        this.util.loading.next(false);
       },
       error: (err: any) => {
         console.log(err);
-      },
-      complete: () => {
         this.util.loading.next(false);
       }
     })
@@ -133,8 +132,6 @@ export class AlterarSenhaComponent implements OnInit {
           this.util.loading.next(false);
           this.util.openAlertModal("320px", "error-modal", "Erro",
             `Não foi possível alterar a senha! Por favor, tente novamente! Caso o problema persista, entre em contato via e-mail: sistemas.supinf@saude.rj.gov.br`);
-        },complete: () => {
-          this.util.loading.next(false);
         }
       })
     }

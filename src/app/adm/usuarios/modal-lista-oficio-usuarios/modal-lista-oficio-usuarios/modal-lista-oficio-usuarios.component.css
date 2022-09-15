@@ -1,9 +1,13 @@
 .mat-row:nth-child(even){
   background-color: lightgray;
+  vertical-align: middle;
+  text-align: center;
 }
 
 .mat-row:nth-child(odd){
   background-color: whitesmoke;
+  vertical-align: middle;
+  text-align: center;
 }
 
 .container-table {
@@ -85,10 +89,7 @@ th.mat-header-cell {
 
 
 
-.alert-danger {
-  color: #842029;
-  background-color: #f8d7da;
-  border-color: #f5c2c7;
+.linha-tabela {
   vertical-align: middle;
   text-align: center;
 }

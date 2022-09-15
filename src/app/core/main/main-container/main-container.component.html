@@ -8,7 +8,7 @@
   <button
   class="btn btn-menu btn-primary btn-standard btn-standard-mb-5"
   [routerLink]="(item?.link) ? item?.link : ''"
-  (click)="(item?.nome === 'sair') ? logout() : titulo = item?.nome"
+  (click)="(item?.nome === 'Sair') ? logout() : titulo = item?.nome"
   *ngFor="let item of menu">{{item.nome}}</button>
 </mat-nav-list>
 </mat-sidenav>

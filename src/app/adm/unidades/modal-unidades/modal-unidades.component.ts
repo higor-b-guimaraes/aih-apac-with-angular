@@ -224,13 +224,9 @@ export class ModalUnidadesComponent implements OnInit {
         if(this.novoCadastro === true) {
           await this.submitNovaUnidade(this.formUnidade.getRawValue());
           this.util.openAlertModal("320px", "success-modal", "Unidade cadastrada!", `A unidade ${this.formUnidade.get(`Descricao`)?.value}, foi cadastrada com sucesso no sistema!`).then((update) => {if(update) location.reload()});
-          this.closeModal(1);
-          return;
         }else {
           await this.submitAtualizaUnidade(request);
           this.util.openAlertModal("320px", "success-modal", "Atualização de dados realizada!", `Os dados da unidade ${this.formUnidade.get(`Descricao`)?.value}, foram atualizados no sistema!`).then((update) => {if(update) location.reload()});
-          this.closeModal(1);
-          return;
         }
       }
     }
@@ -263,12 +259,12 @@ export class ModalUnidadesComponent implements OnInit {
         this.unidadeService.atualizarUnidade(request.data).subscribe({
           next: () => {
             this.util.loading.next(false);
-            // TODO: Depois de gravar, precisa recarregar a tela
             resolve(true);
           },
-          error: () => {
+          error: (err: any) => {
             this.util.loading.next(false);
-            this.util.openAlertModal("320px", "error-modal", "Erro ao atualizar unidade", `Houve um erro ao tentar atualizar os dados da unidade ${this.formUnidade.get(`Descricao`)?.value} em nossa base de dados! Por favor, tente novamente! Caso o problema persista, entre em contato via e-mail: sistemas.supinf@saude.rj.gov.br`);
+            this.util.openAlertModal("320px", "error-modal", "Erro ao atualizar unidade",
+              err.error);
             reject(false);
           },
         })
@@ -276,9 +272,9 @@ export class ModalUnidadesComponent implements OnInit {
     )
   }
 
-  closeModal(status: any): void {
+  /*closeModal(status: any): void {
     this.dialogRef.close(status);
-  }
+  }*/
 
   ngAfterContentChecked() {
     this.cdRef.detectChanges();

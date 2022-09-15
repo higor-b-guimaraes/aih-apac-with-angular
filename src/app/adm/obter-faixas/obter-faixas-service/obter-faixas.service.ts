@@ -16,7 +16,15 @@ export class ObterFaixasService {
     return this.http.get(`${environment.BASE_URL}ObterFaixas/listarFaixasGeradas`,{params:options});
   }
 
+  verificarArquivoFaixaGerado(uploadData: FormData) {
+    return this.http.post(`${environment.BASE_URL}ObterFaixas/verificarArquivoFaixaGerado`, uploadData);
+  }
+
   gravarObterFaixa(uploadData: FormData) {
     return this.http.post(`${environment.BASE_URL}ObterFaixas/gerarArquivoFaixasManualmente`, uploadData);
+  }
+
+  downloadArquivoFaixas(id: number) {
+    return this.http.get(`${environment.BASE_URL}ObterFaixas/baixarArquivoFaixas/${id}`, {responseType:'blob'});
   }
 }

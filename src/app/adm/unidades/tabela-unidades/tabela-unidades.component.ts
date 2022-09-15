@@ -322,10 +322,4 @@ error: () => {this.util.loading.next(false)}*/
   ngAfterContentChecked() {
     this.cdRef.detectChanges();
   }
-
-  ngOnDestroy() {
-    if (isPlatformBrowser(this.platformId)) {
-      this.subscription.unsubscribe();
-    }
-  }
 }

@@ -19,7 +19,7 @@
         <mat-select  (selectionChange)="buscarListaTiposFaixas()"
                      formControlName="IdUnidade">
           <mat-option *ngFor="let unidades of opcoesUnidade" [value]="unidades.Id" required >
-            {{unidades.UnidadeDescricao}}
+            {{unidades.Descricao}}
           </mat-option>
         </mat-select>
         <mat-error *ngIf="formObterFaixa.get('IdUnidade')?.hasError('required')">É preciso selecionar a unidade do usuário</mat-error>
