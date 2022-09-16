@@ -8,7 +8,7 @@
         <mat-label>Tipo de Solicitante</mat-label>
         <mat-select  (selectionChange)="buscarListaTiposFaixas()"
           formControlName="IdTipoSolicitante">
-          <mat-option *ngFor="let tsolicitante of opcoesTipoSolicitante" [value]="tsolicitante.Id" required>
+          <mat-option *ngFor="let tsolicitante of opcoesTipoSolicitante" [value]="tsolicitante.Id" >
             {{tsolicitante.Descricao}}
           </mat-option>
         </mat-select>
@@ -18,7 +18,7 @@
       <mat-label>Unidade</mat-label>
       <mat-select  (selectionChange)="buscarListaTiposFaixas()"
         formControlName="IdUnidade">
-        <mat-option *ngFor="let unidades of opcoesUnidade" [value]="unidades.Id" required >
+        <mat-option *ngFor="let unidades of opcoesUnidade" [value]="unidades.Id"  >
           {{unidades.Descricao}}
         </mat-option>
       </mat-select>
@@ -29,7 +29,7 @@
       <mat-label>Município</mat-label>
       <mat-select (selectionChange)="buscarListaTiposFaixas()"
         formControlName="CodigoIbgeMunicipio">
-        <mat-option *ngFor="let municipio of opcoesMunicipio" [value]="municipio['CodigoIbge']" required >
+        <mat-option *ngFor="let municipio of opcoesMunicipio" [value]="municipio['CodigoIbge']"  >
           {{municipio['NomeMunicipio'] + " - " + municipio['CodigoIbge']}}
         </mat-option>
       </mat-select>
@@ -41,11 +41,11 @@
       <mat-label>Tipo de Faixa</mat-label>
         <mat-select (selectionChange)="buscarCotaPadrao(); buscarTotalCotaExtraAprovada()"
           formControlName="IdTipoFaixa">
-          <mat-option *ngFor="let tipoFaixa of opcoesTipoFaixa" [value]="tipoFaixa.Id" required>
+          <mat-option *ngFor="let tipoFaixa of opcoesTipoFaixa" [value]="tipoFaixa.Id" >
             {{tipoFaixa.Descricao}}
           </mat-option>
         </mat-select>
-        <mat-error *ngIf="formSolicitacaoFaixa.get('IdTipoFaixa')?.hasError('required')">É preciso informar o tipo de faixa</mat-error>
+        <!--<mat-error *ngIf="formSolicitacaoFaixa.get('IdTipoFaixa')?.hasError('required')">É preciso informar o tipo de faixa</mat-error>-->
       </mat-form-field>
     </div>
 
@@ -55,7 +55,7 @@
         <mat-label>Competência (ano)</mat-label>
         <mat-select (selectionChange)="buscarTotalCotaExtraAprovada()"
            formControlName="Competencia">
-          <mat-option *ngFor="let competencia of opcoesCompetencia" [value]="competencia" required>
+          <mat-option *ngFor="let competencia of opcoesCompetencia" [value]="competencia" >
             {{competencia}}
           </mat-option>
         </mat-select>
@@ -66,7 +66,7 @@
       <mat-form-field appearance="outline"  class="col-md-3">
         <mat-label>Mês</mat-label>
         <mat-select (selectionChange)="buscarTotalCotaExtraAprovada()" formControlName="Mes">
-          <mat-option *ngFor="let mes of opcoesMes" [value]="mes.mes" required>
+          <mat-option *ngFor="let mes of opcoesMes" [value]="mes.mes" >
             {{mes.descricao}}
           </mat-option>
         </mat-select>
@@ -94,7 +94,7 @@
       <!-- Total Cota Extra aprovada -->
       <mat-form-field appearance="outline"  class="col-md-3">
         <mat-label>Total cota extra aprovada</mat-label>
-        <input [disabled]="true" matInput formControlName="TotalCotaExtraAprovada" type="number">
+        <input  matInput formControlName="TotalCotaExtraAprovada" type="number">
       </mat-form-field>
     </div>
   </fieldset>
@@ -112,7 +112,6 @@
       </mat-form-field>
     </div>
   </fieldset>
-
 </form>
 
 <!--[mat-dialog-close]="usuarioModel"-->

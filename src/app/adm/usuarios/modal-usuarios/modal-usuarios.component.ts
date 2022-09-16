@@ -63,7 +63,7 @@ export class ModalUsuariosComponent implements OnInit {
     Telefone: new FormControl('', [Validators.required]),
     Email: new FormControl('', [Validators.required, Validators.email]),
     NomeUsuario: new FormControl('', [Validators.required]),
-    Situacao: new FormControl(1, [Validators.required]),
+    Situacao: new FormControl({value:1}, [Validators.required]),
     IdPerfilUsuario: new FormControl('', [Validators.required]),
     IdTipoSolicitante: new FormControl('', [Validators.required]),
     IdUnidade: new FormControl(null, [Validators.required]),
@@ -84,67 +84,74 @@ export class ModalUsuariosComponent implements OnInit {
     private usuariosService: UsuariosService,
     private cdRef: ChangeDetectorRef
   ) {
-    this.usuariosService.getTipoUnidade().subscribe( (data) => {
-      this.opcoesTipoUnidade = data
-    });
-    this.usuariosService.getTipoPerfil().subscribe( (data) => {
-      this.opcoesPerfil = data;
-    })
-    this.usuariosService.getMunicipiosCadastro().subscribe( (data) => {
-      this.opcoesMunicipio = data;
-    })
-    this.usuariosService.getUnidadesCadastro().subscribe( (data) => {
-      console.log(data);
-      this.opcoesUnidades = data;
-    })
+
 
   }
 
-  ngOnInit(): void {
+  ngOnInit() {
     this.util.loading.next(true);
-    if(this.dataModal?.idRequest) {
-      this.usuariosService.getUsuario(this.dataModal).subscribe({
-        next: (res: any) => {
-          console.log(res);
-          this.form = res;
+    try {
+      this.usuariosService.getTipoUnidade().subscribe( (data) => {
+        this.opcoesTipoUnidade = data;
+      });
+      this.usuariosService.getTipoPerfil().subscribe( (data) => {
+        this.opcoesPerfil = data;
+      });
+      this.usuariosService.getMunicipiosCadastro().subscribe( (data) => {
+        this.opcoesMunicipio = data;
+      });
+      this.usuariosService.getUnidadesCadastro().subscribe( (data) => {
+        console.log(data);
+        this.opcoesUnidades = data;
+      });
+      if(this.dataModal?.idRequest) {
+        // const usuario: Usuario = await this.usuariosService.getUsuario(this.dataModal);
+        this.usuariosService.getUsuario(this.dataModal).subscribe({
+          next: (res: any) => {
+            console.log(res);
+            this.form = res;
 
-          this.formUsuario.patchValue({
-            Nome: res?.Nome,
-            NomeSocial: res?.NomeSocial,
-            Cpf: this.util.addMaskCPF(res?.Cpf),
-            Telefone: this.util.addphoneMask(res?.Telefone),
-            Email: res?.Email,
-            NomeUsuario: res?.NomeUsuario,
-            Situacao: parseInt(res?.Situacao),
-            IdPerfilUsuario: parseInt(res?.IdPerfilUsuario),
-            IdTipoSolicitante: parseInt(res?.IdTipoSolicitante),
-            IdUnidade: parseInt(res?.IdUnidade),
-            CodigoIbgeMunicipio: res?.CodigoIbgeMunicipio,
-            Oficio: null,
-          })
+            this.formUsuario.patchValue({
+              Nome: res?.Nome,
+              NomeSocial: res?.NomeSocial,
+              Cpf: this.util.addMaskCPF(res?.Cpf),
+              Telefone: this.util.addphoneMask(res?.Telefone),
+              Email: res?.Email,
+              NomeUsuario: res?.NomeUsuario,
+              Situacao: parseInt(res?.Situacao),
+              IdPerfilUsuario: parseInt(res?.IdPerfilUsuario),
+              IdTipoSolicitante: parseInt(res?.IdTipoSolicitante),
+              IdUnidade: parseInt(res?.IdUnidade),
+              CodigoIbgeMunicipio: res?.CodigoIbgeMunicipio,
+              Oficio: null,
+            })
 
-          this.getMunicipioOuUnidade();
-          this.validaNecessidadeOficio();
-          this.novoCadastro = false;
-          this.util.loading.next(false);
+            this.getMunicipioOuUnidade();
+            this.validaNecessidadeOficio();
+            this.novoCadastro = false;
+            this.util.loading.next(false);
 
-          this.formUsuario.get('Nome')?.disable({onlySelf: true});
-          this.formUsuario.get('NomeUsuario')?.disable({onlySelf: true});
-          this.formUsuario.get('Cpf')?.disable({onlySelf: true});
+            this.formUsuario.get('Nome')?.disable({onlySelf: true});
+            this.formUsuario.get('NomeUsuario')?.disable({onlySelf: true});
+            this.formUsuario.get('Cpf')?.disable({onlySelf: true});
 
-          this.idUsuario = res?.Id;
-          this.formUsuario.get(`Oficio`)?.clearValidators();
-          this.formUsuario.get(`Oficio`)?.setValue(null);
-          this.oficioObrigatorio = false;
-          console.log(this.formUsuario)
-        },
+            this.idUsuario = res?.Id;
+            this.formUsuario.get(`Oficio`)?.clearValidators();
+            this.formUsuario.get(`Oficio`)?.setValue(null);
+            this.oficioObrigatorio = false;
+            console.log(this.formUsuario)
+          },
 
-        error: () => {},
-      })
-    }else {
-      this.util.loading.next(false);
-      this.novoCadastro = true;
+          error: () => {},
+        })
+      }else {
+        this.util.loading.next(false);
+        this.novoCadastro = true;
+      }
+    } catch (e) {
+
     }
+
   }
 
   getMunicipioOuUnidade() {

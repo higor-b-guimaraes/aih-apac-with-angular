@@ -29,7 +29,7 @@ export class UsuariosService {
     return this.http.get(`${environment.BASE_URL}Usuarios/listarUsuarios`,{params:options});
   }
 
-  getUsuario(request: {idUser:any, idRequest: number}) {
+  getUsuario(request: {idUser:any, idRequest: number}){
     return this.http.get(`${environment.BASE_URL}Usuarios/usuario/${request.idRequest}`);
   }
 

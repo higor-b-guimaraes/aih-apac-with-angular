@@ -7,6 +7,11 @@
     </div>
   </div>
 </nav>
+
+<div *ngIf="loading" class="loading-data">
+  <mat-spinner></mat-spinner>
+</div>
+
 <div class="container-principal">
   <div class="container-conteudo">
     <div class="container container-faixas">
@@ -15,7 +20,9 @@
         <!-- Código Verificação -->
         <mat-form-field class="col-12" [formGroup]="form" appearance="outline">
           <mat-label>Código de Verificação</mat-label>
-          <input  matInput formControlName="CodigoVerificacao" (blur)="VerificarCodigo()">
+          <input  matInput formControlName="CodigoVerificacao" maxlength="6" (ngModelChange)="digitarCodigoVerificacao()" >
+          <!--<mat-icon matSuffix (click)="exibirAlerta('A')">search</mat-icon>-->
+          <!--(blur)="VerificarCodigo()"-->
         </mat-form-field>
 
         <!-- Nova Senha -->

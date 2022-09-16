@@ -5,6 +5,7 @@ import {environment} from "../../../environments/environment";
 import {ActivatedRoute, Router} from "@angular/router";
 import {ValidarNovaSenhaService} from "./validar-nova-senha-service/validar-nova-senha.service";
 import {UtilService} from "../../shared/services/utils/util.service";
+import {Subscription} from "rxjs";
 
 @Component({
   selector: 'app-validar-nova-senha',
@@ -16,6 +17,9 @@ export class ValidarNovaSenhaComponent implements OnInit {
   logoSESRJ = `${environment.BASE_SITE}assets/resources/images/logo-ses-rj.svg`;
   userId: number | undefined;
   isCodigoVerificacao: boolean = false;
+
+  private subscribeLoading!: Subscription;
+  loading: boolean = false;
 
   form: FormGroup = this.formBuilder.group({
       CodigoVerificacao: new FormControl("",Validators.required),
@@ -38,7 +42,7 @@ export class ValidarNovaSenhaComponent implements OnInit {
   }
 
   ngOnInit(): void {
-
+    this.subscribeLoading = this.utils.loadingActivated().subscribe((res: any) => this.loading = res);
   }
 
   onSubmit() {
@@ -110,13 +114,17 @@ export class ValidarNovaSenhaComponent implements OnInit {
 
     this.service.getCodigoVerificacao(codigoVerificacao, this.userId as number).subscribe({
       next: (data: any) => {
+        this.isCodigoVerificacao = data;
         if ( !data ) {
+          this.form.get('CodigoVerificacao')?.setValue('');
           this.utils.openAlertModal(
             "320px", "error-modal", "Código Inválido.",
             `O código de verificação informado está incorreto! Por favor, verifique seu e-mail e tente novamente! Caso o problema persista, entre em contato via e-mail: sistemas.supinf@saude.rj.gov.br`
           );
+          this.utils.loading.next(false);
+          return;
         }
-        this.isCodigoVerificacao = data;
+        this.form.get('CodigoVerificacao')?.disable({onlySelf: true});
         this.utils.loading.next(false);
       },
       error: (err) => {
@@ -127,5 +135,16 @@ export class ValidarNovaSenhaComponent implements OnInit {
         this.utils.loading.next(false);
       }
     })
+  }
+
+  digitarCodigoVerificacao() {
+    console.log("Mudou");
+    if ( (this.form.get('CodigoVerificacao')?.value).length == 6 ) {
+      this.VerificarCodigo();
+    }
+  }
+
+  ngOnDestroy(): void {
+    this.subscribeLoading.unsubscribe();
   }
 }

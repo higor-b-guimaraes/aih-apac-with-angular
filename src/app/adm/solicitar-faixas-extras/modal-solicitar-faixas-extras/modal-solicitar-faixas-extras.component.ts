@@ -1,4 +1,4 @@
-import {ChangeDetectorRef, Component, Inject, OnInit} from '@angular/core';
+import {AfterContentChecked, ChangeDetectorRef, Component, Inject, OnInit} from '@angular/core';
 import {FormBuilder, FormControl, FormGroup, Validators} from "@angular/forms";
 import {MAT_DIALOG_DATA, MatDialogRef} from "@angular/material/dialog";
 import {UtilService} from "../../../shared/services/utils/util.service";
@@ -7,16 +7,17 @@ import {UsuariosService} from "../../usuarios/services/usuarios.service";
 import {SolicitarFaixasExtrasService} from "../services/solicitar-faixas-extras.service";
 import {FileValidator} from "ngx-material-file-input";
 import {CustomValidators} from "../../../shared/validators/custom-validators";
-import {UsuariosComponent} from "../../usuarios/usuarios/usuarios.component";
+import {AlterarSenhaService} from "../../alterar-senha/services/alterar-senha.service";
+
 
 @Component({
   selector: 'app-modal-solicitar-faixas-extras',
   templateUrl: './modal-solicitar-faixas-extras.component.html',
   styleUrls: ['./modal-solicitar-faixas-extras.component.css']
 })
-export class ModalSolicitarFaixasExtrasComponent implements OnInit {
+export class ModalSolicitarFaixasExtrasComponent implements OnInit, AfterContentChecked {
 
-  opcoesTipoSolicitante: any;
+  opcoesTipoSolicitante: any = [];
   opcoesTipoFaixa: any;
   opcoesMunicipio: any;
   opcoesUnidade: any;
@@ -25,6 +26,7 @@ export class ModalSolicitarFaixasExtrasComponent implements OnInit {
   oficioValido: boolean = false;
   msgErroOficio: string = "";
   perfilUsuario: string = "";
+  usuario: any;
 
   readonly maxSize = 10485760;   //Max Filesize 10MB
 
@@ -62,16 +64,16 @@ export class ModalSolicitarFaixasExtrasComponent implements OnInit {
     12: "Dezembro",
   }
 
-  formSolicitacaoFaixa: FormGroup = this.formBuilder.group({
-    IdTipoSolicitante: new FormControl(null, Validators.required),
+  formSolicitacaoFaixa: FormGroup = new FormGroup({
+    IdTipoSolicitante: new FormControl('', [Validators.required]),
     IdUnidade: new FormControl(''),
     CodigoIbgeMunicipio: new FormControl(''),
-    IdTipoFaixa: new FormControl('',Validators.required),
-    Competencia: new FormControl('',Validators.required),
-    Mes: new FormControl('',Validators.required),
-    QuantidadeFaixas: new FormControl(0,Validators.required),
-    CotaPadrao: new FormControl({value: 0, disabled: true}, Validators.required),
-    TotalCotaExtraAprovada: new FormControl({value: 0, disabled: true},Validators.required),
+    IdTipoFaixa: new FormControl('',[Validators.required]),
+    Competencia: new FormControl('',[Validators.required]),
+    Mes: new FormControl('',[Validators.required]),
+    QuantidadeFaixas: new FormControl(0,[Validators.required]),
+    CotaPadrao: new FormControl({value: 0, disabled: true}, [Validators.required]),
+    TotalCotaExtraAprovada: new FormControl({value: 0, disabled: true},[Validators.required]),
     Oficio: new FormControl(null, [Validators.required, FileValidator.maxContentSize(this.maxSize), this.validator.acceptTypeFileInput]),
   });
 
@@ -84,59 +86,117 @@ export class ModalSolicitarFaixasExtrasComponent implements OnInit {
     private cdRef: ChangeDetectorRef,
     private validator: CustomValidators,
     private usuariosService: UsuariosService,
+    private alterarSenhaService: AlterarSenhaService,
     private solicitacaoFaixaExtraService: SolicitarFaixasExtrasService
   ) {
 
   }
 
-  ngOnInit(): void {
-    this.util.loading.next(true);
-    this.usuariosService.getTipoUnidade().subscribe( (data) => {
+  async ngOnInit() {
+    try {
+      this.util.loading.next(true);
+      this.opcoesTipoSolicitante = await this.usuariosService.getTipoUnidade().toPromise();
+      this.opcoesMunicipio = await this.usuariosService.getMunicipiosCadastro().toPromise();
+      this.opcoesUnidade = await this.usuariosService.getUnidadesCadastro().toPromise();
+      this.perfilUsuario = await this.auth.requestProfile().toPromise() as string;
+
+      this.usuario = await this.alterarSenhaService.getUsuario().toPromise();
+      console.log('Usuário: ', this.usuario);
+      if ( this.usuario && this.usuario.IdPerfilUsuario == 3 ) {
+        // this.formSolicitacaoFaixa.get('IdTipoSolicitante')?.setValue(this.usuario.IdTipoSolicitante);
+        this.formSolicitacaoFaixa.patchValue({
+          IdTipoSolicitante:  parseInt(this.usuario.IdTipoSolicitante),
+          IdUnidade: parseInt(this.usuario.IdUnidade),
+          CodigoIbgeMunicipio: this.usuario.CodigoIbgeMunicipio,
+
+        })
+
+        this.formSolicitacaoFaixa.get('IdTipoSolicitante')?.disable({onlySelf:true});
+        this.formSolicitacaoFaixa.get('IdUnidade')?.disable({onlySelf:true});
+        this.formSolicitacaoFaixa.get('CodigoIbgeMunicipio')?.disable({onlySelf:true});
+        /*if ( parseInt(this.usuario.IdTipoSolicitante) == 1 ) {
+          this.formSolicitacaoFaixa.get('IdUnidade')?.disable({onlySelf:true});
+        } else if ( parseInt(this.usuario.IdTipoSolicitante) == 2 ){
+
+        }*/
+      }
+
+      var fullDate = new Date();
+      this.formSolicitacaoFaixa.patchValue({
+        Mes: ("00" + (fullDate.getUTCMonth() + 1).toString()).substring(("00" + (fullDate.getUTCMonth() + 1).toString()).length - 2),
+        Competencia: fullDate.getUTCFullYear().toString()
+      })
+    } catch (e) {
+      console.log(e);
+    } finally {
+      this.util.loading.next(false);
+    }
+    /*this.util.loading.next(true);
+    this.usuariosService.getTipoUnidade().subscribe((data) => {
       this.opcoesTipoSolicitante = data;
-    })
-    this.usuariosService.getMunicipiosCadastro().subscribe( (data) => {
+    })*/
+    /*this.usuariosService.getMunicipiosCadastro().subscribe((data) => {
       this.opcoesMunicipio = data;
     })
-    this.usuariosService.getUnidadesCadastro().subscribe( (data) => {
+    this.usuariosService.getUnidadesCadastro().subscribe((data) => {
       this.opcoesUnidade = data;
     })
 
-    this.auth.requestProfile().subscribe((data:any) => {
+    this.auth.requestProfile().subscribe((data: any) => {
       this.perfilUsuario = data;
     })
 
-    var fullDate = new Date();
-    console.log("Full Date: ", fullDate);
-    this.formSolicitacaoFaixa.patchValue({
-      Mes: ("00" + (fullDate.getUTCMonth() + 1).toString()).substring(("00" + (fullDate.getUTCMonth() + 1).toString()).length - 2),
-      Competencia: fullDate.getUTCFullYear().toString()
-    })
+    this.alterarSenhaService.getUsuario().subscribe({
+      next: (data: any) => {
+        this.usuario = data;
+        console.log(this.usuario);
+      },
+      error: (err: any) => {
+        console.error(err.error);
+      }
+    })*/
+
+    // var fullDate = new Date();
+    // this.formSolicitacaoFaixa.patchValue({
+    //   Mes: ("00" + (fullDate.getUTCMonth() + 1).toString()).substring(("00" + (fullDate.getUTCMonth() + 1).toString()).length - 2),
+    //   Competencia: fullDate.getUTCFullYear().toString()
+    // })
+  }
+
+  ngAfterContentChecked(){
+    this.cdRef.detectChanges();
   }
 
   buscarListaTiposFaixas() {
-    this.filtroTipoFaixa.tipoSolicitante =
-      this.formSolicitacaoFaixa.get('IdTipoSolicitante')?.value;
+    try {
+      this.util.loading.next(true);
+      this.filtroTipoFaixa.tipoSolicitante =
+        this.formSolicitacaoFaixa.get('IdTipoSolicitante')?.value;
 
-    if ( (!this.formSolicitacaoFaixa.get('IdUnidade')?.value)
-      && ((!this.formSolicitacaoFaixa.get('CodigoIbgeMunicipio')?.value))
-    ) {
-      this.formSolicitacaoFaixa.get('IdTipoFaixa')?.disable({onlySelf: true});
-    } else {
-      this.formSolicitacaoFaixa.controls['IdTipoFaixa'].enable();
-    }
-
-    if ( this.filtroTipoFaixa.tipoSolicitante ) {
-      if ( this.filtroTipoFaixa.tipoSolicitante === 1 ) { // Unidade
-        this.filtroTipoFaixa.codigoSolicitante =
-          this.formSolicitacaoFaixa.get('IdUnidade')?.value;
-      } else if ( this.filtroTipoFaixa.tipoSolicitante === 2 ) { // Município
-        this.filtroTipoFaixa.codigoSolicitante =
-          this.formSolicitacaoFaixa.get('CodigoIbgeMunicipio')?.value;
+      if ( (!this.formSolicitacaoFaixa.get('IdUnidade')?.value)
+        && ((!this.formSolicitacaoFaixa.get('CodigoIbgeMunicipio')?.value))
+      ) {
+        this.formSolicitacaoFaixa.get('IdTipoFaixa')?.disable({onlySelf: true});
+      } else {
+        this.formSolicitacaoFaixa.controls['IdTipoFaixa'].enable();
       }
 
-      this.solicitacaoFaixaExtraService.getListaTipoFaixaUnidadeMunicipio(this.filtroTipoFaixa).subscribe( (data) => {
-        this.opcoesTipoFaixa = data;
-      })
+      if ( this.filtroTipoFaixa.tipoSolicitante ) {
+        if ( this.filtroTipoFaixa.tipoSolicitante === 1 ) { // Unidade
+          this.filtroTipoFaixa.codigoSolicitante =
+            this.formSolicitacaoFaixa.get('IdUnidade')?.value;
+        } else if ( this.filtroTipoFaixa.tipoSolicitante === 2 ) { // Município
+          this.filtroTipoFaixa.codigoSolicitante =
+            this.formSolicitacaoFaixa.get('CodigoIbgeMunicipio')?.value;
+        }
+
+        this.solicitacaoFaixaExtraService.getListaTipoFaixaUnidadeMunicipio(this.filtroTipoFaixa).subscribe( (data) => {
+          this.opcoesTipoFaixa = data;
+          this.util.loading.next(false);
+        })
+      }
+    } catch (e) {
+      this.util.loading.next(false);
     }
   }
 
@@ -305,7 +365,6 @@ export class ModalSolicitarFaixasExtrasComponent implements OnInit {
     this.buscarListaTiposFaixas();
     this.selectOpcoesCompetencia();
     this.selectOpcoesMes();
-    this.util.loading.next(false);
   }
 
   configurarForm() {

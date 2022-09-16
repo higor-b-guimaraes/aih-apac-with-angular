@@ -124,14 +124,13 @@ export class AccountRecoveryComponent implements OnInit {
       this.util.openAlertModal(
         "320px", "success-modal", "Recuperação de senha gerada com sucesso!",
         `Verifique sua caixa de e-mail cadastrado para o usuário para prosseguir com a recuperação de sua senha.`
-      );
+      ).then((update) => {if(update) this.route.navigate(['login']) });
       return;
     } else {
       this.util.openAlertModal(
         "320px", "success-modal", "Solicitação de recuperação de senha gerada com sucesso!",
         `Sua solicitação foi enviada e está pendente de autorização. Você receberá um e-mail com a resposta.`
-      );
-      this.route.navigate(['login']);
+      ).then((update) => {if(update) this.route.navigate(['login']) });
       return;
     }
   }
