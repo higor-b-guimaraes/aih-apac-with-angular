@@ -37,6 +37,8 @@ export class TabelaPaginaInicialComponent implements OnInit {
   @ViewChild(MatPaginator) paginator!: MatPaginator;
   @ViewChild(MatSort) sort!: MatSort;
   subject = new Subject<any>();
+  totalFaixasExtrasPendentes: number = 0;
+  totalAlteracaoSenhaPendente: number = 0;
 
   constructor(
     private service: PaginaInicialServiceService,

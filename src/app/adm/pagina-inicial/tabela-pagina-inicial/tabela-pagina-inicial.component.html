@@ -4,6 +4,13 @@
     <h2 *ngIf="countSolicitacoes == 0" style="text-align:center;"><span>Não há solicitações pendentes de análise</span></h2>
   </div>
 </div>
+<div class="row" style="width: 100%">
+  <div class="col-12 align-self-right">
+    <h3>Total de solicitações de faixas pendentes: <b>{{ totalFaixasExtrasPendentes }}</b></h3>
+    <h3>Total de solicitações de alteração de senha pendentes: <b>{{ totalAlteracaoSenhaPendente }}</b></h3>
+    <h3></h3>
+  </div>
+</div>
 
 <div class="container-table">
   <div class="row" style="width: 100%">
