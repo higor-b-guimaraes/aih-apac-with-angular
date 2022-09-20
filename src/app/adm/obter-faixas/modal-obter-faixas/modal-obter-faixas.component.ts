@@ -9,6 +9,7 @@ import {ObterFaixasComponent} from "../obter-faixas/obter-faixas.component";
 import {ObterFaixasService} from "../obter-faixas-service/obter-faixas.service";
 import {UsuariosService} from "../../usuarios/services/usuarios.service";
 import {SolicitarFaixasExtrasService} from "../../solicitar-faixas-extras/services/solicitar-faixas-extras.service";
+import {AlterarSenhaService} from "../../alterar-senha/services/alterar-senha.service";
 
 @Component({
   selector: 'app-modal-obter-faixas',
@@ -24,6 +25,7 @@ export class ModalObterFaixasComponent implements OnInit {
   opcoesCompetencia: any;
   opcoesMes: any;
   perfilUsuario: string = "";
+  usuario: any;
 
   filtroTipoFaixa:any = {
     tipoSolicitante: "",
@@ -78,32 +80,63 @@ export class ModalObterFaixasComponent implements OnInit {
     private service: ObterFaixasService,
     private usuariosService: UsuariosService,
     private solicitacaoFaixaExtraService: SolicitarFaixasExtrasService,
+    private alterarSenhaService: AlterarSenhaService,
     private cdRef: ChangeDetectorRef
   ) { }
 
-  ngOnInit(): void {
-    this.util.loading.next(true);
-    this.usuariosService.getTipoUnidade().subscribe( (data) => {
-      this.opcoesTipoSolicitante = data;
+  async ngOnInit() {
+    try {
+      this.util.loading.next(true);
+      this.opcoesTipoSolicitante = await this.usuariosService.getTipoUnidade().toPromise();
+      this.opcoesMunicipio = await this.usuariosService.getMunicipiosCadastro().toPromise();
+      this.opcoesUnidade = await this.usuariosService.getUnidadesCadastro().toPromise();
+      this.perfilUsuario = await this.auth.requestProfile().toPromise() as string;
+
+      this.usuario = await this.alterarSenhaService.getUsuario().toPromise();
+      if ( this.usuario && this.usuario.IdPerfilUsuario == 3 ) {
+        // this.formSolicitacaoFaixa.get('IdTipoSolicitante')?.setValue(this.usuario.IdTipoSolicitante);
+        this.formObterFaixa.patchValue({
+          IdTipoSolicitante:  parseInt(this.usuario.IdTipoSolicitante),
+          IdUnidade: parseInt(this.usuario.IdUnidade),
+          CodigoIbgeMunicipio: this.usuario.CodigoIbgeMunicipio,
+
+        })
+
+        this.formObterFaixa.get('IdTipoSolicitante')?.disable({onlySelf:true});
+        this.formObterFaixa.get('IdUnidade')?.disable({onlySelf:true});
+        this.formObterFaixa.get('CodigoIbgeMunicipio')?.disable({onlySelf:true});
+        this.buscarListaTiposFaixas();
+      }
+
+
+      var fullDate = new Date();
+      this.formObterFaixa.patchValue({
+        Mes: ("00" + (fullDate.getUTCMonth() + 1).toString()).substring(("00" + (fullDate.getUTCMonth() + 1).toString()).length - 2),
+        Competencia: fullDate.getUTCFullYear().toString()
+      });
+    } catch (e) {
+      console.log(e);
+    } finally {
       this.util.loading.next(false);
-    })
+    }
+    // this.util.loading.next(true);
+    // this.usuariosService.getTipoUnidade().subscribe( (data) => {
+    //   this.opcoesTipoSolicitante = data;
+    //   this.util.loading.next(false);
+    // })
+    //
+    // this.usuariosService.getMunicipiosCadastro().subscribe( (data) => {
+    //   this.opcoesMunicipio = data;
+    // })
+    // this.usuariosService.getUnidadesCadastro().subscribe( (data) => {
+    //   this.opcoesUnidade = data;
+    // })
+    //
+    // this.auth.requestProfile().subscribe((data:any) => {
+    //   this.perfilUsuario = data;
+    // })
 
-    this.usuariosService.getMunicipiosCadastro().subscribe( (data) => {
-      this.opcoesMunicipio = data;
-    })
-    this.usuariosService.getUnidadesCadastro().subscribe( (data) => {
-      this.opcoesUnidade = data;
-    })
 
-    this.auth.requestProfile().subscribe((data:any) => {
-      this.perfilUsuario = data;
-    })
-
-    var fullDate = new Date();
-    this.formObterFaixa.patchValue({
-      Mes: ("00" + (fullDate.getUTCMonth() + 1).toString()).substring(("00" + (fullDate.getUTCMonth() + 1).toString()).length - 2),
-      Competencia: fullDate.getUTCFullYear().toString()
-    });
   }
 
   /*getMunicipioOuUnidade() {

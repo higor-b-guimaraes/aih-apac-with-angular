@@ -101,7 +101,6 @@ export class ModalSolicitarFaixasExtrasComponent implements OnInit, AfterContent
       this.perfilUsuario = await this.auth.requestProfile().toPromise() as string;
 
       this.usuario = await this.alterarSenhaService.getUsuario().toPromise();
-      console.log('Usuário: ', this.usuario);
       if ( this.usuario && this.usuario.IdPerfilUsuario == 3 ) {
         // this.formSolicitacaoFaixa.get('IdTipoSolicitante')?.setValue(this.usuario.IdTipoSolicitante);
         this.formSolicitacaoFaixa.patchValue({
@@ -114,11 +113,7 @@ export class ModalSolicitarFaixasExtrasComponent implements OnInit, AfterContent
         this.formSolicitacaoFaixa.get('IdTipoSolicitante')?.disable({onlySelf:true});
         this.formSolicitacaoFaixa.get('IdUnidade')?.disable({onlySelf:true});
         this.formSolicitacaoFaixa.get('CodigoIbgeMunicipio')?.disable({onlySelf:true});
-        /*if ( parseInt(this.usuario.IdTipoSolicitante) == 1 ) {
-          this.formSolicitacaoFaixa.get('IdUnidade')?.disable({onlySelf:true});
-        } else if ( parseInt(this.usuario.IdTipoSolicitante) == 2 ){
-
-        }*/
+        this.buscarListaTiposFaixas();
       }
 
       var fullDate = new Date();
@@ -131,36 +126,6 @@ export class ModalSolicitarFaixasExtrasComponent implements OnInit, AfterContent
     } finally {
       this.util.loading.next(false);
     }
-    /*this.util.loading.next(true);
-    this.usuariosService.getTipoUnidade().subscribe((data) => {
-      this.opcoesTipoSolicitante = data;
-    })*/
-    /*this.usuariosService.getMunicipiosCadastro().subscribe((data) => {
-      this.opcoesMunicipio = data;
-    })
-    this.usuariosService.getUnidadesCadastro().subscribe((data) => {
-      this.opcoesUnidade = data;
-    })
-
-    this.auth.requestProfile().subscribe((data: any) => {
-      this.perfilUsuario = data;
-    })
-
-    this.alterarSenhaService.getUsuario().subscribe({
-      next: (data: any) => {
-        this.usuario = data;
-        console.log(this.usuario);
-      },
-      error: (err: any) => {
-        console.error(err.error);
-      }
-    })*/
-
-    // var fullDate = new Date();
-    // this.formSolicitacaoFaixa.patchValue({
-    //   Mes: ("00" + (fullDate.getUTCMonth() + 1).toString()).substring(("00" + (fullDate.getUTCMonth() + 1).toString()).length - 2),
-    //   Competencia: fullDate.getUTCFullYear().toString()
-    // })
   }
 
   ngAfterContentChecked(){
@@ -320,7 +285,7 @@ export class ModalSolicitarFaixasExtrasComponent implements OnInit, AfterContent
     if(this.formSolicitacaoFaixa.valid) {
       this.util.loading.next(true);
 
-      var form = this.formSolicitacaoFaixa.value;
+      var form = this.formSolicitacaoFaixa.getRawValue();
       var uploadData = new FormData();
       for (let i in form) {
         if ((form[i] instanceof Object) && form[i]._files[0] instanceof Blob) {
@@ -369,5 +334,33 @@ export class ModalSolicitarFaixasExtrasComponent implements OnInit, AfterContent
 
   configurarForm() {
 
+  }
+
+  apenasNumeros(evt: any) {
+    if ( !evt )
+      return;
+
+    var ASCIICode = (evt.which) ? evt.which : evt.keyCode
+    if (ASCIICode > 31 && (ASCIICode < 48 || ASCIICode > 57))
+      return false;
+    return true;
+  }
+
+
+
+  formatarNumero( ) {
+    var numero = this.formSolicitacaoFaixa.get('QuantidadeFaixas')?.value;
+    numero = '000000' + numero.toString()
+    var numeroFormatado = parseInt(numero) == 0 ? 0 : (numero).substring(numero.length -6)
+    this.formSolicitacaoFaixa.patchValue({
+      QuantidadeFaixas: numeroFormatado
+    });
+    // return ('000000' + numero.toString()).substring(numero.length -6);
+  }
+
+  selecionarTexto(e: any) {
+    console.log(e);
+    e.target.focus();
+    e.target.select();
   }
 }

@@ -1,14 +1,18 @@
-<div class="row " style="width: 100%">
+<div class="row " style="width: 100%" *ngIf="perfilUsuario != 3">
   <div class="col-12 align-self-center">
     <h2 *ngIf="countSolicitacoes > 0" style="text-align:center;"><span class="text-danger">ATENÇÃO! Há solicitações pendentes de aprovação</span></h2>
     <h2 *ngIf="countSolicitacoes == 0" style="text-align:center;"><span>Não há solicitações pendentes de análise</span></h2>
   </div>
 </div>
-<div class="row" style="width: 100%">
-  <div class="col-12 align-self-right">
-    <h3>Total de solicitações de faixas pendentes: <b>{{ totalFaixasExtrasPendentes }}</b></h3>
-    <h3>Total de solicitações de alteração de senha pendentes: <b>{{ totalAlteracaoSenhaPendente }}</b></h3>
-    <h3></h3>
+
+<div class="row" style="width: 100%" *ngIf="perfilUsuario != 3">
+  <div class="col-12 align-self-right" style="text-align:end;">
+    <span style="text-align:center;">Total de solicitações de faixas pendentes: <b>{{ totalFaixasExtrasPendentes }}</b></span>
+  </div>
+</div>
+<div class="row" style="width: 100%" *ngIf="perfilUsuario != 3">
+  <div class="col-12 align-self-right" style="text-align:end;">
+    <span style="text-align:center;">Total de solicitações de alteração de senha pendentes: <b>{{ totalAlteracaoSenhaPendente }}</b></span>
   </div>
 </div>
 
@@ -91,7 +95,8 @@
     <tr mat-header-row *matHeaderRowDef="columns"></tr>
     <tr mat-row *matRowDef="let row; columns: columns;"></tr>
     <tr class="mat-row" *matNoDataRow>
-      <td class="mat-cell" [colSpan]="columns.length">Não há solicitações pendentes de análise</td>
+      <td class="mat-cell" [colSpan]="columns.length" *ngIf="perfilUsuario != 3">Não há solicitações pendentes de análise</td>
+      <td class="mat-cell" [colSpan]="columns.length" *ngIf="perfilUsuario == 3">Não há solicitações para este usuário</td>
     </tr>
   </table>
 

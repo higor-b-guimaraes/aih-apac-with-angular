@@ -32,7 +32,7 @@ export class TabelaPaginaInicialComponent implements OnInit {
   columns: string[] = [];
   isSolicitacaoPendente: boolean = false;
   countSolicitacoes: number = 0;
-  tipoUsuario: number = 0;
+  perfilUsuario: number = 3; // setado o valor para iniciar oculto
 
   @ViewChild(MatPaginator) paginator!: MatPaginator;
   @ViewChild(MatSort) sort!: MatSort;
@@ -79,9 +79,13 @@ export class TabelaPaginaInicialComponent implements OnInit {
           .subscribe({
             next: (data:any) => {
               console.log(data);
-              this.dataSource = new MatTableDataSource<PaginaInicial>(data);
+              this.dataSource = new MatTableDataSource<PaginaInicial>(data.solicitacoes);
               this.dataSource.paginator = this.paginator;
               this.dataSource.sort = this.sort;
+
+              this.totalFaixasExtrasPendentes = data.countSolicitacoesFaixasExtras;
+              this.totalAlteracaoSenhaPendente = data.countSolicitacoesAlteracaoSenha;
+              this.perfilUsuario = data.IdPerfilUsuario
 
               this.util.loading.next(false);
             } ,
