@@ -10,6 +10,7 @@ import {MatDialog} from "@angular/material/dialog";
 import {ObterFaixasService} from "../obter-faixas-service/obter-faixas.service";
 import {ModalUnidadesComponent} from "../../unidades/modal-unidades/modal-unidades.component";
 import {ModalObterFaixasComponent} from "../modal-obter-faixas/modal-obter-faixas.component";
+import {MatTableDataSource} from "@angular/material/table";
 
 @Component({
   selector: 'app-tabela-obter-faixas',
@@ -80,45 +81,42 @@ export class TabelaObterFaixasComponent implements OnInit {
       next: (e:any) => {
         this.service.getListaFaixasGeradas(this.filtro).subscribe({
           next: (e: any) => {
-            this.dataSource = e;
+            this.dataSource = new MatTableDataSource(e);
+            this.dataSource.paginator = this.paginator;
+            this.dataSource.sort = this.sort;
+            this.util.loading.next(false);
             this.util.loading.next(false);
           }
         })
       }
     })
 
-    let data = {
-      pageIndex: 0 ,
-      pageSize: 5 ,
-    }
-
-    this.subject.next(data);
+    this.subject.next(this.filtro);
     this.util.loading.next(true);
   }
 
   submeterFiltro(event: any) {
-
+    console.log("1");
+    if ( event.keyCode == 13 ) {
+      console.log("2");
+      this.filtrar();
+    }
   }
 
   filtrar() {
-
+    this.listarObterFaixas();
   }
 
   getNewElements() {
+    this.util.loading.next(true);
+    let data = {
+      pageIndex: (this.dataSource?.paginator?.pageIndex) ? this.dataSource?.paginator?.pageIndex : 0 ,
+      pageSize: (this.dataSource?.paginator?.pageSize) ? this.dataSource?.paginator?.pageSize : 0 ,
+    }
 
+    this.subject.next(data);
   }
 
-  /*const dialogRef = this.modal.open(ModalUnidadesComponent, {
-    width: '100%',
-    panelClass: 'common-modal',
-    data: {
-      idUser: this.auth.getId(),
-      idRequest: unidade
-    }
-  });
-  dialogRef.afterClosed().subscribe(result => {
-  location.reload();
-});*/
   gerarFaixasManualmente() {
     const dialogRef = this.modal.open(ModalObterFaixasComponent, {
       width: '70%',

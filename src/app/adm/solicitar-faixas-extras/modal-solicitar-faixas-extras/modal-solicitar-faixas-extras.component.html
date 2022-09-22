@@ -77,8 +77,15 @@
       <mat-form-field appearance="outline"  class="col-md-3">
         <mat-label>Quantidade de faixas</mat-label>
 <!--        <input  matInput formControlName="QuantidadeFaixas" type="number" min="0" max="999999" maxlength="6">-->
-        <input (focusin)="selecionarTexto($event)" (blur)="formatarNumero()" (keypress)="apenasNumeros($event)" matInput formControlName="QuantidadeFaixas" type="text" maxlength="6">
-        <mat-error *ngIf="formSolicitacaoFaixa.get('QuantidadeFaixas')?.hasError('required')">É preciso informar uma quantidade de faixas</mat-error>
+        <input
+          (focusin)="selecionarTexto($event)"
+          (blur)="formatarNumero()"
+          (keypress)="apenasNumeros($event)"
+          (focusout)="verificarZeros($event)"
+          matInput formControlName="QuantidadeFaixas" type="text" maxlength="6">
+        <mat-error *ngIf="formSolicitacaoFaixa.get('QuantidadeFaixas')?.value == '0' ||
+          formSolicitacaoFaixa.get('QuantidadeFaixas')?.hasError('required')
+            ">É preciso informar uma quantidade de faixas</mat-error>
       </mat-form-field>
     </div>
   </fieldset>

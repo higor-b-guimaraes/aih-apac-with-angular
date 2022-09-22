@@ -174,7 +174,13 @@ export class TabelaAnaliseSolicitacaoFaixaExtraComponent implements OnInit {
   }
 
   getNewElements() {
+    this.util.loading.next(true);
+    let data = {
+      pageIndex: (this.dataSource?.paginator?.pageIndex) ? this.dataSource?.paginator?.pageIndex : 0 ,
+      pageSize: (this.dataSource?.paginator?.pageSize) ? this.dataSource?.paginator?.pageSize : 0 ,
+    }
 
+    this.subject.next(data);
   }
 
   downloadOficio(id: number) {

@@ -27,6 +27,7 @@ export class ModalSolicitarFaixasExtrasComponent implements OnInit, AfterContent
   msgErroOficio: string = "";
   perfilUsuario: string = "";
   usuario: any;
+  isZero: boolean = false;
 
   readonly maxSize = 10485760;   //Max Filesize 10MB
 
@@ -299,7 +300,6 @@ export class ModalSolicitarFaixasExtrasComponent implements OnInit, AfterContent
         "320px", "success-modal", "Solicitação de faixas extras cadastrado!",
         `Sua solicitação foi enviada e está pendente de autorização. Você receberá um e-mail com a resposta.”`
       ).then((update) => {if(update) location.reload()});
-      // .then((update) => {if(update) location.reload()});
       this.dialogRef.close(true);
       return;
     }
@@ -346,8 +346,6 @@ export class ModalSolicitarFaixasExtrasComponent implements OnInit, AfterContent
     return true;
   }
 
-
-
   formatarNumero( ) {
     var numero = this.formSolicitacaoFaixa.get('QuantidadeFaixas')?.value;
     numero = '000000' + numero.toString()
@@ -362,5 +360,18 @@ export class ModalSolicitarFaixasExtrasComponent implements OnInit, AfterContent
     console.log(e);
     e.target.focus();
     e.target.select();
+  }
+
+  verificarZeros(e: any) {
+    console.log(this.formSolicitacaoFaixa.get('QuantidadeFaixas')?.value == '0');
+    console.log(this.formSolicitacaoFaixa.get('QuantidadeFaixas')?.hasError('required'));
+    if ( parseInt(e.target.value) <= 0 ) {
+      console.log("False");
+      this.isZero = true;
+    } else {
+      console.log("True");
+      this.isZero = false;
+    }
+
   }
 }

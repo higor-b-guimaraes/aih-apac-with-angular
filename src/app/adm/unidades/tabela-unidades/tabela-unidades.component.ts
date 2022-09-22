@@ -78,19 +78,26 @@ export class TabelaUnidadesComponent implements OnInit {
   }
 
   buscarUnidades() {
-    this.util.loading.next(true);
-    this.unidadeService.getUnidades(this.filtro).subscribe({
-      next: (data) => {
-        console.log(this.paginator);
-        console.log(this.sort);
-        this.dataSource = new MatTableDataSource<Unidade>(data as any);
-        this.dataSource.paginator = this.paginator;
-        this.dataSource.sort = this.sort;
-        this.util.loading.next(false);
-      },error: (err) => {
-        this.util.loading.next(false);
-      }
+    this.getUnidade.subscribe({
+      next: (data: any) => {
+        this.unidadeService.getUnidades(this.filtro).subscribe({
+          next: (data) => {
+            console.log(this.paginator);
+            console.log(this.sort);
+            this.dataSource = new MatTableDataSource<Unidade>(data as any);
+            this.dataSource.paginator = this.paginator;
+            this.dataSource.sort = this.sort;
+            this.util.loading.next(false);
+          },error: (err) => {
+            this.util.loading.next(false);
+          }
+        })
+      } ,
+      error: () => {this.util.loading.next(false)}
     })
+
+    this.getUnidade.next(this.filtro);
+    this.util.loading.next(true);
   }
 
   submeterFiltro(event: any) {

@@ -18,7 +18,9 @@
     <!-- Solicitante -->
     <ng-container matColumnDef="Solicitante" >
       <th mat-header-cell class="header-table" *matHeaderCellDef mat-sort-header [style.placeContent]="'center'">Solicitante</th>
-      <td mat-cell class="alert-success" *matCellDef="let row"> {{row.Solicitante }} </td>
+      <td mat-cell class="alert-success" *matCellDef="let row">
+        {{ row.IdTipoSolicitante == 1 ? row.DescricaoUnidade : row.DescricaoMunicipio }}
+      </td>
     </ng-container>
 
     <!-- Mes -->
@@ -82,9 +84,9 @@
     </tr>
   </table>
 
-  <mat-paginator (page)="getNewElements()" [pageSizeOptions]="[5, 10,30,50]" aria-label="Select page of users"></mat-paginator>
+  <mat-paginator (page)="getNewElements()" [pageSizeOptions]="[10,20,50,100]" aria-label="Select page of users"></mat-paginator>
 
-  <div class="row" style="width: 100%;">
+  <div class="row" style="width: 100%; margin-bottom: 18px;">
     <div class="col-12 pull-right">
       <button (click)="gerarFaixasManualmente()" class="float-end" mat-raised-button color="primary">
         <fa-icon [icon]="faPlus"></fa-icon>&nbsp;Gerar Faixas Manualmente</button>
