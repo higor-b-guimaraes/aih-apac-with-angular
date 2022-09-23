@@ -24,10 +24,10 @@
         </mat-form-field>
 
         <!-- Nova Senha -->
-        <pre>
+        <!--<pre>
           {{ this.form.get('NovaSenha')?.valid }}
           {{ this.form.get('NovaSenha')?.validator  }}
-        </pre>
+        </pre>-->
         <mat-form-field [formGroup]="form" *ngIf="isCodigoVerificacao" class="col-12 mat-form-field-redefinir-senha" appearance="outline">
           <mat-label>Nova senha</mat-label>
           <input  matInput formControlName="NovaSenha" type="password">

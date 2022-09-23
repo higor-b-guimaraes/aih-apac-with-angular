@@ -20,13 +20,14 @@
           <mat-label>Nova senha</mat-label>
           <input matInput formControlName="NovaSenha" type="password">
           <mat-error *ngIf="formResetPassword.get('NovaSenha')?.hasError('required')">Informe a sua nova senha</mat-error>
+          <mat-error *ngIf="formResetPassword.get('NovaSenha')?.hasError('isSenhaValida')">Sua senha deve contar letras maiúsculas, minúsculas, números e caracteres.</mat-error>
         </mat-form-field>
 
         <!-- Confirmar Nova Senha -->
         <mat-form-field class="col-12" [formGroup]="formResetPassword" appearance="outline" *ngIf="PerfilUsuario?.IdPerfilUsuario == 1">
           <mat-label>Confirmar nova senha</mat-label>
           <input matInput formControlName="ConfirmarNovaSenha" type="password">
-          <mat-error *ngIf="formResetPassword.get('ConfirmarNovaSenha')?.hasError('required')">Confirme a sua nova senha</mat-error>
+          <mat-error *ngIf="formResetPassword.get('ConfirmarNovaSenha')?.hasError('required')">As senhas não são correspondentes.</mat-error>
         </mat-form-field>
 
         <mat-form-field [formGroup]="formResetPassword" appearance="outline" class="col-12"

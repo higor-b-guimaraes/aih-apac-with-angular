@@ -83,7 +83,8 @@
           (keypress)="apenasNumeros($event)"
           (focusout)="verificarZeros($event)"
           matInput formControlName="QuantidadeFaixas" type="text" maxlength="6">
-        <mat-error *ngIf="formSolicitacaoFaixa.get('QuantidadeFaixas')?.value == '0' ||
+        <mat-error *ngIf="
+        formSolicitacaoFaixa.get('QuantidadeFaixas')?.hasError('isCampoZerado') ||
           formSolicitacaoFaixa.get('QuantidadeFaixas')?.hasError('required')
             ">É preciso informar uma quantidade de faixas</mat-error>
       </mat-form-field>

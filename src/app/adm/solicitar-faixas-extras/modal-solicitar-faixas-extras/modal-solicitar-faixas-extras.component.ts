@@ -72,7 +72,7 @@ export class ModalSolicitarFaixasExtrasComponent implements OnInit, AfterContent
     IdTipoFaixa: new FormControl('',[Validators.required]),
     Competencia: new FormControl('',[Validators.required]),
     Mes: new FormControl('',[Validators.required]),
-    QuantidadeFaixas: new FormControl(0,[Validators.required]),
+    QuantidadeFaixas: new FormControl(0,[Validators.required, this.customValidators.campoZerado]),
     CotaPadrao: new FormControl({value: 0, disabled: true}, [Validators.required]),
     TotalCotaExtraAprovada: new FormControl({value: 0, disabled: true},[Validators.required]),
     Oficio: new FormControl(null, [Validators.required, FileValidator.maxContentSize(this.maxSize), this.validator.acceptTypeFileInput]),
@@ -88,7 +88,8 @@ export class ModalSolicitarFaixasExtrasComponent implements OnInit, AfterContent
     private validator: CustomValidators,
     private usuariosService: UsuariosService,
     private alterarSenhaService: AlterarSenhaService,
-    private solicitacaoFaixaExtraService: SolicitarFaixasExtrasService
+    private solicitacaoFaixaExtraService: SolicitarFaixasExtrasService,
+    private customValidators: CustomValidators
   ) {
 
   }

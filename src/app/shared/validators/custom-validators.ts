@@ -59,25 +59,19 @@ export class CustomValidators {
   }
 
   validarSenha(input: FormControl) {
-    console.log('Validar Senha regex');
     const regex: any = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[$*&@#])[0-9a-zA-Z$*&@#]{8,}$/;
     input.hasError('isSenhaValida');
-    if (regex.test(input.value) ) {
-      return {isSenhaValida: false};
-    } else {
-      return {isSenhaValida: true }
+    if (!regex.test(input.value) ) {
+      return {isSenhaValida: true};
     }
+    return null;
   }
 
-  validarSenha2(input: FormControl) {
-    console.log('Validar Senha regex');
-    const regex: any = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[$*&@#])[0-9a-zA-Z$*&@#]{8,}$/;
-    input.hasError('isSenhaValida');
-    return regex.test(input.value);
-    if (regex.test(input.value) ) {
-      return {isSenhaValida: false};
-    } else {
-      return {isSenhaValida: true }
+  campoZerado(input: FormControl) {
+    input.hasError('isCampoZerado');
+    if ( input.value == 0 ) {
+      return { isCampoZerado: true }
     }
+    return null;
   }
 }

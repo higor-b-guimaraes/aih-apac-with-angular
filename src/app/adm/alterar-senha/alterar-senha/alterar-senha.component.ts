@@ -31,7 +31,7 @@ export class AlterarSenhaComponent implements OnInit {
   formResetPassword: FormGroup = this.formBuilder.group({
     NomeUsuario: new FormControl({value: "", disabled: true}),
     SenhaAtual: new FormControl("",Validators.required),
-    NovaSenha: new FormControl("",Validators.required),
+    NovaSenha: new FormControl("",[Validators.required,this.validator.validarSenha]),
     ConfirmarNovaSenha: new FormControl("",Validators.required),
     Oficio: new FormControl(null, [Validators.required, FileValidator.maxContentSize(this.maxSize), this.validator.acceptTypeFileInput]),
   },

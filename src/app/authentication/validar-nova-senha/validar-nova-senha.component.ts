@@ -22,12 +22,12 @@ export class ValidarNovaSenhaComponent implements OnInit {
   private subscribeLoading!: Subscription;
   loading: boolean = false;
 
-  form: FormGroup = new FormGroup({
+  form: FormGroup = this.formBuilder.group({
       CodigoVerificacao: new FormControl("",Validators.required),
       NovaSenha: new FormControl("",[Validators.required,this.validator.validarSenha]),
       ConfirmarNovaSenha: new FormControl("",Validators.required),
-    }/* ,
-    { validator: this.matchPassword('NovaSenha', 'ConfirmarNovaSenha') } */
+    } ,
+    { validator: this.matchPassword('NovaSenha', 'ConfirmarNovaSenha') }
   );
 
   constructor(
