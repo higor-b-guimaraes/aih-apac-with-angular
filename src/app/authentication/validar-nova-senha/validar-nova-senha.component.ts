@@ -6,6 +6,7 @@ import {ActivatedRoute, Router} from "@angular/router";
 import {ValidarNovaSenhaService} from "./validar-nova-senha-service/validar-nova-senha.service";
 import {UtilService} from "../../shared/services/utils/util.service";
 import {Subscription} from "rxjs";
+import {CustomValidators} from "../../shared/validators/custom-validators";
 
 @Component({
   selector: 'app-validar-nova-senha',
@@ -21,12 +22,12 @@ export class ValidarNovaSenhaComponent implements OnInit {
   private subscribeLoading!: Subscription;
   loading: boolean = false;
 
-  form: FormGroup = this.formBuilder.group({
+  form: FormGroup = new FormGroup({
       CodigoVerificacao: new FormControl("",Validators.required),
-      NovaSenha: new FormControl("",Validators.required),
+      NovaSenha: new FormControl("",[Validators.required,this.validator.validarSenha]),
       ConfirmarNovaSenha: new FormControl("",Validators.required),
-    },
-    { validator: this.matchPassword('NovaSenha', 'ConfirmarNovaSenha') }
+    }/* ,
+    { validator: this.matchPassword('NovaSenha', 'ConfirmarNovaSenha') } */
   );
 
   constructor(
@@ -34,7 +35,8 @@ export class ValidarNovaSenhaComponent implements OnInit {
     private activatedRoute: ActivatedRoute,
     private service: ValidarNovaSenhaService,
     private route: Router,
-    private utils: UtilService
+    private utils: UtilService,
+    private validator: CustomValidators,
   ) {
     this.activatedRoute.queryParams.subscribe(params => {
       this.userId = params['user-id'];
@@ -138,7 +140,6 @@ export class ValidarNovaSenhaComponent implements OnInit {
   }
 
   digitarCodigoVerificacao() {
-    console.log("Mudou");
     if ( (this.form.get('CodigoVerificacao')?.value).length == 6 ) {
       this.VerificarCodigo();
     }

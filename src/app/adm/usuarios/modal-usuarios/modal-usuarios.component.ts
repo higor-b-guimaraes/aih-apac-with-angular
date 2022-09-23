@@ -167,8 +167,10 @@ export class ModalUsuariosComponent implements OnInit {
   }
 
   validaNecessidadeOficio() {
-    this.util.validateOficioRequired(this.formUsuario, 'Oficio',
-      'IdPerfilUsuario', this.maxSize);
+    if ( !this.novoCadastro ) {
+      this.util.validateOficioRequired(this.formUsuario, 'Oficio',
+        'IdPerfilUsuario', this.maxSize);
+    }
   }
 
   checkCPF() {
@@ -279,6 +281,7 @@ export class ModalUsuariosComponent implements OnInit {
     if ( this.formUsuario.get('IdPerfilUsuario')?.value == 3 ) {
       this.formUsuario.get('IdTipoSolicitante')?.setValidators([Validators.required]);
       this.getMunicipioOuUnidade();
+      this.oficioObrigatorio = true;
     } else {
       this.formUsuario.get('IdUnidade')?.clearValidators();
       this.formUsuario.get('IdUnidade')?.setValue(null);
@@ -286,15 +289,18 @@ export class ModalUsuariosComponent implements OnInit {
       this.formUsuario.get('CodigoIbgeMunicipio')?.setValue(null);
       this.formUsuario.get('IdTipoSolicitante')?.clearValidators();
       this.formUsuario.get('IdTipoSolicitante')?.setValue(null);
+      this.oficioValido = false;
     }
   }
 
   exigirOficio() {
+    console.log("Exigir Ofício");
     if (
         this.formUsuario.get('IdUnidade')?.value != this.form.IdUnidade
       || this.formUsuario.get('CodigoIbgeMunicipio')?.value != this.form.CodigoIbgeMunicipio
       || this.formUsuario.get('IdPerfilUsuario')?.value != this.form.IdPerfilUsuario
       || this.formUsuario.get('Situacao')?.value != this.form.Situacao
+      || this.novoCadastro
     ) {
       this.oficioObrigatorio = true;
       this.formUsuario.get(`Oficio`)?.setValidators(
@@ -302,6 +308,10 @@ export class ModalUsuariosComponent implements OnInit {
           FileValidator.maxContentSize(this.maxSize),
           this.validator.acceptTypeFileInput]
       );
+    } else {
+      this.oficioObrigatorio = false;
+      this.formUsuario.get(`Oficio`)?.clearValidators();
+      this.formUsuario.get('Oficio')?.setValue(null);
     }
 
   }

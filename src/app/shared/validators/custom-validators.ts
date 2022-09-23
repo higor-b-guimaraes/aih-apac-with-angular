@@ -5,6 +5,8 @@ import { Injectable } from "@angular/core";
 export class CustomValidators {
 
 
+
+
   loginValidator(input: FormControl) {
     input.hasError('campoVazio');
 
@@ -54,5 +56,28 @@ export class CustomValidators {
         return null;
       }
       return {tipoArquivoInvalido: true}
+  }
+
+  validarSenha(input: FormControl) {
+    console.log('Validar Senha regex');
+    const regex: any = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[$*&@#])[0-9a-zA-Z$*&@#]{8,}$/;
+    input.hasError('isSenhaValida');
+    if (regex.test(input.value) ) {
+      return {isSenhaValida: false};
+    } else {
+      return {isSenhaValida: true }
+    }
+  }
+
+  validarSenha2(input: FormControl) {
+    console.log('Validar Senha regex');
+    const regex: any = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[$*&@#])[0-9a-zA-Z$*&@#]{8,}$/;
+    input.hasError('isSenhaValida');
+    return regex.test(input.value);
+    if (regex.test(input.value) ) {
+      return {isSenhaValida: false};
+    } else {
+      return {isSenhaValida: true }
+    }
   }
 }

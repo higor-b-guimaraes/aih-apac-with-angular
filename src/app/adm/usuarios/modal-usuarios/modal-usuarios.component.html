@@ -51,8 +51,7 @@
 
     <div class="row">
       <mat-form-field appearance="outline" class="col-md-12"
-                      *ngIf="formUsuario.get('IdPerfilUsuario')?.value !== 1
-                        && oficioObrigatorio
+                      *ngIf=" oficioObrigatorio
                       "
       >
         <ngx-mat-file-input
