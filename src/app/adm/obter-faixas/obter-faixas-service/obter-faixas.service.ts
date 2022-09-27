@@ -27,4 +27,8 @@ export class ObterFaixasService {
   downloadArquivoFaixas(id: number) {
     return this.http.get(`${environment.BASE_URL}ObterFaixas/baixarArquivoFaixas/${id}`, {responseType:'blob'});
   }
+
+  getDadosFaixa(id: number) {
+    return this.http.get(`${environment.BASE_URL}ObterFaixas/getDadosFaixa/${id}`);
+  }
 }

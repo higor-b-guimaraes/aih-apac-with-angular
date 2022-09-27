@@ -128,24 +128,40 @@ export class TabelaObterFaixasComponent implements OnInit {
   }
 
   download(id: number) {
+    var dadosFaixa: any = null;
     this.util.loading.next(true);
-    this.service.downloadArquivoFaixas(id).subscribe({
-      next: (data: any) => {
-        const blob = new Blob([data], {type: data.type});
-        if ( !blob ) {
-          this.util.loading.next(false);
-          return;
-        }
-        const anchor = document.createElement('a');
-        anchor.download = 'arquivo-faixas.txt';
-        anchor.href = (window.webkitURL || window.URL).createObjectURL(blob);
-        anchor.click();
-        this.util.loading.next(false);
-      },
-      error: (err: any) => {
-        console.log(err);
-        this.util.loading.next(false);
+    this.service.getDadosFaixa(id).subscribe( {
+      next: (faixa: any) => {
+        dadosFaixa = faixa;
+
+        this.service.downloadArquivoFaixas(id).subscribe({
+          next: (data: any) => {
+            const blob = new Blob([data], {type: data.type});
+            if ( !blob ) {
+              this.util.loading.next(false);
+              return;
+            }
+            // Tipo de Faixa - Nome Unidade ou Município - Mês (MM) - Ano (AAAA)
+            let nomeArquivo = `${dadosFaixa.DescricaoTipoFaixa} - ${dadosFaixa.DescricaoSolicitante} - ${dadosFaixa.Mes} - ${dadosFaixa.Competencia}` ;
+
+            const anchor = document.createElement('a');
+            anchor.download = nomeArquivo;
+            anchor.href = (window.webkitURL || window.URL).createObjectURL(blob);
+            anchor.click();
+            this.util.loading.next(false);
+          },
+          error: (err: any) => {
+            console.log(err);
+            this.util.loading.next(false);
+          }
+        })
+      }, error: (err: any) => {
+
       }
     })
+
+
+
+
   }
 }
