@@ -220,6 +220,7 @@ export class ModalSolicitarFaixasExtrasComponent implements OnInit, AfterContent
 
       this.solicitacaoFaixaExtraService.getTotalCotaExtraAprovada(this.filtroTotalCotaExtraAprovada)
         .subscribe( (data:any) => {
+          console.log(data);
         this.formSolicitacaoFaixa?.patchValue({
           TotalCotaExtraAprovada: data
         })
@@ -349,8 +350,9 @@ export class ModalSolicitarFaixasExtrasComponent implements OnInit, AfterContent
 
   formatarNumero( ) {
     var numero = this.formSolicitacaoFaixa.get('QuantidadeFaixas')?.value;
-    numero = '000000' + numero.toString()
-    var numeroFormatado = parseInt(numero) == 0 ? 0 : (numero).substring(numero.length -6)
+    // numero = '000000' + numero.toString()
+    // var numeroFormatado = parseInt(numero) == 0 ? 0 : (numero).substring(numero.length -6)
+    var numeroFormatado = parseInt(numero) == 0 ? 0 : (numero)
     this.formSolicitacaoFaixa.patchValue({
       QuantidadeFaixas: numeroFormatado
     });

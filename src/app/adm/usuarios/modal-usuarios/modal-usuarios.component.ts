@@ -145,6 +145,9 @@ export class ModalUsuariosComponent implements OnInit {
           error: () => {},
         })
       }else {
+        this.formUsuario.patchValue({
+          Situacao: 1
+        })
         this.util.loading.next(false);
         this.novoCadastro = true;
       }
