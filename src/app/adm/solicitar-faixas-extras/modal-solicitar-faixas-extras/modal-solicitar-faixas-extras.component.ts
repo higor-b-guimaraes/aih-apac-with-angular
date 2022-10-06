@@ -135,6 +135,7 @@ export class ModalSolicitarFaixasExtrasComponent implements OnInit, AfterContent
   }
 
   buscarListaTiposFaixas() {
+    console.log('Tentando mudar');
     try {
       this.util.loading.next(true);
       this.filtroTipoFaixa.tipoSolicitante =
@@ -163,6 +164,7 @@ export class ModalSolicitarFaixasExtrasComponent implements OnInit, AfterContent
         })
       }
     } catch (e) {
+      console.error(e);
       this.util.loading.next(false);
     }
   }
@@ -376,5 +378,18 @@ export class ModalSolicitarFaixasExtrasComponent implements OnInit, AfterContent
       this.isZero = false;
     }
 
+  }
+
+  resetarCampos() {
+    var fullDate = new Date();
+    this.formSolicitacaoFaixa.patchValue({
+      IdUnidade: null,
+      CodigoIbgeMunicipio: null,
+      Mes: ("00" + (fullDate.getUTCMonth() + 1).toString()).substring(("00" + (fullDate.getUTCMonth() + 1).toString()).length - 2),
+      Competencia: fullDate.getUTCFullYear().toString(),
+      CotaPadrao: 0,
+      TotalCotaExtraAprovada: 0,
+      Oficio: null
+    });
   }
 }

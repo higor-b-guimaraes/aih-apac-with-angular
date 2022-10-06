@@ -6,7 +6,7 @@
       <!-- Tipo de Solicitante -->
       <mat-form-field appearance="outline"  class="col-md-3">
         <mat-label>Tipo de Solicitante</mat-label>
-        <mat-select  (selectionChange)="buscarListaTiposFaixas()"
+        <mat-select  (selectionChange)="resetarCampos();"
           formControlName="IdTipoSolicitante">
           <mat-option *ngFor="let tsolicitante of opcoesTipoSolicitante" [value]="tsolicitante.Id" >
             {{tsolicitante.Descricao}}
@@ -16,7 +16,7 @@
 
     <mat-form-field appearance="outline"  class="col-md-6" *ngIf="formSolicitacaoFaixa.get('IdTipoSolicitante')?.value === 1">
       <mat-label>Unidade</mat-label>
-      <mat-select  (selectionChange)="buscarListaTiposFaixas()"
+      <mat-select  (selectionChange)="buscarListaTiposFaixas(); buscarCotaPadrao(); buscarTotalCotaExtraAprovada()"
         formControlName="IdUnidade">
         <mat-option *ngFor="let unidades of opcoesUnidade" [value]="unidades.Id"  >
           {{unidades.Descricao}}
@@ -27,7 +27,7 @@
 
     <mat-form-field appearance="outline"  class="col-md-6" *ngIf="formSolicitacaoFaixa.get('IdTipoSolicitante')?.value === 2">
       <mat-label>Município</mat-label>
-      <mat-select (selectionChange)="buscarListaTiposFaixas()"
+      <mat-select (selectionChange)="buscarListaTiposFaixas(); buscarCotaPadrao(); buscarTotalCotaExtraAprovada()"
         formControlName="CodigoIbgeMunicipio">
         <mat-option *ngFor="let municipio of opcoesMunicipio" [value]="municipio['CodigoIbge']"  >
           {{municipio['NomeMunicipio'] + " - " + municipio['CodigoIbge']}}
