@@ -311,7 +311,6 @@ export class ModalObterFaixasComponent implements OnInit {
   selectOpcoesCompetencia() {
     var competencia: string[] = [];
     var fullDate = new Date();
-
     if (fullDate.getUTCMonth() < 3 ) {
       competencia.push((fullDate.getUTCFullYear() - 1).toString());
     }

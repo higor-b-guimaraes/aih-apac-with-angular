@@ -273,4 +273,7 @@ h1.example-app-name {
   }
 }
 
-
+#span-nome-usuario {
+  color: white;
+  font-size: 3vh;
+}

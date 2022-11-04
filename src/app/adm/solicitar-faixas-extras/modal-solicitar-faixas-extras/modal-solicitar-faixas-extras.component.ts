@@ -135,7 +135,6 @@ export class ModalSolicitarFaixasExtrasComponent implements OnInit, AfterContent
   }
 
   buscarListaTiposFaixas() {
-    console.log('Tentando mudar');
     try {
       this.util.loading.next(true);
       this.filtroTipoFaixa.tipoSolicitante =
@@ -238,7 +237,6 @@ export class ModalSolicitarFaixasExtrasComponent implements OnInit, AfterContent
       competencia.push((fullDate.getUTCFullYear() - 1).toString());
     }
     competencia.push((fullDate.getUTCFullYear()).toString());
-    console.log(competencia);
     this.opcoesCompetencia = competencia;
   }
 
@@ -261,20 +259,6 @@ export class ModalSolicitarFaixasExtrasComponent implements OnInit, AfterContent
     }
     this.opcoesMes = mes;
   }
-
-  /*selectOpcoesAno() {
-    var ano: any[] = [];
-    var fullDate = new Date();
-    if ( fullDate.getUTCMonth() < 4 ) {
-      ano.push({
-        ano: fullDate.getUTCFullYear() - 1
-      });
-    }
-    ano.push({
-      ano: fullDate.getUTCFullYear()
-    });
-    this.opcoesCompetencia;
-  }*/
 
   checkOficio(event: any) {
     let statusOficio: any = this.util.checkOficio(this.formSolicitacaoFaixa, 'Oficio');

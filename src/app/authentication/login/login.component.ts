@@ -17,7 +17,7 @@ import {environment} from "../../../environments/environment";
 export class LoginComponent implements OnInit {
 
 
-  logoRJ: string = `${environment.BASE_SITE}assets/resources/images/logoTISESRJ.png`;
+  logoRJ: string = window.location.origin + `/assets/resources/images/logoTISESRJ.png`;
 
   validLogin:boolean = false;
   errorLoginMsg: string = "";

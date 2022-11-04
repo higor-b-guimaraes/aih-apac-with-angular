@@ -15,7 +15,8 @@ import {CustomValidators} from "../../shared/validators/custom-validators";
 })
 export class ValidarNovaSenhaComponent implements OnInit {
 
-  logoSESRJ = `${environment.BASE_SITE}assets/resources/images/logo-ses-rj.svg`;
+  // logoSESRJ = `${environment.BASE_SITE}assets/resources/images/logo-ses-rj.svg`;
+  logoSESRJ: string = window.location.origin + `/assets/resources/images/logoTISESRJ.png`;
   userId: number | undefined;
   isCodigoVerificacao: boolean = false;
 

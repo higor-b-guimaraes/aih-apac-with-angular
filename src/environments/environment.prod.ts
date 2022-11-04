@@ -5,10 +5,16 @@ export const environment = {
   // BASE_SITE:'http://10.42.2.53:8086/',
 
   // Produção
-  BASE_URL: 'http://10.42.2.53:8096/public/api/',
+  // BASE_URL: 'http://10.42.2.53:8096/public/api/',
+  // BASE_SITE:'http://10.42.2.53:8087/',
+
+  // Produção
+  // BASE_URL: 'http://10.42.2.53:8096/public/api/',
+  BASE_URL: 'https://apiaihapac.saude.rj.gov.br/public/api/',
   BASE_SITE:'http://10.42.2.53:8087/',
 
   API: '',
   // API: 'http://localhost:3000/',
-  // BASE_URL: '/api'
+  // BASE_U
+  // RL: '/api'
 };

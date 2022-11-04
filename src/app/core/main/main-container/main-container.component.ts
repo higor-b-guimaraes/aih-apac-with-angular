@@ -15,8 +15,10 @@ import { environment } from "../../../../environments/environment";
 })
 export class MainContainerComponent implements OnInit {
   showFiller = false;
-  logoSESRJ = `${environment.BASE_SITE}assets/resources/images/logo-ses-rj.svg`;
+  // logoSESRJ = `${environment.BASE_SITE}assets/resources/images/logo-ses-rj.svg`;
+  logoSESRJ = window.location.origin + `/assets/resources/images/logo-ses-rj.svg`;
   loading: boolean = false;
+  public nomeUsuario: string = "";
 
   menu: Array<any> = [
     {
@@ -111,8 +113,11 @@ export class MainContainerComponent implements OnInit {
   typeOfUser() {
     this.auth.requestProfile()
     .subscribe({
-      next: (data) => {
+      next: (data: any) => {
         this.controlAccessMenu(data);
+        if ( data ) {
+          this.nomeUsuario = data.NomeUsuario;
+        }
       },
       error: () => this.openDialog()
     });
